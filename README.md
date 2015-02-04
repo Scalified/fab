@@ -115,7 +115,7 @@ For instance, using [**RelativeLayout**](http://developer.android.com/reference/
 
 ### Create an object
 
-```android
+```java
 import com.software.shell.fab.FloatingActionButton;
 
 // ...
@@ -126,10 +126,14 @@ FloatingActionButton actionButton = new FloatingActionButton(context);
 
 ## Customization
 
-### Button type
+### XML configuration example
 
-#### XML
+Firstly add the namespace:
+```xml
+xmlns:fab="http://schemas.android.com/apk/res-auto"
+```
 
+Then refer the added namespace to configure **Floating Action Button** parameters
 ```xml
 <com.software.shell.fab.FloatingActionButton 
             android:id="@+id/action_button"
@@ -138,11 +142,46 @@ FloatingActionButton actionButton = new FloatingActionButton(context);
             android:layout_marginRight="@dimen/fab_margin"
             android:layout_marginBottom="@dimen/fab_margin"
             fab:type="normal"
+            fab:button_color="@color/material_green_500"
+            fab:button_colorPressed="@color/material_green_900"
+            fab:image="@drawable/fab_plus_icon"
+            fab:image_size="24dp"
+            fab:shadow_color="#757575"
+            fab:shadow_radius="1.0dp"
+            fab:shadow_xOffset="0.5dp"
+            fab:shadow_yOffset="1.0dp"
+            fab:stroke_color="@color/material_blue_grey_500"
+            fab:stroke_width="1.0dp"
+            fab:animation_onShow="@anim/fab_roll_from_down"
+            fab:animation_onHide="@anim/fab_roll_to_down"
             />
 ```
 
 #### Programatically
 
-```android
+```java
+//Button type
 actionButton.setType(FloatingActionButton.Type.MINI);
+
+//Button colors
+actionButton.setButtonColor(getResources().getColor(R.color.material_green_500));
+actionButton.setButtonColorPressed(getResources().getColor(R.color.material_green_900));
+
+//Image
+actionButton.setImageDrawable(getResources().getDrawable(R.drawable.fab_plus_icon));
+actionButton.setImageSize(24.0f);
+
+//Shadow
+actionButton.setShadowColor(Color.parseColor("#757575"));
+actionButton.setShadowRadius(1.0f);
+actionButton.setShadowXOffset(0.5f);
+actionButton.setShadowYOffset(1.0f);
+
+//Stroke
+actionButton.setStrokeColor(getResources().getColor(R.color.material_blue_grey_500));
+actionButton.setStrokeWidth(1.0f);
+
+//Animations
+actionButton.setAnimationOnShow(FloatingActionButton.Animations.ROLL_FROM_DOWN);
+actionButton.setAnimationOnHide(FloatingActionButton.Animations.ROLL_TO_DOWN);
 ```
