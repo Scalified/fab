@@ -75,7 +75,7 @@ public class FloatingActionButton extends View {
 	/**
 	 * Shadow radius expressed in actual pixels
 	 */
-	private float shadowRadius = MetricsConverter.dpToPx(getContext(), 1.5f);
+	private float shadowRadius = MetricsConverter.dpToPx(getContext(), 1.0f);
 
 	/**
 	 * Shadow X-axis offset expressed in actual pixels
@@ -90,7 +90,7 @@ public class FloatingActionButton extends View {
 	/**
 	 * Shadow color 
 	 */
-	private int shadowColor = Color.parseColor("#9e9e9e");
+	private int shadowColor = Color.parseColor("#757575");
 
 	/**
 	 * Stroke width 
