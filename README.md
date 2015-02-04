@@ -2,7 +2,7 @@
 
 ## Description
 
-This Library contains implementation of the [Floating Action Button](http://www.google.com/design/spec/components/buttons.html#buttons-floating-action-button) for Android.
+This Library contains implementation of the [**Floating Action Button**](http://www.google.com/design/spec/components/buttons.html#buttons-floating-action-button) for Android.
 
 Floating action buttons are used for a special type of promoted action. They are distinguished by a circled icon floating above the UI and have special motion behaviors related to morphing, launching, and the transferring anchor point
 
@@ -38,39 +38,41 @@ Watch the [**Full Demo Video**](https://www.youtube.com/watch?v=skSApXvi4xM) on 
 
 ## Floating Action Button types
 
-Floating action buttons come in two sizes
+Floating action buttons come in two sizes: the **DEFAULT**, which should be used in most cases, and the **MINI**, which should only be used to create visual continuity with other elements on the screen
 
-* **DEFAULT** (should be used in most cases)
-* **MINI** (should only be used to create visual continuity with other elements on the screen)
-
-![Default](https://github.com/shell-software/fab/blob/master/demo/button_type_default.png) 
-![Mini](https://github.com/shell-software/fab/blob/master/demo/button_type_mini.png)
+DEFAULT | MINI
+:-:|:-:
+![Default](https://github.com/shell-software/fab/blob/master/demo/button_type_default.png) | ![Mini](https://github.com/shell-software/fab/blob/master/demo/button_type_mini.png)
 
 ## Color palette
 
-The Library contains all of the **500** and **900** colors of the [**Material Color Palette**](http://www.google.com/design/spec/style/color.html#color-color-palette).
+The Library contains all of the colors **500** and **900** of the [**Material Color Palette**](http://www.google.com/design/spec/style/color.html#color-color-palette).
 
-**500** are best used for the *normal* button state while **900** ones for the *pressed* state
-//TODO add screenshots
+Colors **500** are used for the *normal* button state while **900** ones for the *pressed* state
+
+Here are some colors examples:
+
+Green 500 | Amber 500 | Blue Grey 500
+:-:|:-:|:-:
+![Green 500](https://github.com/shell-software/fab/blob/master/demo/color_green.png) | ![Amber Color](https://github.com/shell-software/fab/blob/master/demo/color_amber.png) | ![Blue Grey](https://github.com/shell-software/fab/blob/master/demo/color_blue_grey.png)
 
 ## Shadow
 
-Shadow enabled by default with default parameters, which are suitable in most cases. However, shadow can be modified in three ways: radius, X- or Y-axis offset and color
+Shadow enabled by default and has starndard settings. These settings are suitable in most cases. However, shadow can be modified in three ways: radius, X- or Y-axis offset and color
 
-//FIXME change screenshots
-
-![Shadow Radius](https://github.com/shell-software/fab/blob/master/demo/shadow_radius.png)
-![Shadow Offset](https://github.com/shell-software/fab/blob/master/demo/shadow_offset.png)
+Default | Radius | X- and Y- axis offset
+:-:|:-:|:-:
+![Default Shadow](https://github.com/shell-software/fab/blob/master/demo/default_shadow.png) | ![Shadow Radius](https://github.com/shell-software/fab/blob/master/demo/shadow_radius.png) | ![Shadow Offset](https://github.com/shell-software/fab/blob/master/demo/shadow_axis_offset.png)
 
 ## Stroke
 
 Stroke disabled by default.
 Stroke can be modified in two ways: width and color
 
-//FIXME change screenshots
+Thin | Medium | Thick
+:-:|:-:|:-:
+![Thin Stroke](https://github.com/shell-software/fab/blob/master/demo/stroke_thin.png) | ![Medium Stroke](https://github.com/shell-software/fab/blob/master/demo/stroke_medium.png) | ![Thick Stroke](https://github.com/shell-software/fab/blob/master/demo/stroke_thick.png)
 
-![Stroke Thin](https://github.com/shell-software/fab/blob/master/demo/stroke_thin.png)
-![Stroke Thick](https://github.com/shell-software/fab/blob/master/demo/stroke_thick.png)
 
 ## Animations
 
@@ -88,14 +90,59 @@ Scale In - Scale Out | Roll From Right - Roll To Right | Jump From Right - Jump 
 
 ## Creation
 
-### Declare in XML
+### Declare inside XML resource
 
-```android
+For instance, using [**RelativeLayout**](http://developer.android.com/reference/android/widget/RelativeLayout.html):
 
+```xml
+<RelativeLayout 
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <com.software.shell.fab.FloatingActionButton 
+            android:id="@+id/action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" 
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin"
+            />
+</RelativeLayout>
 ```
 
 ### Create an object
 
 ```android
-FloatingActionButton actionButton = new FloatingActionButton(this);
+import com.software.shell.fab.FloatingActionButton;
+
+// ...
+
+Context context = getContext();
+FloatingActionButton actionButton = new FloatingActionButton(context);
+```
+
+## Customization
+
+### Button type
+
+#### XML
+
+```xml
+<com.software.shell.fab.FloatingActionButton 
+            android:id="@+id/action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin"
+            fab:type="normal"
+            />
+```
+
+#### Programatically
+
+```android
+actionButton.setType(FloatingActionButton.Type.MINI);
 ```
