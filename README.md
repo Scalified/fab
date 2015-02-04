@@ -79,18 +79,18 @@ Thin | Medium | Thick
 The Library has several predefined animations:
 
 Fade In - Fade Out | Roll From Down - Roll To Down | Jump From Down - Jump To Down
-:-----------------:|:-----------------------------:|:----------------------------:
+:-:|:-:|:-:
 ![Fade In Fade Out](https://github.com/shell-software/fab/blob/master/demo/animation_fade_in_fade_out.gif) | ![Roll From Down Roll To Down](https://github.com/shell-software/fab/blob/master/demo/animation_roll_from_down_roll_to_down.gif) | ![Jump From Down - Jump To Down](https://github.com/shell-software/fab/blob/master/demo/animation_jump_from_down_jump_to_down.gif)
 
 Scale In - Scale Out | Roll From Right - Roll To Right | Jump From Right - Jump To Right
-:-------------------:|:-------------------------------:|:------------------------------:
+:-:|:-:|:-:
 ![Scale In Scale Out](https://github.com/shell-software/fab/blob/master/demo/animation_scale_in_scale_out.gif) | ![Roll From Right Roll To Right](https://github.com/shell-software/fab/blob/master/demo/animation_roll_from_right_roll_to_right.gif) | ![Jump From Right Jump To Right](https://github.com/shell-software/fab/blob/master/demo/animation_jump_from_right_jump_to_right.gif)
 
 # Usage
 
 ## Creation
 
-### Declare inside XML resource
+### Declaration inside XML resource
 
 For instance, using [**RelativeLayout**](http://developer.android.com/reference/android/widget/RelativeLayout.html):
 
@@ -113,7 +113,7 @@ For instance, using [**RelativeLayout**](http://developer.android.com/reference/
 </RelativeLayout>
 ```
 
-### Create an object
+### Object creation
 
 ```java
 import com.software.shell.fab.FloatingActionButton;
