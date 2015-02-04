@@ -157,7 +157,7 @@ Then refer the added namespace to configure **Floating Action Button** parameter
             />
 ```
 
-#### Programatically
+### Configuration example in code
 
 ```java
 //Button type
