@@ -40,7 +40,7 @@ buildscript {
 
 allprojects {
 
-	group = 'com.github.software-shell'
+	group = 'com.github.shell-software'
 	version = '1.0.0'
 
 	repositories {
