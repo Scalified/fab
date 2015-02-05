@@ -17,7 +17,9 @@
  */
 
 apply plugin: 'com.android.library'
-apply from: getScriptsDir() + 'aar_publish.gradle'
+
+//Publishing
+apply from: aarPublishingScript()
 
 android {
 
