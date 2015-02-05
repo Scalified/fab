@@ -16,8 +16,6 @@
  * File created: 2015-01-17 10:08:50
  */
 
-version = '1.0.0'
-
 ext {
 
 	ANDROID_COMPILE_SDK_VERSION = 21
@@ -42,8 +40,11 @@ buildscript {
 
 allprojects {
 
+	group = 'com.github.software-shell'
+	version = '1.0.0'
+
 	repositories {
 		jcenter()
 	}
-
+	
 }

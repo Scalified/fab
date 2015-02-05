@@ -17,6 +17,7 @@
  */
 
 apply plugin: 'com.android.library'
+apply from: getScriptsDir() + 'aar_publish.gradle'
 
 android {
 
@@ -38,7 +39,7 @@ android {
 	buildTypes {
 		release {
 			minifyEnabled true
-			proguardFiles 'proguard-rules.txt'
+			proguardFiles 'proguard-rules.pro'
 		}
 	}
 

@@ -142,30 +142,30 @@ Then refer the added namespace to configure **Floating Action Button** parameter
             android:layout_marginRight="@dimen/fab_margin"
             android:layout_marginBottom="@dimen/fab_margin"
             fab:type="normal"
-            fab:button_color="@color/material_green_500"
-            fab:button_colorPressed="@color/material_green_900"
+            fab:button_color="@color/fab_material_lime_500"
+            fab:button_colorPressed="@color/fab_material_lime_900"
             fab:image="@drawable/fab_plus_icon"
             fab:image_size="24dp"
             fab:shadow_color="#757575"
             fab:shadow_radius="1.0dp"
             fab:shadow_xOffset="0.5dp"
             fab:shadow_yOffset="1.0dp"
-            fab:stroke_color="@color/material_blue_grey_500"
+            fab:stroke_color="@color/fab_material_blue_grey_500"
             fab:stroke_width="1.0dp"
             fab:animation_onShow="@anim/fab_roll_from_down"
             fab:animation_onHide="@anim/fab_roll_to_down"
             />
 ```
 
-### Configuration example in code
+### The same configuration example using code
 
 ```java
 //Button type
 actionButton.setType(FloatingActionButton.Type.MINI);
 
 //Button colors
-actionButton.setButtonColor(getResources().getColor(R.color.material_green_500));
-actionButton.setButtonColorPressed(getResources().getColor(R.color.material_green_900));
+actionButton.setButtonColor(getResources().getColor(R.color.fab_material_lime_500));
+actionButton.setButtonColorPressed(getResources().getColor(R.color.fab_material_lime_900));
 
 //Image
 actionButton.setImageDrawable(getResources().getDrawable(R.drawable.fab_plus_icon));
@@ -178,7 +178,7 @@ actionButton.setShadowXOffset(0.5f);
 actionButton.setShadowYOffset(1.0f);
 
 //Stroke
-actionButton.setStrokeColor(getResources().getColor(R.color.material_blue_grey_500));
+actionButton.setStrokeColor(getResources().getColor(R.color.fab_material_blue_grey_500));
 actionButton.setStrokeWidth(1.0f);
 
 //Animations
