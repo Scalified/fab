@@ -6,37 +6,23 @@ This Library contains implementation of the [**Floating Action Button**](http://
 
 Floating action buttons are used for a special type of promoted action. They are distinguished by a circled icon floating above the UI and have special motion behaviors related to morphing, launching, and the transferring anchor point
 
-## License
-
-```
-  Copyright 2015 Shell Software Inc.
-  
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-  
-      http://www.apache.org/licenses/LICENSE-2.0
-  
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-```
-
-# Requirements
+## Requirements
 
 The Library requires **Android SDK version 9 (Gingerbread) and higher**
 
-# Gradle Dependency
+## Gradle Dependency
 
-//TODO
+```java
+dependencies {
+	compile 'com.github.shell-software:fab:1.0.1'
+}
+```
 
-# Demo
+## Demo
 
 Watch the [**Full Demo Video**](https://www.youtube.com/watch?v=skSApXvi4xM) on YouTube
 
-## Floating Action Button types
+### Floating Action Button types
 
 Floating action buttons come in two sizes: the **DEFAULT**, which should be used in most cases, and the **MINI**, which should only be used to create visual continuity with other elements on the screen
 
@@ -44,7 +30,7 @@ DEFAULT | MINI
 :-:|:-:
 ![Default](https://github.com/shell-software/fab/blob/master/demo/button_type_default.png) | ![Mini](https://github.com/shell-software/fab/blob/master/demo/button_type_mini.png)
 
-## Color palette
+### Color palette
 
 The Library contains all of the colors **500** and **900** of the [**Material Color Palette**](http://www.google.com/design/spec/style/color.html#color-color-palette).
 
@@ -56,7 +42,7 @@ Green 500 | Amber 500 | Blue Grey 500
 :-:|:-:|:-:
 ![Green 500](https://github.com/shell-software/fab/blob/master/demo/color_green.png) | ![Amber Color](https://github.com/shell-software/fab/blob/master/demo/color_amber.png) | ![Blue Grey](https://github.com/shell-software/fab/blob/master/demo/color_blue_grey.png)
 
-## Shadow
+### Shadow
 
 Shadow enabled by default and has starndard settings. These settings are suitable in most cases. However, shadow can be modified in three ways: radius, X- or Y-axis offset and color
 
@@ -64,7 +50,7 @@ Default | Radius | X- and Y- axis offset
 :-:|:-:|:-:
 ![Default Shadow](https://github.com/shell-software/fab/blob/master/demo/default_shadow.png) | ![Shadow Radius](https://github.com/shell-software/fab/blob/master/demo/shadow_radius.png) | ![Shadow Offset](https://github.com/shell-software/fab/blob/master/demo/shadow_axis_offset.png)
 
-## Stroke
+### Stroke
 
 Stroke disabled by default.
 Stroke can be modified in two ways: width and color
@@ -74,7 +60,7 @@ Thin | Medium | Thick
 ![Thin Stroke](https://github.com/shell-software/fab/blob/master/demo/stroke_thin.png) | ![Medium Stroke](https://github.com/shell-software/fab/blob/master/demo/stroke_medium.png) | ![Thick Stroke](https://github.com/shell-software/fab/blob/master/demo/stroke_thick.png)
 
 
-## Animations
+### Animations
 
 The Library has several predefined animations:
 
@@ -86,11 +72,11 @@ Scale In - Scale Out | Roll From Right - Roll To Right | Jump From Right - Jump 
 :-:|:-:|:-:
 ![Scale In Scale Out](https://github.com/shell-software/fab/blob/master/demo/animation_scale_in_scale_out.gif) | ![Roll From Right Roll To Right](https://github.com/shell-software/fab/blob/master/demo/animation_roll_from_right_roll_to_right.gif) | ![Jump From Right Jump To Right](https://github.com/shell-software/fab/blob/master/demo/animation_jump_from_right_jump_to_right.gif)
 
-# Usage
+## Usage
 
-## Creation
+### Creation
 
-### Declaration inside XML resource
+#### Declaration inside XML resource
 
 For instance, using [**RelativeLayout**](http://developer.android.com/reference/android/widget/RelativeLayout.html):
 
@@ -113,7 +99,7 @@ For instance, using [**RelativeLayout**](http://developer.android.com/reference/
 </RelativeLayout>
 ```
 
-### Object creation
+#### Object creation
 
 ```java
 import com.software.shell.fab.FloatingActionButton;
@@ -124,9 +110,9 @@ Context context = getContext();
 FloatingActionButton actionButton = new FloatingActionButton(context);
 ```
 
-## Customization
+### Customization
 
-### XML configuration example
+#### XML configuration example
 
 Firstly add the namespace:
 ```xml
@@ -157,7 +143,7 @@ Then refer the added namespace to configure **Floating Action Button** parameter
             />
 ```
 
-### The same configuration example using code
+#### The same configuration example using code
 
 ```java
 //Button type
@@ -184,4 +170,22 @@ actionButton.setStrokeWidth(1.0f);
 //Animations
 actionButton.setAnimationOnShow(FloatingActionButton.Animations.ROLL_FROM_DOWN);
 actionButton.setAnimationOnHide(FloatingActionButton.Animations.ROLL_TO_DOWN);
+```
+
+## License
+
+```
+  Copyright 2015 Shell Software Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
 ```

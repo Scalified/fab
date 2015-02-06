@@ -22,7 +22,7 @@ ext {
 	ANDROID_BUILD_TOOLS_VERSION = '21.1.1'
 	ANDROID_MIN_SDK_VERSION = 9
 	ANDROID_TARGET_SDK_VERSION = 21
-	ANDROID_VERSION_CODE = 1
+	ANDROID_VERSION_CODE = 2
 
 }
 
@@ -41,7 +41,7 @@ buildscript {
 allprojects {
 
 	group = 'com.github.shell-software'
-	version = '1.0.0'
+	version = '1.0.1'
 
 	repositories {
 		jcenter()

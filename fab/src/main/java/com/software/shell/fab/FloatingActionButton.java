@@ -42,7 +42,7 @@ import android.view.animation.AnimationUtils;
  * <a href="http://www.google.com.ua/design/spec/components/buttons.html">Material Design</a>
  *
  * @author Vladislav
- * @version 1.0.0
+ * @version 1.0.1
  * @since 1.0.0
  */
 public class FloatingActionButton extends View {
@@ -379,7 +379,7 @@ public class FloatingActionButton extends View {
 	 */
 	private void initShowAnimation(TypedArray attrs) {
 		if (attrs.hasValue(R.styleable.FloatingActionButton_animation_onShow)) {
-			final int animResId = attrs.getInteger(R.styleable.FloatingActionButton_animation_onShow, 
+			final int animResId = attrs.getResourceId(R.styleable.FloatingActionButton_animation_onShow,
 					Animations.NONE.animResId);
 			animationOnShow = Animations.load(getContext(), animResId);
 			Log.v(LOG_TAG, "Initialized animation on show");
@@ -394,7 +394,7 @@ public class FloatingActionButton extends View {
 	 */
 	private void initHideAnimation(TypedArray attrs) {
 		if (attrs.hasValue(R.styleable.FloatingActionButton_animation_onHide)) {
-			final int animResId = attrs.getInteger(R.styleable.FloatingActionButton_animation_onHide, 
+			final int animResId = attrs.getResourceId(R.styleable.FloatingActionButton_animation_onHide,
 					Animations.NONE.animResId);
 			animationOnHide = Animations.load(getContext(), animResId);
 			Log.v(LOG_TAG, "Initialized animation on hide");
