@@ -189,3 +189,8 @@ actionButton.setAnimationOnHide(FloatingActionButton.Animations.ROLL_TO_DOWN);
   See the License for the specific language governing permissions and
   limitations under the License.
 ```
+
+## Shell Software Inc. links
+
+* [Google+](https://plus.google.com/112119444427380215269)
+* [Twitter Page](https://twitter.com/shell_software)
