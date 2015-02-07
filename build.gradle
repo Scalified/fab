@@ -40,8 +40,8 @@ buildscript {
 
 allprojects {
 
-	group = 'com.github.shell-software'
-	version = '1.0.1'
+	group = POM_GROUP_ID
+	version = POM_VERSION
 
 	repositories {
 		jcenter()
