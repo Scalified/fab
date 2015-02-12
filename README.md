@@ -1,5 +1,7 @@
 # Floating Action Button library for Android
 
+[![Andriod Arsenal](https://img.shields.io/badge/Android%20Arsenal-fab-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1522)
+
 ## Description
 
 This Library contains implementation of the [**Floating Action Button**](http://www.google.com/design/spec/components/buttons.html#buttons-floating-action-button) for Android.
