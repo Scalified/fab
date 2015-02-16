@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2015 Shell Software Inc.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  ~ File created: 2015-02-14 12:17:06
+  -->
+
+<resources>
+
+	<!--Base components layout width && height-->
+	<style name="fab_layout_match_width_wrap_height_style">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">wrap_content</item>
+	</style>
+	<style name="fab_layout_wrap_width_wrap_height_style">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+	</style>
+	<style name="fab_layout_match_width_match_height_style">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">match_parent</item>
+	</style>
+	
+	<style name="fab_container_base_style" parent="fab_layout_match_width_wrap_height_style">
+		<item name="android:padding">@dimen/fab_container_padding_dimen</item>
+	</style>
+	
+	<!--TextView-->
+	<style name="fab_textview_base_style" parent="fab_layout_match_width_wrap_height_style">
+		<item name="android:textStyle">bold</item>
+		<item name="android:textSize">@dimen/fab_textview_text_size_dimen</item>
+	</style>
+	<style name="fab_textview_style" parent="fab_textview_base_style">
+		<item name="android:layout_marginLeft">@dimen/fab_textview_left_start_margin_dimen</item>
+		<item name="android:layout_marginRight">@dimen/fab_textview_right_end_margin_dimen</item>
+		<item name="android:layout_marginTop">@dimen/fab_textview_top_margin_dimen</item>
+		<item name="android:layout_marginBottom">@dimen/fab_textview_bottom_margin_dimen</item>
+	</style>
+	<style name="fab_textview_new_block_style" parent="fab_textview_style">
+		<item name="android:layout_marginTop">@dimen/fab_textview_new_block_top_margin_dimen</item>
+		<item name="android:layout_marginBottom">@dimen/fab_textview_new_block_bottom_margin_dimen</item>
+	</style>
+	
+	<!--RadioGroup-->
+	<style name="fab_radiogroup_base_style" parent="fab_layout_match_width_wrap_height_style" />
+	<style name="fab_radiogroup_style" parent="fab_radiogroup_base_style">
+		<item name="android:layout_marginLeft">@dimen/fab_radiogroup_left_start_margin_dimen</item>
+		<item name="android:layout_marginRight">@dimen/fab_radiogroup_right_end_margin_dimen</item>
+		<item name="android:layout_marginTop">@dimen/fab_radiogroup_top_margin_dimen</item>
+		<item name="android:layout_marginBottom">@dimen/fab_radiogroup_bottom_margin_dimen</item>
+	</style>
+	
+	<!--RadioButton-->
+	<style name="fab_radiobutton_base_style" parent="fab_layout_wrap_width_wrap_height_style" />
+	<style name="fab_radiobutton_style" parent="fab_radiobutton_base_style" />
+	<style name="fab_radiobutton_horizontal_next_style" parent="fab_radiobutton_base_style">
+		<item name="android:layout_marginLeft">@dimen/fab_radiobutton_horizontal_left_start_margin</item>
+	</style>
+	
+	<!--SeekBar-->
+	<style name="fab_seekbar_base_style" parent="fab_layout_wrap_width_wrap_height_style">
+		<item name="android:layout_width">@dimen/fab_seekbar_width_dimen</item>
+	</style>
+	<style name="fab_seekbar_style" parent="fab_seekbar_base_style">
+		<item name="android:layout_marginLeft">@dimen/fab_seekbar_left_start_margin_dimen</item>
+		<item name="android:layout_marginRight">@dimen/fab_seekbar_right_end_margin_dimen</item>
+		<item name="android:layout_marginTop">@dimen/fab_seekbar_top_margin_dimen</item>
+		<item name="android:layout_marginBottom">@dimen/fab_seekbar_bottom_margin_dimen</item>
+	</style>
+	
+	<!--CheckBox-->
+	<style name="fab_checkbox_base_style" parent="fab_layout_wrap_width_wrap_height_style" />
+	<style name="fab_checkbox_style" parent="fab_checkbox_base_style">
+		<item name="android:layout_marginLeft">@dimen/fab_checkbox_left_start_margin_dimen</item>
+		<item name="android:layout_marginRight">@dimen/fab_checkbox_right_end_margin_dimen</item>
+		<item name="android:layout_marginTop">@dimen/fab_checkbox_top_margin_dimen</item>
+		<item name="android:layout_marginBottom">@dimen/fab_checkbox_bottom_margin_dimen</item>
+	</style>
+	
+	<!--Action Button-->
+	<style name="fab_action_button_base_style" parent="fab_layout_wrap_width_wrap_height_style" />
+	<style name="fab_action_button_style" parent="fab_action_button_base_style">
+		<item name="android:layout_alignParentBottom">true</item>
+		<item name="android:layout_alignParentRight">true</item>
+		<item name="android:layout_marginRight">@dimen/fab_margin</item>
+		<item name="android:layout_marginBottom">@dimen/fab_margin</item>
+	</style>
+	
+</resources>

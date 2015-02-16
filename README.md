@@ -1,4 +1,4 @@
-# Floating Action Button library for Android
+# Floating Action Button Library for Android
 
 ## Description
 
@@ -8,15 +8,72 @@ Floating action buttons are used for a special type of promoted action. They are
 
 ## Requirements
 
-The Library requires **Android SDK version 9 (Gingerbread) and higher**
+The Library requires **Android SDK version 9 (Gingerbread)** and higher
 
 ## Gradle Dependency
 
 ```java
 dependencies {
-	compile 'com.github.shell-software:fab:1.0.1'
+	compile 'com.github.shell-software:fab:1.0.2'
 }
 ```
+
+## Activity Stream
+
+[**Complete ChangeLog**](https://github.com/shell-software/fab/CHANGELOG.md)
+
+### 1.0.3 - *current*
+
+1. Attention! Deprecated XML attributes:
+	* **normal** XML attribute renamed to **DEFAULT**. You can still use **normal** XML attribute, however it will 
+    be removed in version 2.0.0
+    * **mini** XML attribute renamed to **MINI**. You can still use **mini** XML attribute, however it will 
+    be removed in version 2.0.0
+    
+### 1.0.2 - *previous*
+
+1. Attention! Deprecated classes and methods:
+> **FloatingActionButton** class renamed to **ActionButton** class. You can still use **FloatingActionButton** 
+> class, however it is marked as deprecated and will be removed in version 2.0.0. **FloatingActionButton** class 
+> contains other methods, which were deprecated. You can use these old deprecated methods and XML attributes listed 
+> below only with **FloatingActionButton** class. You can't use them with the new **ActionButton** class. 
+> **ActionButton** class in turn, has the new version of these deprecated methods, which you can use.
+	* **getAnimationOnShow()** method renamed to **getShowAnimation()**. You can still use **getAnimationOnShow()**
+	method, however it is marked as deprecated and will be removed in version 2.0.0.
+	* **setAnimationOnShow(android.view.Animation)** method renamed to **setShowAnimation(android.view.Animation)**.
+	You can still use **setAnimationOnShow(android.view.Animation)** method, however it is marked as deprecated and 
+	will be removed in version 2.0.0.
+	* **setAnimationOnShow(com.software.shell.fab.FloatingActionButton.Animations)** method renamed to 
+	**setShowAnimation(com.software.shell.fab.ActionButton.Animations)**. You can still use 
+	**setAnimationOnShow(com.software.shell.fab.FloatingActionButton.Animations)** method, however it is marked as 
+	deprecated and will be removed in version 2.0.0.
+	* **getAnimationOnHide()** method renamed to **getHideAnimation()**. You can still use **getAnimationOnHide()**
+    method, however it is marked as deprecated and will be removed in version 2.0.0.
+    * **setAnimationOnHide(android.view.Animation)** method renamed to **setHideAnimation(android.view.Animation)**.
+    You can still use **setAnimationOnHide(android.view.Animation)** method, however it is marked as deprecated and 
+    will be removed in version 2.0.0.
+    * **setAnimationOnHide(com.software.shell.fab.FloatingActionButton.Animations)** method renamed to 
+    **setHideAnimation(com.software.shell.fab.ActionButton.Animations)**. You can still use 
+    **setAnimationOnHide(com.software.shell.fab.FloatingActionButton.Animations)** method, however it is marked as 
+    deprecated and will be removed in version 2.0.0.
+    * **animation_onShow** XML attribute renamed to **show_animation**. You can still use **animation_onShow**
+    XML attribute, however it will be removed in version 2.0.0
+    * **animation_onHide** XML attribute renamed to **hide_animation**. You can still use **animation_onHide**
+    XML attribute, however it will be removed in version 2.0.0
+2. Added new public methods:
+	* playShowAnimation() - plays the show animation
+	* playHideAnimation() - plays the hide animation
+	* removeShowAnimation() - removes the show animation
+    * removeHideAnimation() - removes the hide animation
+3. Changed the default values for shadow:
+	* **shadowRadius** from 1.0f to 2.0f in density-independent pixels
+	* **shadowXOffset** from 0.5f to 1.0f in density-independent pixels
+	* **shadowYOffset** from 1.0f to 1.5f in density-independent pixels
+	
+### Features in the next versions:
+
+	* **1.1.0**: Ripple Effect - *confirmed*
+	* **2.0.0**: Action Menu - *TBD* - please <a href="mailto:com.software.shell@gmail.com">send</a> your propositions
 
 ## Demo
 
@@ -44,7 +101,7 @@ Green 500 | Amber 500 | Blue Grey 500
 
 ### Shadow
 
-Shadow enabled by default and has starndard settings. These settings are suitable in most cases. However, shadow can be modified in three ways: radius, X- or Y-axis offset and color
+Shadow enabled by default and has standard settings. These settings are suitable in most cases. However, shadow can be modified in three ways: radius, X- or Y-axis offset and color
 
 Default | Radius | X- and Y- axis offset
 :-:|:-:|:-:
@@ -87,7 +144,7 @@ For instance, using [**RelativeLayout**](http://developer.android.com/reference/
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <com.software.shell.fab.FloatingActionButton 
+        <com.software.shell.fab.ActionButton 
             android:id="@+id/action_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -99,27 +156,275 @@ For instance, using [**RelativeLayout**](http://developer.android.com/reference/
 </RelativeLayout>
 ```
 
+
+```java
+// And then find it within the content view:
+
+ActionButton actionButton = (ActionButton) findViewById(R.id.action_button);
+```
+
 #### Object creation
 
 ```java
-import com.software.shell.fab.FloatingActionButton;
-
-// ...
-
 Context context = getContext();
-FloatingActionButton actionButton = new FloatingActionButton(context);
+ActionButton actionButton = new ActionButton(context);
+
+// And then add it to the content view
 ```
+
+### Button actions
+
+**Floating Action Button** can be *shown*, *hidden* or completely *dismissed*:
+
+```java
+actionButton.show();    // shows the button if it is hidden and plays the show animation if set
+actionButton.hide();    // hides the button if it is shown and plays the hide animation if set
+actionButton.dismiss(); // completely dismisses the button and plays the hide animation if set
+```
+
+Note, that in each case the appropriate animation will be played (if it is set)
+
+> After dismissal the button is completely removed from its parent view,
+> so any calls to **show()** etc. won't be processed
+
+The current status of the button can be checked with the help of:
+
+```java
+// To check whether button is shown (inherited from android.view.View class):
+boolean shown = actionButton.isShown();
+
+// To check whether button is hidden:
+boolean hidden = actionButton.isHidden();
+
+// To check whether button is dismissed:
+boolean dismissed = actionButton.isDismissed();
+```
+
+There are some cases when you need to force playing the animation without calling the **show()**, 
+**hide()** or **dismiss()** methods. For instance, when your button appears within layout in the Activity
+for the first time. In such cases animations can be played apart from *showing*, *hiding*, or *dismissing*
+the button:
+
+```java
+actionButton.playShowAnimation();   // plays the show animation
+actionButton.playHideAnimation();   // plays the hide animation
+```
+
+> Note: Animations are played only if set. 
+> By default animations are not set.
 
 ### Customization
 
-#### XML configuration example
+#### Button types
+
+There are two types of **Floating Action Button**, which you can use:
+
+	* **DEFAULT**
+	* **MINI**
+
+By default the button type is set to **DEFAULT**
+
+To work with button types use:
+
+```java
+// To set the button type:
+actionButton.setType(ActionButton.Type.MINI);
+
+// To get the button type:
+ActionButton.Type type = actionButton.getType();
+```
+	
+#### Button states
+
+There are two states and **Floating Action Button** may reside in on of them:
+
+	* **NORMAL**
+	* **PRESSED**
+	
+To work with button states use:
+
+```java
+// To set the button state:
+actionButton.setState(ActionButton.State.PRESSED);
+
+// To get the button state:
+ActionButton.State state = actionButton.getState();
+```
+
+#### Button colors
+
+Button colors can be set as for **NORMAL** state, so for **PRESSED** one. 
+By default the following colors are set:
+
+	* **Color.LTGRAY** for **NORMAL** state
+	* **Color.DKGRAY** for **PRESSED** state
+	
+To work with button colors use:
+
+```java
+// To set button color for normal state:
+actionButton.setButtonColor(getResources().getColor(R.color.fab_material_lime_500));
+
+// To get button color for normal state:
+int buttonColor = actionButton.getButtonColor();
+
+// To set button color for pressed state:
+actionButton.setButtonColorPressed(getResources().getColor(R.color.fab_material_lime_900));
+
+// To get button color for pressed state:
+int buttonColorPressed = actionButton.getButtonColorPressed();
+```
+
+#### Shadow
+
+Shadow can be customized in three ways: *color*, *radius* and *offset*.
+By default shadow is **enabled** and has the following default values:
+	
+	* **shadowColor** = #757575 (~ middle-grey)
+	* **shadowRadius** = 2.0f   (in density-independent pixels)
+	* **shadowXOffset** = 1.0f  (in density-independent pixels)
+	* **shadowYOffset** = 1.5f  (in density-independent pixels)
+
+To work with shadow use:
+
+```java
+// To check whether shadow is present:
+boolean hasShadow = actionButton.hasShadow();
+
+// To set the shadow color:
+actionButton.setShadowColor(getResources().getColor(R.color.fab_material_grey_500));
+
+// To get the shadow color:
+int shadowColor = actionButton.getShadowColor();
+
+// To set the shadow radius:
+actionButton.setShadowRadius(5.0f);
+
+// To get the shadow radius:
+float shadowRadius = actionButton.getShadowRadius();
+
+// To set the shadow X-axis offset:
+actionButton.setShadowXOffset(3.5f);
+
+// To get the shadow X-axis offset:
+float shadowXOffset = actionButton.getShadowXOffset();
+
+// To set the shadow Y-axis offset:
+actionButton.setShadowYOffset(3.0f);
+
+// To get the shadow Y-axis offset:
+float shadowYOffset = actionButton.getShadowYOffset();
+
+// To remove shadow:
+actionButton.removeShadow();
+```
+
+> Note: Shadow radius and offset must be specified in density-independent pixels.
+
+#### Image
+
+**Floating Action Button** can have an image centered inside. By default image is absent. 
+Any image can be used for adding. The Library has **fab_plus_icon** drawable, which can also be used. 
+When an image is set its width and height are changed to the default ones, which both are set to
+**24.0dp** (according to material design guidelines). However this size is also adjustable.
+ 
+To work with image use:
+
+```java
+// To check whether image is present:
+boolean hasImage = actionButton.hasImage();
+
+// To set an image (either bitmap, drawable or resource id):
+actionButton.setImageBitmap(bitmap);
+actionButton.setImageDrawable(getResource.getDrawable(R.drawable.fab_plus_icon));
+actionButton.setImageResource(R.drawable.fab_plus_icon);
+
+// To get an image:
+Drawable image = actionButton.getImage();
+
+// To set the image size (which is by default 24.0dp):
+actionButton.setImageSize(30.0dp);
+
+// To get the image size:
+float imageSize = actionButton.getImageSize();
+
+// To remove the image:
+actionButton.removeImage();
+```
+
+> Note: Image size must be specified in density-independent pixels.
+> Changing the image size breaks the rules of *Material Design Guidelines*
+
+#### Stroke
+
+Stroke can be customized in two ways: *width* and the *color*. 
+Stroke is disabled by default, however it has the default values:
+
+	* **strokeColor** = Color.BLACK
+	* **strokeWidth** = 0.0f
+
+To work with stroke use:
+
+```java
+// To check whether stroke is enabled:
+boolean hasStroke = actionButton.hasStroke();
+
+// To set stroke color:
+actionButton.setStrokeColor(getResources().getColor(R.color.fab_material_blue_grey_500));
+
+// To get stroke color:
+int strokeColor = actionButton.getStrokeColor();
+
+// To set stroke width:
+actionButton.setStrokeWidth(1.5f);
+
+// To get stroke width:
+float strokeWidth = actionButton.getStrokeWidth();
+
+// To remove the stroke:
+actionButton.removeStroke();
+```
+
+> Note: Stroke width must be specified in density-independent pixels
+
+#### Animations
+
+**Floating Action Button** supports 2 animation types: animation, which is played while *showing*
+the button and animation, which is played while *hiding* the button. By default neither show animation,
+nor hide animation are set.
+
+To work with animations use:
+
+```java
+// To set show animation:
+actionButton.setShowAnimation(getResources().getAnimation(R.anim.fab_fade_in));
+actionButton.setShowAnimation(ActionButton.Animations.FADE_IN);
+
+// To get show animation:
+Animation animation = actionButton.getShowAnimation();
+
+// To remove show animation:
+actionButton.removeShowAnimation();
+
+// To set hide animation:
+actionButton.setHideAnimation(getResources().getAnimation(R.anim.fab_fade_out));
+actionButton.setHideAnimation(ActionButton.Animations.FADE_OUT);
+
+// To get hide animation:
+Animation animation = actionButton.getHideAnimation();
+
+// To remove hide animation:
+actionButton.removeHideAnimation();
+```
+
+#### XML full configuration example
 
 Firstly add the namespace:
 ```xml
 xmlns:fab="http://schemas.android.com/apk/res-auto"
 ```
 
-Then refer the added namespace to configure **Floating Action Button** parameters
+Then refer the added namespace to configure **Action Button** parameters
 ```xml
 <com.software.shell.fab.FloatingActionButton 
             android:id="@+id/action_button"
@@ -127,7 +432,7 @@ Then refer the added namespace to configure **Floating Action Button** parameter
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/fab_margin"
             android:layout_marginBottom="@dimen/fab_margin"
-            fab:type="normal"
+            fab:type="DEFAULT"
             fab:button_color="@color/fab_material_lime_500"
             fab:button_colorPressed="@color/fab_material_lime_900"
             fab:image="@drawable/fab_plus_icon"
@@ -138,39 +443,13 @@ Then refer the added namespace to configure **Floating Action Button** parameter
             fab:shadow_yOffset="1.0dp"
             fab:stroke_color="@color/fab_material_blue_grey_500"
             fab:stroke_width="1.0dp"
-            fab:animation_onShow="@anim/fab_roll_from_down"
-            fab:animation_onHide="@anim/fab_roll_to_down"
+            fab:show_animation="@anim/fab_roll_from_down"
+            fab:hide_animation="@anim/fab_roll_to_down"
             />
 ```
 
-#### The same configuration example using code
-
-```java
-//Button type
-actionButton.setType(FloatingActionButton.Type.MINI);
-
-//Button colors
-actionButton.setButtonColor(getResources().getColor(R.color.fab_material_lime_500));
-actionButton.setButtonColorPressed(getResources().getColor(R.color.fab_material_lime_900));
-
-//Image
-actionButton.setImageDrawable(getResources().getDrawable(R.drawable.fab_plus_icon));
-actionButton.setImageSize(24.0f);
-
-//Shadow
-actionButton.setShadowColor(Color.parseColor("#757575"));
-actionButton.setShadowRadius(1.0f);
-actionButton.setShadowXOffset(0.5f);
-actionButton.setShadowYOffset(1.0f);
-
-//Stroke
-actionButton.setStrokeColor(getResources().getColor(R.color.fab_material_blue_grey_500));
-actionButton.setStrokeWidth(1.0f);
-
-//Animations
-actionButton.setAnimationOnShow(FloatingActionButton.Animations.ROLL_FROM_DOWN);
-actionButton.setAnimationOnHide(FloatingActionButton.Animations.ROLL_TO_DOWN);
-```
+> Note: The above example contains all of the configuration parameters for **Action Button**,
+> so there is no need to configure all of them, because they all have default values
 
 ## License
 

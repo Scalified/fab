@@ -21,13 +21,13 @@ package com.software.shell.fab;
 import android.test.AndroidTestCase;
 
 /**
- * Test for {@link com.software.shell.fab.FloatingActionButton}
+ * Test for {@link com.software.shell.fab.ActionButton}
  *
  * @author Vladislav
  * @version 1.0.0
  * @since 1.0.0
  */
-public class FloatingActionButtonTest extends AndroidTestCase {
+public class ActionButtonTest extends AndroidTestCase {
 
 	@Override
 	public void setUp() throws Exception {
