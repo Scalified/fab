@@ -72,7 +72,7 @@ dependencies {
 ### Features in the next versions:
 
 * **1.1.0**: Ripple Effect - *confirmed*
-* **2.0.0**: Action Menu - *TBD* - please <a href="mailto:com.software.shell@gmail.com">send</a> your propositions
+* **2.0.0**: Action Menu - *TBD* - please <a href="mailto:com.software.shell@gmail.com?subject=[Action Button]: Add Action Menu TBD">send</a> your propositions
 
 ## Demo
 
