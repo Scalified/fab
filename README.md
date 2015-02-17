@@ -1,5 +1,6 @@
 # Floating Action Button Library for Android
 
+[![Build Status](https://travis-ci.org/shell-software/fab.svg?branch=master)](https://travis-ci.org/shell-software/fab)
 [![Andriod Arsenal](https://img.shields.io/badge/Android%20Arsenal-fab-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1522)
 
 ## Description
