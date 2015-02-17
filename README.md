@@ -26,56 +26,53 @@ dependencies {
 
 ### 1.0.3 - *current*
 
-1. Attention! Deprecated XML attributes:
-	* **normal** XML attribute renamed to **DEFAULT**. You can still use **normal** XML attribute, however it will 
-    be removed in version 2.0.0
-    * **mini** XML attribute renamed to **MINI**. You can still use **mini** XML attribute, however it will 
-    be removed in version 2.0.0
+1. **Attention!** Deprecated XML attributes:
+
+	* **normal** XML attribute renamed to **DEFAULT**.
+    You can still use **normal** XML attribute, however it will be removed in version 2.0.0.
+	* **mini** XML attribute renamed to **MINI**.
+    You can still use **mini** XML attribute, however it will be removed in version 2.0.0.
     
 ### 1.0.2 - *previous*
 
-1. Attention! Deprecated classes and methods:
-> **FloatingActionButton** class renamed to **ActionButton** class. You can still use **FloatingActionButton** 
-> class, however it is marked as deprecated and will be removed in version 2.0.0. **FloatingActionButton** class 
-> contains other methods, which were deprecated. You can use these old deprecated methods and XML attributes listed 
-> below only with **FloatingActionButton** class. You can't use them with the new **ActionButton** class. 
+1. **Attention!** Deprecated classes and methods:
+> **FloatingActionButton** class renamed to **ActionButton** class. You can still use **FloatingActionButton** class, however it is  marked as deprecated and will be removed in version 2.0.0. **FloatingActionButton** class contains other methods, which were deprecated. You can use these old deprecated methods and XML attributes listed below only with **FloatingActionButton** class. You can't use them with the new **ActionButton** class. 
 > **ActionButton** class in turn, has the new version of these deprecated methods, which you can use.
-	* **getAnimationOnShow()** method renamed to **getShowAnimation()**. You can still use **getAnimationOnShow()**
-	method, however it is marked as deprecated and will be removed in version 2.0.0.
+	
+	* **getAnimationOnShow()** method renamed to **getShowAnimation()**. 
+    You can still use **getAnimationOnShow()** method, however it is marked as deprecated and will be removed in version 2.0.0.
 	* **setAnimationOnShow(android.view.Animation)** method renamed to **setShowAnimation(android.view.Animation)**.
-	You can still use **setAnimationOnShow(android.view.Animation)** method, however it is marked as deprecated and 
-	will be removed in version 2.0.0.
-	* **setAnimationOnShow(com.software.shell.fab.FloatingActionButton.Animations)** method renamed to 
-	**setShowAnimation(com.software.shell.fab.ActionButton.Animations)**. You can still use 
-	**setAnimationOnShow(com.software.shell.fab.FloatingActionButton.Animations)** method, however it is marked as 
-	deprecated and will be removed in version 2.0.0.
-	* **getAnimationOnHide()** method renamed to **getHideAnimation()**. You can still use **getAnimationOnHide()**
-    method, however it is marked as deprecated and will be removed in version 2.0.0.
-    * **setAnimationOnHide(android.view.Animation)** method renamed to **setHideAnimation(android.view.Animation)**.
-    You can still use **setAnimationOnHide(android.view.Animation)** method, however it is marked as deprecated and 
-    will be removed in version 2.0.0.
-    * **setAnimationOnHide(com.software.shell.fab.FloatingActionButton.Animations)** method renamed to 
-    **setHideAnimation(com.software.shell.fab.ActionButton.Animations)**. You can still use 
-    **setAnimationOnHide(com.software.shell.fab.FloatingActionButton.Animations)** method, however it is marked as 
-    deprecated and will be removed in version 2.0.0.
-    * **animation_onShow** XML attribute renamed to **show_animation**. You can still use **animation_onShow**
-    XML attribute, however it will be removed in version 2.0.0
-    * **animation_onHide** XML attribute renamed to **hide_animation**. You can still use **animation_onHide**
-    XML attribute, however it will be removed in version 2.0.0
+    You can still use **setAnimationOnShow(android.view.Animation)** method, however it is marked as deprecated and will be removed in version 2.0.0.
+	* **setAnimationOnShow(com.software.shell.fab.FloatingActionButton.Animations)** method renamed to **setShowAnimation(com.software.shell.fab.ActionButton.Animations)**. 
+    You can still use **setAnimationOnShow(com.software.shell.fab.FloatingActionButton.Animations)** method, however it is marked as deprecated and will be removed in version 2.0.0.
+	* **getAnimationOnHide()** method renamed to **getHideAnimation()**.
+    You can still use **getAnimationOnHide()** method, however it is marked as deprecated and will be removed in version 2.0.0.
+	* **setAnimationOnHide(android.view.Animation)** method renamed to **setHideAnimation(android.view.Animation)**.
+    You can still use **setAnimationOnHide(android.view.Animation)** method, however it is marked as deprecated and will be removed in version 2.0.0.
+    * **setAnimationOnHide(com.software.shell.fab.FloatingActionButton.Animations)** method renamed to **setHideAnimation(com.software.shell.fab.ActionButton.Animations)**. 
+    You can still use **setAnimationOnHide(com.software.shell.fab.FloatingActionButton.Animations)** method, however it is marked as deprecated and will be removed in version 2.0.0.
+    * **animation_onShow** XML attribute renamed to **show_animation**. 
+    You can still use **animation_onShow** XML attribute, however it will be removed in version 2.0.0
+    * **animation_onHide** XML attribute renamed to **hide_animation**. 
+    You can still use **animation_onHide** XML attribute, however it will be removed in version 2.0.0
+    
 2. Added new public methods:
-	* playShowAnimation() - plays the show animation
-	* playHideAnimation() - plays the hide animation
-	* removeShowAnimation() - removes the show animation
-    * removeHideAnimation() - removes the hide animation
+
+	* **playShowAnimation()** - plays the show animation
+	* **playHideAnimation()** - plays the hide animation
+	* **removeShowAnimation()** - removes the show animation
+	* **removeHideAnimation()** - removes the hide animation
+    
 3. Changed the default values for shadow:
+
 	* **shadowRadius** from 1.0f to 2.0f in density-independent pixels
 	* **shadowXOffset** from 0.5f to 1.0f in density-independent pixels
 	* **shadowYOffset** from 1.0f to 1.5f in density-independent pixels
 	
 ### Features in the next versions:
 
-	* **1.1.0**: Ripple Effect - *confirmed*
-	* **2.0.0**: Action Menu - *TBD* - please <a href="mailto:com.software.shell@gmail.com">send</a> your propositions
+* **1.1.0**: Ripple Effect - *confirmed*
+* **2.0.0**: Action Menu - *TBD* - please <a href="mailto:com.software.shell@gmail.com">send</a> your propositions
 
 ## Demo
 
@@ -161,7 +158,6 @@ For instance, using [**RelativeLayout**](http://developer.android.com/reference/
 
 ```java
 // And then find it within the content view:
-
 ActionButton actionButton = (ActionButton) findViewById(R.id.action_button);
 ```
 
@@ -170,7 +166,6 @@ ActionButton actionButton = (ActionButton) findViewById(R.id.action_button);
 ```java
 Context context = getContext();
 ActionButton actionButton = new ActionButton(context);
-
 // And then add it to the content view
 ```
 
@@ -184,10 +179,7 @@ actionButton.hide();    // hides the button if it is shown and plays the hide an
 actionButton.dismiss(); // completely dismisses the button and plays the hide animation if set
 ```
 
-Note, that in each case the appropriate animation will be played (if it is set)
-
-> After dismissal the button is completely removed from its parent view,
-> so any calls to **show()** etc. won't be processed
+> After dismissal the button is completely removed from its parent view, so any calls to **show()** etc. won't be processed
 
 The current status of the button can be checked with the help of:
 
@@ -212,17 +204,16 @@ actionButton.playShowAnimation();   // plays the show animation
 actionButton.playHideAnimation();   // plays the hide animation
 ```
 
-> Note: Animations are played only if set. 
-> By default animations are not set.
+> Animations are played only if set. By default animations are not set.
 
 ### Customization
 
 #### Button types
 
-There are two types of **Floating Action Button**, which you can use:
+There are two types of **Floating Action Button**, which you can work with:
 
-	* **DEFAULT**
-	* **MINI**
+* **DEFAULT**
+* **MINI**
 
 By default the button type is set to **DEFAULT**
 
@@ -240,8 +231,8 @@ ActionButton.Type type = actionButton.getType();
 
 There are two states and **Floating Action Button** may reside in on of them:
 
-	* **NORMAL**
-	* **PRESSED**
+* **NORMAL**
+* **PRESSED**
 	
 To work with button states use:
 
@@ -258,8 +249,8 @@ ActionButton.State state = actionButton.getState();
 Button colors can be set as for **NORMAL** state, so for **PRESSED** one. 
 By default the following colors are set:
 
-	* **Color.LTGRAY** for **NORMAL** state
-	* **Color.DKGRAY** for **PRESSED** state
+* **Color.LTGRAY** for the **NORMAL** state
+* **Color.DKGRAY** for the **PRESSED** state
 	
 To work with button colors use:
 
@@ -282,10 +273,10 @@ int buttonColorPressed = actionButton.getButtonColorPressed();
 Shadow can be customized in three ways: *color*, *radius* and *offset*.
 By default shadow is **enabled** and has the following default values:
 	
-	* **shadowColor** = #757575 (~ middle-grey)
-	* **shadowRadius** = 2.0f   (in density-independent pixels)
-	* **shadowXOffset** = 1.0f  (in density-independent pixels)
-	* **shadowYOffset** = 1.5f  (in density-independent pixels)
+* **shadowColor** = #757575 (~ middle-grey)
+* **shadowRadius** = 2.0f   (in density-independent pixels)
+* **shadowXOffset** = 1.0f  (in density-independent pixels)
+* **shadowYOffset** = 1.5f  (in density-independent pixels)
 
 To work with shadow use:
 
@@ -321,7 +312,7 @@ float shadowYOffset = actionButton.getShadowYOffset();
 actionButton.removeShadow();
 ```
 
-> Note: Shadow radius and offset must be specified in density-independent pixels.
+> Shadow radius and offset must be specified in density-independent pixels.
 
 #### Image
 
@@ -354,16 +345,15 @@ float imageSize = actionButton.getImageSize();
 actionButton.removeImage();
 ```
 
-> Note: Image size must be specified in density-independent pixels.
-> Changing the image size breaks the rules of *Material Design Guidelines*
+> Image size must be specified in density-independent pixels. Changing the image size breaks the rules of *Material Design Guidelines*
 
 #### Stroke
 
 Stroke can be customized in two ways: *width* and the *color*. 
 Stroke is disabled by default, however it has the default values:
 
-	* **strokeColor** = Color.BLACK
-	* **strokeWidth** = 0.0f
+* **strokeColor** = Color.BLACK
+* **strokeWidth** = 0.0f (no stroke)
 
 To work with stroke use:
 
@@ -387,7 +377,7 @@ float strokeWidth = actionButton.getStrokeWidth();
 actionButton.removeStroke();
 ```
 
-> Note: Stroke width must be specified in density-independent pixels
+> Stroke width must be specified in density-independent pixels
 
 #### Animations
 
@@ -428,7 +418,7 @@ xmlns:fab="http://schemas.android.com/apk/res-auto"
 
 Then refer the added namespace to configure **Action Button** parameters
 ```xml
-<com.software.shell.fab.FloatingActionButton 
+<com.software.shell.fab.ActionButton 
             android:id="@+id/action_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -450,8 +440,7 @@ Then refer the added namespace to configure **Action Button** parameters
             />
 ```
 
-> Note: The above example contains all of the configuration parameters for **Action Button**,
-> so there is no need to configure all of them, because they all have default values
+> The above example contains all of the configuration parameters for **Action Button**, so there is no need to configure all of them, because they all have default values
 
 ## License
 
