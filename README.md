@@ -1,5 +1,7 @@
 # Floating Action Button Library for Android
 
+[![Andriod Arsenal](https://img.shields.io/badge/Android%20Arsenal-fab-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1522)
+
 ## Description
 
 This Library contains implementation of the [**Floating Action Button**](http://www.google.com/design/spec/components/buttons.html#buttons-floating-action-button) for Android.
@@ -14,7 +16,7 @@ The Library requires **Android SDK version 9 (Gingerbread)** and higher
 
 ```java
 dependencies {
-	compile 'com.github.shell-software:fab:1.0.2'
+	compile 'com.github.shell-software:fab:1.0.3'
 }
 ```
 
