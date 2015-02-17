@@ -1,2 +1,2 @@
 language: android
-script: ./gradlew clean build
+script: gradle clean install
