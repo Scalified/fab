@@ -1,2 +1,8 @@
 language: android
-script: gradle clean build
+
+android:
+  components:
+    - build-tools-21.1.2
+    - android-21
+    
+script: gradle clean build --info
