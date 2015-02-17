@@ -25,7 +25,7 @@ dependencies {
 
 [**Full ChangeLog**](https://github.com/shell-software/fab/blob/master/CHANGELOG.md)
 
-### 1.0.3 - *current version*
+### 1.0.3 - *current*
 
 1. **Attention!** Deprecated XML attributes:
 
@@ -34,7 +34,7 @@ dependencies {
 	* **mini** XML attribute renamed to **MINI**.
     You can still use **mini** XML attribute, however it will be removed in version 2.0.0.
     
-### 1.0.2 - *previous version*
+### 1.0.2 - *previous*
 
 > **FloatingActionButton** class has been renamed to **ActionButton** class. You can still use **FloatingActionButton** class, however it is  marked as *deprecated* and will be removed in version 2.0.0. **FloatingActionButton** class contains other methods, which were deprecated. You can use these old deprecated methods and XML attributes listed below only with **FloatingActionButton** class. You can't use them with the new **ActionButton** class.
 > **ActionButton** class in turn, has the new version of these deprecated methods, which you can use.
