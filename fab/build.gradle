@@ -18,10 +18,10 @@
 
 apply plugin: 'com.android.library'
 
-//Publishing
-//if (hasProperty('aarPublishingScript')) {
-//	apply from: properties['aarPublishingScript']
-//}
+// Publishing
+if (hasProperty('aarPublishingScript')) {
+	apply from: properties['aarPublishingScript']
+}
 
 android {
 
