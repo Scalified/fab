@@ -19,8 +19,8 @@
 apply plugin: 'com.android.library'
 
 // Publishing
-if (hasProperty('aarPublishingScript')) {
-	apply from: properties['aarPublishingScript']
+if (hasProperty('AAR_PUBLISHING_SCRIPT')) {
+	apply from: properties['AAR_PUBLISHING_SCRIPT']
 }
 
 android {

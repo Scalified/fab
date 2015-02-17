@@ -27,7 +27,7 @@ dependencies {
 
 ### 1.0.3 - *current*
 
-1. **Attention!** Deprecated XML attributes:
+1. **Attention!** *Deprecated* XML attributes:
 
 	* **normal** XML attribute renamed to **DEFAULT**.
     You can still use **normal** XML attribute, however it will be removed in version 2.0.0.
