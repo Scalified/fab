@@ -22,7 +22,7 @@ dependencies {
 
 ## Activity Stream
 
-[**Complete ChangeLog**](https://github.com/shell-software/fab/CHANGELOG.md)
+[**Complete ChangeLog**](https://github.com/shell-software/fab/blob/master/CHANGELOG.md)
 
 ### 1.0.3 - *current*
 
