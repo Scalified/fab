@@ -1,9 +1,8 @@
 # Floating Action Button Library for Android
 
-[![Join the chat at https://gitter.im/shell-software/fab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/shell-software/fab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [![Build Status](https://travis-ci.org/shell-software/fab.svg?branch=master)](https://travis-ci.org/shell-software/fab)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-fab-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1522)
+[![Join the chat at https://gitter.im/shell-software/fab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/shell-software/fab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Description
 
