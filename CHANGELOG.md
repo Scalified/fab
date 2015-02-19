@@ -64,3 +64,11 @@
     You can still use **normal** XML attribute, however it will be removed in version 2.0.0.
 	* **mini** XML attribute renamed to **MINI**.
     You can still use **mini** XML attribute, however it will be removed in version 2.0.0.
+
+# 1.0.4
+
+1. Fixed [**issue #8**: Both buttons show up when I only want one at a time](https://github.com/shell-software/fab/issues/8):
+
+	A small fix was applied to **show()**, **hide()** and **dismiss()** methods. Previously these methods might not work properly if the call was done within **onCreate()** method.
+	This happened because of using **android.view.View#isShown()** method, which returned *false* even if the button was shown. Now these methods relay on **VISIBILITY** and work
+	as expected wherever they called.

@@ -18,7 +18,7 @@ The Library requires **Android SDK version 9 (Gingerbread)** and higher.
 
 ```java
 dependencies {
-	compile 'com.github.shell-software:fab:1.0.3'
+	compile 'com.github.shell-software:fab:1.0.4'
 }
 ```
 
@@ -26,7 +26,15 @@ dependencies {
 
 [**Full ChangeLog**](https://github.com/shell-software/fab/blob/master/CHANGELOG.md)
 
-### 1.0.3 - *current*
+### 1.0.4 - *current*
+
+1. Fixed [**issue #8**: Both buttons show up when I only want one at a time](https://github.com/shell-software/fab/issues/8):
+
+	A small fix was applied to **show()**, **hide()** and **dismiss()** methods. Previously these methods might not work properly if the call was done within **onCreate()** method.
+	This happened because of using **android.view.View#isShown()** method, which returned *false* even if the button was shown. Now these methods relay on **VISIBILITY** and work
+	as expected wherever they called.
+
+### 1.0.3 - *previous*
 
 1. **Attention!** *Deprecated* XML attributes:
 
@@ -34,57 +42,15 @@ dependencies {
     You can still use **normal** XML attribute, however it will be removed in version 2.0.0.
 	* **mini** XML attribute renamed to **MINI**.
     You can still use **mini** XML attribute, however it will be removed in version 2.0.0.
-    
-### 1.0.2 - *previous*
 
-> **FloatingActionButton** class has been renamed to **ActionButton** class. You can still use **FloatingActionButton** class, however it is  marked as *deprecated* and will be removed in version 2.0.0. **FloatingActionButton** class contains other methods, which were deprecated. You can use these old deprecated methods and XML attributes listed below only with **FloatingActionButton** class. You can't use them with the new **ActionButton** class.
-> **ActionButton** class in turn, has the new version of these deprecated methods, which you can use.
-
-1. **Attention!** *Deprecated* classes and methods:
-	
-    1. Classes:
-    
-    	* **FloatingActionButton** class renamed to **ActionButton** class.
-        You can still use **FloatingActionButton** class, however it is marked as *deprecated* and wiil be removed in version 2.0.0.
-
-	2. Public methods in **ActionButton** **(FloatingActionButton)** class:
-    
-    	* **getAnimationOnShow()** method renamed to **getShowAnimation()**.
-        You can still use **getAnimationOnShow()** method, however it is marked as *deprecated* and will be removed in version 2.0.0.
-        * **setAnimationOnShow(android.view.Animation)** method renamed to **setShowAnimation(android.view.Animation)**.
-        You can still use **setAnimationOnShow(android.view.Animation)** method, however it is marked as *deprecated* and will be removed in version 2.0.0.
-        * **setAnimationOnShow(com.software.shell.fab.FloatingActionButton.Animations)** method renamed to **setShowAnimation(com.software.shell.fab.ActionButton.Animations)**.
-        You can still use **setAnimationOnShow(com.software.shell.fab.FloatingActionButton.Animations)** method, however it is marked as *deprecated* and will be removed in version 2.0.0.
-        * **getAnimationOnHide()** method renamed to **getHideAnimation()**.
-        You can still use **getAnimationOnHide()** method, however it is marked as *deprecated* and will be removed in version 2.0.0.
-        * **setAnimationOnHide(android.view.Animation)** method renamed to **setHideAnimation(android.view.Animation)**.
-        You can still use **setAnimationOnHide(android.view.Animation)** method, however it is marked as *deprecated* and will be removed in version 2.0.0.
-        * **setAnimationOnHide(com.software.shell.fab.FloatingActionButton.Animations)** method renamed to **setHideAnimation(com.software.shell.fab.ActionButton.Animations)**.
-        You can still use **setAnimationOnHide(com.software.shell.fab.FloatingActionButton.Animations)** method, however it is marked as *deprecated* and will be removed in version 2.0.0.
-    
-	3. XML attributes:
-    
-    	* **animation_onShow** XML attribute renamed to **show_animation**.
-        You can still use **animation_onShow** XML attribute, however it will be removed in version 2.0.0.
-        * **animation_onHide** XML attribute renamed to **hide_animation**.
-        You can still use **animation_onHide** XML attribute, however it will be removed in version 2.0.0.
-    
-2. Added new public methods in **ActionButton** **(FloatingActionButton)** class:
-
-	* **playShowAnimation()** - plays the show animation
-	* **playHideAnimation()** - plays the hide animation
-	* **removeShowAnimation()** - removes the show animation
-	* **removeHideAnimation()** - removes the hide animation
-    
-3. Changed the default shadow values:
-
-	* **shadowRadius** value changed from **1.0f** to **2.0f** in density-independent pixels
-	* **shadowXOffset** value changed from **0.5f** to **1.0f** in density-independent pixels
-	* **shadowYOffset** value changed from **1.0f** to **1.5f** in density-independent pixels
-	
 ### Features in the next versions:
 
-* **1.1.0**: Ripple Effect - *confirmed*.
+* **1.1.0**:
+
+	New features - **confirmed**:
+	* [**issue #2**: ripple effect](https://github.com/shell-software/fab/issues/2)
+	* [**issue #9**: Move button up and down](https://github.com/shell-software/fab/issues/9)
+	
 * **2.0.0**: Action Menu - *TBD* - please <a href="mailto:com.software.shell@gmail.com?subject=[Action Button]: Add Action Menu TBD">send me</a> your propositions.
 
 ## Demo

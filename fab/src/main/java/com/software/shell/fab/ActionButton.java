@@ -449,7 +449,7 @@ public class ActionButton extends View {
 	 * {@link #showAnimation} is played if set
 	 */
 	public void show() {
-		if (!isShown()) {
+		if (isHidden()) {
 			playShowAnimation();
 			setVisibility(VISIBLE);
 			Log.v(LOG_TAG, "Action Button shown");
@@ -463,7 +463,7 @@ public class ActionButton extends View {
 	 * {@link #hideAnimation} is played if set
 	 */
 	public void hide() {
-		if (isShown()) {
+		if (!isHidden() && !isDismissed()) {
 			playHideAnimation();
 			setVisibility(INVISIBLE);
 			Log.v(LOG_TAG, "Action Button hidden");
@@ -481,7 +481,7 @@ public class ActionButton extends View {
 	 */
 	public void dismiss() {
 		if (!isDismissed()) {
-			if (isShown()) {
+			if (!isHidden()) {
 				playHideAnimation();
 			}
 			setVisibility(GONE);
