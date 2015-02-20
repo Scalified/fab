@@ -27,6 +27,7 @@
 			<enum name="normal" value="0" />
 			<enum name="mini" value="1" />
 		</attr>
+		<attr name="size" format="dimension" />
 		<attr name="button_color" format="color" />
 		<attr name="button_colorPressed" format="color" />
 		<attr name="shadow_radius" format="dimension" />

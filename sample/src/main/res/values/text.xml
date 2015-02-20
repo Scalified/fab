@@ -70,9 +70,12 @@
 	<!--RadioButton-->
 	<string name="fab_radiobutton_default_type_text">DEFAULT</string>
 	<string name="fab_radiobutton_mini_type_text">MINI</string>
-	
+	<string name="fab_radiobutton_none_on_click_text">None</string>
+	<string name="fab_radiobutton_hide_and_show_on_click_text">Hide and show on click</string>
+	<string name="fab_radiobutton_move_up_and_down_on_click">Move up and down on click</string>
+	<string name="fab_radiobutton_move_left_and_right_on_click">Move left and right on click</string>
+
 	<!--CheckBox-->
 	<string name="fab_checkbox_default_icon_plus_text">Default icon plus</string>
-	<string name="fab_checkbox_hide_and_show_on_click_text">Hide and show on click</string>
 	
 </resources>

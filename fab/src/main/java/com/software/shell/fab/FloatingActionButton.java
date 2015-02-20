@@ -34,7 +34,7 @@ import android.view.animation.Animation;
  * methods declared there instead
  *
  * @author Vladislav
- * @version 1.0.0
+ * @version 1.0.1
  * @since 1.0.0
  */
 @Deprecated
@@ -42,20 +42,24 @@ public class FloatingActionButton extends ActionButton{
 	
 	private static final String LOG_TAG = "FAB";
 	
+	@Deprecated
 	public FloatingActionButton(Context context) {
 		super(context);
 	}
 
+	@Deprecated
 	public FloatingActionButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initActionButton(context, attrs, 0, 0);
 	}
 
+	@Deprecated
 	public FloatingActionButton(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		initActionButton(context, attrs, defStyleAttr, 0);
 	}
 
+	@Deprecated
 	public FloatingActionButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
 		initActionButton(context, attrs, defStyleAttr, defStyleRes);

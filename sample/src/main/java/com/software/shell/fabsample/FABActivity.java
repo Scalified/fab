@@ -38,7 +38,9 @@ import java.util.Set;
 public class FABActivity extends Activity {
 	
 	private static final int SEEKBAR_PROGRESS_MULTIPLIER = 10;
-	private static final int ACTION_BUTTON_SHOW_DELAY_MS = 2000;
+	private static final int ACTION_BUTTON_POST_DELAY_MS = 2000;
+	private static final float MOVE_DISTANCE = 200.0f;
+	private static final long MOVE_DURATION_MS = 1000;
 	
 	private ActionButton actionButton;
 	
@@ -47,10 +49,10 @@ public class FABActivity extends Activity {
 	private SeekBar shadowXOffsetSeekBar;
 	private SeekBar shadowYOffsetSeekBar;
 	private CheckBox defaultIconPlusCheckBox;
-	private CheckBox hideAndShowOnClickCheckBox;
 	private RadioGroup buttonColorsRadioGroup;
 	private RadioGroup strokeColorRadioGroup;
 	private SeekBar strokeWidthSeekBar;
+	private RadioGroup buttonBehaviorRadioGroup;
 	private RadioGroup animationsRadioGroup;
 
 	@Override
@@ -64,7 +66,7 @@ public class FABActivity extends Activity {
 		initShadowXOffsetSeekBar();
 		initShadowYOffsetSeekBar();
 		initDefaultIconPlusCheckBox();
-		initHideAndShowOnClickCheckBox();
+		initButtonBehaviorRadioGroup();
 		initButtonColorsRadioGroup();
 		initStrokeColorRadioGroup();
 		initStrokeWidthSeekBar();
@@ -116,22 +118,22 @@ public class FABActivity extends Activity {
 		defaultIconPlusCheckBox.setOnCheckedChangeListener(new DefaultIconPlusChangeListener());
 	}
 	
-	private void initHideAndShowOnClickCheckBox() {
-		hideAndShowOnClickCheckBox = (CheckBox) findViewById(R.id.fab_activity_checkbox_hide_and_show_on_click);
-		hideAndShowOnClickCheckBox.setChecked(false);
+	private void initButtonBehaviorRadioGroup() {
+		buttonBehaviorRadioGroup = (RadioGroup) findViewById(R.id.fab_activity_button_behavior_radiogroup);
+		buttonBehaviorRadioGroup.check(R.id.fab_activity_radiobutton_none_on_click_radiobutton);
 	}
 	
 	private void initButtonColorsRadioGroup() {
 		buttonColorsRadioGroup = (RadioGroup) findViewById(R.id.fab_activity_radiogroup_colors);
-		buttonColorsRadioGroup.setOnCheckedChangeListener(new ColorChangeListener());
 		populateColorsRadioGroup(buttonColorsRadioGroup, RadioButtons.COLORS);
+		buttonColorsRadioGroup.setOnCheckedChangeListener(new ColorChangeListener());
 		buttonColorsRadioGroup.check(buttonColorsRadioGroup.getChildAt(0).getId());
 	}
 	
 	private void initStrokeColorRadioGroup() {
 		strokeColorRadioGroup = (RadioGroup) findViewById(R.id.fab_activity_radiogroup_stroke);
-		strokeColorRadioGroup.setOnCheckedChangeListener(new ColorChangeListener());
 		populateColorsRadioGroup(strokeColorRadioGroup, RadioButtons.STROKE_COLORS);
+		strokeColorRadioGroup.setOnCheckedChangeListener(new ColorChangeListener());
 		strokeColorRadioGroup.check(strokeColorRadioGroup.getChildAt(0).getId());
 	}
 	
@@ -157,8 +159,8 @@ public class FABActivity extends Activity {
 	
 	private void initAnimationsRadioGroup() {
 		animationsRadioGroup = (RadioGroup) findViewById(R.id.fab_activity_radiogroup_animations);
-		animationsRadioGroup.setOnCheckedChangeListener(new AnimationsChangeListener());
 		populateAnimationsRadioGroup(animationsRadioGroup, RadioButtons.ANIMATIONS);
+		animationsRadioGroup.setOnCheckedChangeListener(new AnimationsChangeListener());
 		animationsRadioGroup.check(animationsRadioGroup.getChildAt(0).getId());
 	}
 	
@@ -173,15 +175,37 @@ public class FABActivity extends Activity {
 	}
 	
 	public void onActionButtonClick(View v) {
-		if (hideAndShowOnClickCheckBox.isChecked()) {
-			actionButton.hide();
-			new Handler().postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					actionButton.show();
-				}
-			}, ACTION_BUTTON_SHOW_DELAY_MS);
+		final int checkedId = buttonBehaviorRadioGroup.getCheckedRadioButtonId();
+		switch (checkedId) {
+			case R.id.fab_activity_radiobutton_hide_and_show_on_click_radiobutton:
+				actionButton.hide();
+				new Handler().postDelayed(getShowRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+				break;
+			case R.id.fab_activity_radiobutton_move_up_and_down_on_click_radiobutton:
+				actionButton.moveUp(MOVE_DISTANCE);
+				new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+				break;
+			default:
+				break;
 		}
+	}
+	
+	private Runnable getShowRunnable() {
+		return new Runnable() {
+			@Override
+			public void run() {
+				actionButton.show();
+			}
+		};		
+	}
+	
+	private Runnable getMoveDownRunnable() {
+		return new Runnable() {
+			@Override
+			public void run() {
+				actionButton.moveDown(MOVE_DISTANCE);
+			}
+		};		
 	}
 	
 	protected static float getSeekBarRealProgress(int progress) {
@@ -287,28 +311,41 @@ public class FABActivity extends Activity {
 		
 	}
 	
-	class ColorChangeListener implements RadioGroup.OnCheckedChangeListener {
+	abstract class RadioGroupChangeListener implements RadioGroup.OnCheckedChangeListener {
+		
+		RadioButton getCheckedRadioButton(RadioGroup group) {
+			for (int i = 0; i < group.getChildCount(); i++) {
+				RadioButton current = (RadioButton) group.getChildAt(i);
+				if (current.getId() == group.getCheckedRadioButtonId()) {
+					return current;
+				}
+			}
+			return null;
+		}
+		
+		Object extractTag(RadioGroup group) {
+			return getCheckedRadioButton(group).getTag();
+		}
+		
+	}
+	
+	class ColorChangeListener extends RadioGroupChangeListener {
 
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 			if (buttonColorsRadioGroup.equals(group)) {
-				RadioButtons.ColorsInfo colorsInfo = extractTag(group, checkedId);
+				RadioButtons.ColorsInfo colorsInfo = (RadioButtons.ColorsInfo) extractTag(group);
 				final int buttonColor = getResources().getColor(colorsInfo.primaryColorResId);
 				final int buttonColorPressed = getResources().getColor(colorsInfo.secondaryColorResId);
 				actionButton.setButtonColor(buttonColor);
 				actionButton.setButtonColorPressed(buttonColorPressed);
 			} else if (strokeColorRadioGroup.equals(group)) {
-				RadioButtons.ColorsInfo colorsInfo = extractTag(group, checkedId);
+				RadioButtons.ColorsInfo colorsInfo = (RadioButtons.ColorsInfo) extractTag(group);
 				final int strokeColor = getResources().getColor(colorsInfo.primaryColorResId);
 				actionButton.setStrokeColor(strokeColor);
 			}
 		}
-		
-		private RadioButtons.ColorsInfo extractTag(RadioGroup group, int checkedId) {
-			final RadioButton checkedRadioButton = (RadioButton) group.findViewById(checkedId);
-			return (RadioButtons.ColorsInfo) checkedRadioButton.getTag();
-		}
-		
+
 	}
 	
 	class StrokeWidthChangeListener implements SeekBar.OnSeekBarChangeListener {
@@ -334,14 +371,13 @@ public class FABActivity extends Activity {
 		
 	}
 	
-	class AnimationsChangeListener implements RadioGroup.OnCheckedChangeListener {
+	class AnimationsChangeListener extends RadioGroupChangeListener {
 
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 			if (animationsRadioGroup.equals(group)) {
-				final RadioButton checkedRadioButton = (RadioButton) group.findViewById(checkedId);
 				final RadioButtons.AnimationInfo animationInfo =
-						(RadioButtons.AnimationInfo) checkedRadioButton.getTag();
+						(RadioButtons.AnimationInfo) extractTag(group);
 				actionButton.setShowAnimation(animationInfo.animationOnShow);
 				actionButton.setHideAnimation(animationInfo.animationOnHide);
 			}
