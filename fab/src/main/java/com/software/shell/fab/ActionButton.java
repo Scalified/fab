@@ -22,27 +22,26 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.WindowManager;
+import android.view.animation.*;
+import android.view.animation.Interpolator;
 
 /**
  * This class represents a <b>Action Button</b>, which is used in 
  * <a href="http://www.google.com.ua/design/spec/components/buttons.html">Material Design</a>
  *
  * @author Vladislav
- * @version 1.0.2
+ * @version 1.1.0
  * @since 1.0.0
  */
 public class ActionButton extends View {
@@ -56,6 +55,11 @@ public class ActionButton extends View {
 	 * <b>Action Button</b> type
 	 */
 	private Type type = Type.DEFAULT;
+
+	/**
+	 * <b>Action Button</b> size
+	 */
+	private float size = MetricsConverter.dpToPx(getContext(), type.getSize());
 
 	/**
 	 * <b>Action Button</b> state
@@ -226,6 +230,7 @@ public class ActionButton extends View {
 				defStyleAttr, defStyleRes);
 		try {
 			initType(attributes);
+			initSize(attributes);
 			initButtonColor(attributes);
 			initButtonColorPressed(attributes);
 			initShadowRadius(attributes);
@@ -269,6 +274,20 @@ public class ActionButton extends View {
 			final int id = attrs.getInteger(R.styleable.ActionButton_type, type.getId());
 			type = Type.forId(id);
 			Log.v(LOG_TAG, "Initialized type: " + getType());
+		}
+	}
+
+	/**
+	 * Initializes the {@link #size} of <b>Action Button</b>
+	 *
+	 * @param attrs attributes of the XML tag that is inflating the view
+	 */
+	private void initSize(TypedArray attrs) {
+		if (attrs.hasValue(R.styleable.ActionButton_size)) {
+			this.size = attrs.getDimension(R.styleable.ActionButton_size, getSize());
+			Log.v(LOG_TAG, "Initialized size: " + getSize());
+		} else {
+			this.size = type.getSize();
 		}
 	}
 
@@ -509,19 +528,88 @@ public class ActionButton extends View {
 		ViewGroup parent = (ViewGroup) getParent();
 		return parent == null;
 	}
-
-	/**
-	 * Returns the size of the <b>Action Button</b> in actual pixels (px).
-	 * Size of the <b>Action Button</b> is the diameter of the main circle
-	 *  
-	 * @return size of the <b>Action Button</b> in actual pixels (px)
-	 */
-	public int getButtonSize() {
-		final int buttonSize = (int) type.getSize(getContext());
-		Log.v(LOG_TAG, "Button size is: " + buttonSize);
-		return buttonSize;
+	
+	public void moveUp(float distance, long duration, Interpolator interpolator) {
+		setY(getY() + 300);
+		getTranslationX();
+//		final float mDistance = MetricsConverter.dpToPx(getContext(), distance);
+//		final ViewGroup.MarginLayoutParams layoutParams = calculateLayoutParams(0, mDistance);
+//		final MoveAnimation upAnimation = new MoveAnimation(layoutParams, duration, interpolator);
+//		setLayoutParams(layoutParams);
+//		startAnimation(upAnimation);
 	}
 
+	public void moveUp(float distance, long duration) {
+		moveUp(distance, duration, DEFAULT_MOVE_ANIMATION_INTERPOLATOR);
+	}
+
+	public void moveUp(float distance) {
+		moveUp(distance, DEFAULT_MOVE_ANIMATION_DURATION_MS, DEFAULT_MOVE_ANIMATION_INTERPOLATOR);
+	}
+
+	public void moveDown(float distance, long duration, Interpolator interpolator) {
+		setY(getY() - 300);
+//		final float mDistance = MetricsConverter.dpToPx(getContext(), distance);
+//		final ViewGroup.MarginLayoutParams layoutParams = calculateLayoutParams(0, -mDistance);
+//		final MoveAnimation downAnimation = new MoveAnimation(layoutParams, duration, interpolator);
+//		setLayoutParams(layoutParams);
+//		startAnimation(downAnimation);
+		
+	}
+	
+	public void moveDown(float distance, long duration) {
+		moveDown(distance, duration, DEFAULT_MOVE_ANIMATION_INTERPOLATOR);
+	}
+	
+	public void moveDown(float distance) {
+		moveDown(distance, DEFAULT_MOVE_ANIMATION_DURATION_MS);
+	}
+	
+	//FIXME: check positive/negative
+	protected ViewGroup.MarginLayoutParams calculateLayoutParams(float xAxisDelta, float yAxisDelta) {
+		final ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) getLayoutParams();
+		if (layoutParams.bottomMargin == 0 && layoutParams.topMargin != 0) {
+			layoutParams.topMargin -= yAxisDelta;
+		} else {
+			layoutParams.bottomMargin += yAxisDelta;
+		}
+
+		return layoutParams;
+	}
+	
+	private static final long DEFAULT_MOVE_ANIMATION_DURATION_MS = 1000;
+	private static final Interpolator DEFAULT_MOVE_ANIMATION_INTERPOLATOR = new AccelerateInterpolator();
+	
+	class MoveAnimation extends TranslateAnimation implements Animation.AnimationListener {
+
+		/**
+		 * Default duration for move animation 
+		 */
+		
+		private final ViewGroup.LayoutParams layoutParams;
+
+		MoveAnimation(ViewGroup.MarginLayoutParams layoutParams, long duration, Interpolator interpolator) {
+			super(0, layoutParams.rightMargin, 0, layoutParams.bottomMargin);
+			this.layoutParams = layoutParams;
+			setDuration(duration);
+//			setInterpolator(interpolator);
+		}
+
+		@Override
+		public void onAnimationStart(Animation animation) {
+		}
+
+		@Override
+		public void onAnimationEnd(Animation animation) {
+			setLayoutParams(layoutParams);
+		}
+
+		@Override
+		public void onAnimationRepeat(Animation animation) {
+		}
+		
+	}
+	
 	/**
 	 * Returns the type of the <b>Action Button</b>
 	 *  
@@ -533,14 +621,59 @@ public class ActionButton extends View {
 
 	/**
 	 * Sets the type of the <b>Action Button</b> and 
-	 * invalidates the layout of the view
+	 * calls {@link #setSize(float)} to invalidate the layout of the view
 	 *
 	 * @param type type of the <b>Action Button</b>
 	 */
 	public void setType(Type type) {
 		this.type = type;
+		this.size = type.getSize();
 		requestLayout();
 		Log.v(LOG_TAG, "Type changed to: " + getType());
+	}
+
+	/**
+	 * Returns the size of the <b>Action Button</b> in actual pixels (px).
+	 * Size of the <b>Action Button</b> is the diameter of the main circle
+	 *
+	 * @deprecated since version <b>1.1.0</b>. Please use {@link #getSize()} instead
+	 *
+	 * @return size of the <b>Action Button</b> in actual pixels (px)
+	 */
+	@Deprecated
+	public int getButtonSize() {
+		return (int) getSize();
+	}
+
+	/**
+	 * Returns the size of the <b>Action Button</b> in actual pixels (px).
+	 * Size of the <b>Action Button</b> is the diameter of the main circle
+	 *
+	 * @return size of the <b>Action Button</b> in actual pixels (px)
+	 */
+	public float getSize() {
+		return size;
+	}
+
+	/**
+	 * Sets the <b>Action Button</b> size and invalidates the layout of the view
+	 * <p>
+	 * Changing the default size of the button breaks the rules of 
+	 * <a href="http://www.google.com/design/spec/components/buttons.html">Material Design</a>* 
+	 * <p>
+	 * Setting the button size explicitly means, that button types with its default sizes are
+	 * completely ignored. Do not use this method, unless you know what you are doing
+	 * <p> 
+	 * Must be specified in density-independent (dp) pixels, which are
+	 * then converted into actual pixels (px)
+	 *  
+	 * @param size size of the button specified in density-independent 
+	 *                   (dp) pixels
+	 */
+	public void setSize(float size) {
+		this.size = MetricsConverter.dpToPx(getContext(), size);
+		requestLayout();
+		Log.v(LOG_TAG, "Button size set to: " + getSize());
 	}
 
 	/**
@@ -986,7 +1119,10 @@ public class ActionButton extends View {
 	public void setHideAnimation(Animations animation) {
 		setHideAnimation(Animations.load(getContext(), animation.animResId));
 	}
-	
+
+	/**
+	 * Removes the animation, which is used while hiding <b>Action Button</b>
+	 */
 	public void removeHideAnimation() {
 		setHideAnimation(Animations.NONE);
 		Log.v(LOG_TAG, "Hide animation removed");
@@ -1007,20 +1143,41 @@ public class ActionButton extends View {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		super.onTouchEvent(event);
-		final int action = event.getAction();
-		switch (action) {
-			case MotionEvent.ACTION_DOWN:
-				Log.v(LOG_TAG, "Motion event action down detected");
-				setState(State.PRESSED);
-				return true;
-			case MotionEvent.ACTION_UP:
-				Log.v(LOG_TAG, "Motion event action up detected");
-				setState(State.NORMAL);
-				return true;
-			default:
-				Log.v(LOG_TAG, "Unrecognized motion event detected");
-				return false;
+		if (isPointInsideCircle(event.getX(), event.getY())) {
+			final int action = event.getAction();
+			switch (action) {
+				case MotionEvent.ACTION_DOWN:
+					Log.v(LOG_TAG, "Motion event action down detected");
+					setState(State.PRESSED);
+					return true;
+				case MotionEvent.ACTION_UP:
+					Log.v(LOG_TAG, "Motion event action up detected");
+					setState(State.NORMAL);
+					return true;
+				default:
+					Log.v(LOG_TAG, "Unrecognized motion event detected");
+					return false;
+			}
+		} else {
+			Log.v(LOG_TAG, "Motion event skipped: touched point is not inside the circle");
+			return false;
 		}
+	}
+
+	/**
+	 * Checks whether point (touch point) is inside the main circle or not
+	 *
+	 * @param pointX X-axis coordinate of the point
+	 * @param pointY Y-axis coordinate of the point
+	 * @return true if point is inside the main circle, otherwise false
+	 */
+	protected boolean isPointInsideCircle(float pointX, float pointY) {
+		final double xValue = Math.pow((pointX - calculateCenterX()), 2);
+		final double yValue = Math.pow((pointY - calculateCenterY()), 2);
+		final double radiusValue = Math.pow(calculateCircleRadius(), 2);
+		final boolean pointInsideCircle = xValue + yValue <= radiusValue;
+		Log.v(LOG_TAG, String.format("Point IS %s circle", pointInsideCircle ? "INSIDE" : "NOT INSIDE"));
+		return pointInsideCircle;
 	}
 
 	/**
@@ -1064,7 +1221,31 @@ public class ActionButton extends View {
 		if (hasImage()) {
 			drawImage(canvas);
 		}
+		if (getState() == State.PRESSED) {
+			postDelayed(new InvalidationRunnable(), 16);
+		}
 	}
+	
+	protected void drawRipple(Canvas canvas, int radius) {
+		resetPaint();
+		paint.setStyle(Paint.Style.FILL);
+		paint.setColor(Color.parseColor("#FFFFFF"));
+		canvas.drawCircle(calculateCenterX(), calculateCenterY(), radius, paint);
+	}
+	
+	class InvalidationRunnable implements Runnable {
+		
+		@Override
+		public void run() {
+			invalidate();
+		}
+		
+	}
+	
+	
+	
+	
+	
 
 	/**
 	 * Draws the main circle of the <b>Action Button</b> and calls
@@ -1111,10 +1292,10 @@ public class ActionButton extends View {
 	 * @return radius of the main circle
 	 */
 	protected final float calculateCircleRadius() {
-		final float circleRadius = getButtonSize() / 2;
+		final float circleRadius = getSize() / 2;
 		Log.v(LOG_TAG, "Calculated circle circleRadius = " + circleRadius);
 		return circleRadius;
-	}	
+	}
 
 	/**
 	 * Draws the shadow if view elevation is not enabled
@@ -1192,7 +1373,7 @@ public class ActionButton extends View {
 	 * @return measured width in actual pixels for the entire view
 	 */
 	private int calculateMeasuredWidth() {
-		final int measuredWidth = (int) (getButtonSize() + calculateShadowWidth() * 2 + getStrokeWidth() * 2);
+		final int measuredWidth = (int) (getSize() + calculateShadowWidth() * 2 + getStrokeWidth() * 2);
 		Log.v(LOG_TAG, "Calculated measured width = " + measuredWidth);
 		return measuredWidth;
 	}
@@ -1203,7 +1384,7 @@ public class ActionButton extends View {
 	 * @return measured width in actual pixels for the entire view
 	 */
 	private int calculateMeasuredHeight() {
-		final int measuredHeight = (int) (getButtonSize() + calculateShadowHeight() * 2 + getStrokeWidth() * 2);
+		final int measuredHeight = (int) (getSize() + calculateShadowHeight() * 2 + getStrokeWidth() * 2);
 		Log.v(LOG_TAG, "Calculated measured height = " + measuredHeight);
 		return measuredHeight;
 	}
@@ -1245,8 +1426,8 @@ public class ActionButton extends View {
 			}
 		
 			@Override
-			float getSize(Context context) {
-				return MetricsConverter.dpToPx(context, 56.0f);
+			float getSize() {
+				return 56.0f;
 			}
 		},
 
@@ -1260,8 +1441,8 @@ public class ActionButton extends View {
 			}
 
 			@Override
-			float getSize(Context context) {
-				return MetricsConverter.dpToPx(context, 40.0f);
+			float getSize() {
+				return 40.0f;
 			}
 		};
 
@@ -1276,11 +1457,12 @@ public class ActionButton extends View {
 
 		/**
 		 * Returns the size of the specific type of the <b>Action Button</b>
+		 * in density-independent pixels, which then must be converted into
+		 * real pixels 
 		 *
-		 * @param context context the view is running in
 		 * @return size of the particular type of the <b>Action Button</b>
 		 */
-		abstract float getSize(Context context);
+		abstract float getSize();
 
 		/**
 		 * Returns the <b>Action Button</b> type for a specific {@code id}

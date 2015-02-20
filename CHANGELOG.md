@@ -1,3 +1,26 @@
+# 1.1.0
+
+3. **New** public methods and attributes:
+
+	1. Methods:
+
+		* **setSize(float)** - sets the size of the **Action Button** (in density-independent pixels).
+		Changing the default size of the button breaks the rules of <a href="http://www.google.com/design/spec/components/buttons.html">Material Design</a>.
+	    Setting the button size explicitly means, that button types with its default sizes are completely ignored. Do not use this method, unless you know what you are doing
+		* **getSize()** - returns the size of the **Action Button** in real pixels (the same as **getButtonSize()**, which is now *deprecated*).
+	
+	2. XML attributes:
+	
+		* **size** - lets to declare the button size (the same as **setSize(float)**)
+		
+4. **Attention!** *Deprecated* methods:
+
+	* **getButtonSize()** renamed to **getSize()**. You can still use **getButtonSize()** method, however it is marked as *deprecated* and will be removed in version 2.0.0.
+
+5. Added checking of the *X* and *Y* touch coordinates.
+	
+	Now if the touch *X* and *Y* coordinates are not inside the main button circle, the button won't react on click
+
 # 1.0.4
 
 1. Fixed [**issue #8**: Both buttons show up when I only want one at a time](https://github.com/shell-software/fab/issues/8):
@@ -20,7 +43,7 @@
 > **FloatingActionButton** class has been renamed to **ActionButton** class. You can still use **FloatingActionButton** class, however it is  marked as *deprecated* and will be removed in version 2.0.0. **FloatingActionButton** class contains other methods, which were deprecated. You can use these old deprecated methods and XML attributes listed below only with **FloatingActionButton** class. You can't use them with the new **ActionButton** class.
 > **ActionButton** class in turn, has the new version of these deprecated methods, which you can use.
 
-1. **Attention!** *Deprecated* classes and methods:
+1. **Attention!** *Deprecated* classes, methods, attributes:
 
     1. Classes:
 

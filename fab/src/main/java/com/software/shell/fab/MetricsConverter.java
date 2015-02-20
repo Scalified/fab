@@ -36,15 +36,37 @@ public final class MetricsConverter {
 	}
 
 	/**
-	 * Converts the density-independent value into real pixel value based on display metrics
+	 * Converts the density-independent value into real pixel value based on current display metrics
 	 *
 	 * @param context application context
 	 * @param dp density-independent value
 	 * @return converted real pixel value
 	 */
 	public static float dpToPx(Context context, float dp) {
-		final float scale = context.getResources().getDisplayMetrics().density;
-		return dp * scale;
+		return dp * calculateScale(context);
+	}
+
+	/**
+	 * Converts the real pixel value into density-independent value based on current display metrics
+	 *
+	 * @param context application context
+	 * @param px real pixel value
+	 * @return density-independent value
+	 */
+	public static float pxToDp(Context context, float px) {
+		return px / calculateScale(context);
+	}
+
+	/**
+	 * Calculates the density scale factor for the current device
+	 * <p>
+	 * Used when converting density-independent pixels to real ones and vice versa
+	 *  
+	 * @param context application context
+	 * @return density scale factor for the current device
+	 */
+	private static float calculateScale(Context context) {
+		return context.getResources().getDisplayMetrics().density;
 	}
 	
 }

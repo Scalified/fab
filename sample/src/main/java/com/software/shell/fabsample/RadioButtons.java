@@ -118,7 +118,7 @@ public class RadioButtons {
 		}
 		
 	}
-	
+
 	static class AnimationInfo {
 		
 		int animationTextResId;
