@@ -1,6 +1,7 @@
 # Floating Action Button Library for Android
 
 [![Build Status](https://travis-ci.org/shell-software/fab.svg?branch=master)](https://travis-ci.org/shell-software/fab)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.shell-software/fab.svg)](http://search.maven.org/#search|gav|1|g%3A%22com.github.shell-software%22%20AND%20a%3A%22fab%22)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-fab-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1522)
 [![Join the chat at https://gitter.im/shell-software/fab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/shell-software/fab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
