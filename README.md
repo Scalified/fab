@@ -3,7 +3,12 @@
 [![Build Status](https://travis-ci.org/shell-software/fab.svg?branch=master)](https://travis-ci.org/shell-software/fab)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.shell-software/fab.svg)](http://search.maven.org/#search|gav|1|g%3A%22com.github.shell-software%22%20AND%20a%3A%22fab%22)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-fab-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1522)
-[![Join the chat at https://gitter.im/shell-software/fab](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/shell-software/fab?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+## Donation
+
+Donation helps to improve the project development and speed up the release of new versions. I appreciate any contribution
+
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=44CVJBPFRKXJL)
 
 ## Description
 
@@ -19,7 +24,7 @@ The Library requires **Android SDK version 9 (Gingerbread)** and higher.
 
 ```java
 dependencies {
-	compile 'com.github.shell-software:fab:1.0.4'
+	compile 'com.github.shell-software:fab:1.0.5'
 }
 ```
 
@@ -27,22 +32,31 @@ dependencies {
 
 [**Full ChangeLog**](https://github.com/shell-software/fab/blob/master/CHANGELOG.md)
 
-### 1.0.4 - *current*
+### 1.0.5 - *current*
+
+1. Fixed [**issue #12**: Lollipop elevation disable shadow](https://github.com/shell-software/fab/issues/12):
+	
+	The fix enables elevation on devices with **API 21 Lollipop** and higher. Now if elevation is set and the device *API* meets requirements (has *API 21 Lollipop* and higher) elevation will be drawn instead of the default shadow.
+	In this case configuration of any of the default shadow's parameters will be ignored.
+	Previously elevation was not drawn for such devices if set.
+	
+  A fix was applied to:
+    
+  * **hasShadow()** method: now if **Action Button** has elevation enabled (for *API 21 Lollipop* and higher) the shadow won't be drawn at all
+  * **calculateCenterX()** method: **getWidth()** method replaced by **getMeasuredWidth()** to calculate *X-axis* coordinate
+  * **calculateCenterY()** method: **getHeight()** method replaced by **getMeasuredHeight()** is used to calculate *Y-axis* coordinate
+    
+  New methods added:
+    
+  * **drawElevation()**: protected void method, which is called by **onDraw(Canvas)** to draw the elevation for *API 21 Lollipop* devices and higher
+
+### 1.0.4 - *previous*
 
 1. Fixed [**issue #8**: Both buttons show up when I only want one at a time](https://github.com/shell-software/fab/issues/8):
 
 	A small fix was applied to **show()**, **hide()** and **dismiss()** methods. Previously these methods might not work properly if the call was done within **onCreate()** method.
 	This happened because of using **android.view.View#isShown()** method, which returned *false* even if the button was shown. Now these methods relay on **VISIBILITY** and work
 	as expected wherever they called.
-
-### 1.0.3 - *previous*
-
-1. **Attention!** *Deprecated* XML attributes:
-
-	* **normal** XML attribute renamed to **DEFAULT**.
-    You can still use **normal** XML attribute, however it will be removed in version 2.0.0.
-	* **mini** XML attribute renamed to **MINI**.
-    You can still use **mini** XML attribute, however it will be removed in version 2.0.0.
 
 ### Features in the next versions:
 
@@ -293,6 +307,7 @@ actionButton.removeShadow();
 ```
 
 > Shadow radius and offset must be specified in density-independent pixels.
+> For *API 21 Lollipop* and higher **elevation** can be enabled. In this case the default shadow becomes disabled and configuration of any of its parameters will be ignored.
 
 #### Image
 

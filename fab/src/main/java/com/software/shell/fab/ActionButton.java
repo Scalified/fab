@@ -32,9 +32,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.ViewOutlineProvider;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.*;
-import android.view.animation.Interpolator;
 
 /**
  * This class represents a <b>Action Button</b>, which is used in 
@@ -746,13 +747,14 @@ public class ActionButton extends View {
 	}
 
 	/**
-	 * Checks whether <b>Action Button</b> has shadow 
-	 * by determining shadow radius
+	 * Checks whether <b>Action Button</b> has shadow by determining shadow radius
+	 * <p>
+	 * Shadow is disabled if elevation is set API level is {@code 21 Lollipop} and higher     
 	 *  
 	 * @return true if <b>Action Button</b> has radius, otherwise false
 	 */
 	public boolean hasShadow() {
-		return getShadowRadius() > 0.0f;
+		return !hasElevation() && getShadowRadius() > 0.0f;
 	}
 
 	/**
@@ -1215,6 +1217,9 @@ public class ActionButton extends View {
 		super.onDraw(canvas);
 		Log.v(LOG_TAG, "Action Button onDraw called");
 		drawCircle(canvas);
+		if (hasElevation()) {
+			drawElevation();
+		}
 		if (hasStroke()) {
 			drawStroke(canvas);
 		}
@@ -1249,7 +1254,7 @@ public class ActionButton extends View {
 
 	/**
 	 * Draws the main circle of the <b>Action Button</b> and calls
-	 * {@link #drawShadow()} to draw shadow if present 
+	 * {@link #drawShadow()} to draw the shadow if present
 	 *  
 	 * @param canvas canvas, on which circle is to be drawn
 	 */
@@ -1270,7 +1275,7 @@ public class ActionButton extends View {
 	 * @return X-axis center coordinate of the entire view
 	 */
 	protected float calculateCenterX() {
-		final float centerX = getWidth() / 2;
+		final float centerX = getMeasuredWidth() / 2;
 		Log.v(LOG_TAG, "Calculated center X = " + centerX);
 		return centerX;
 	}
@@ -1281,7 +1286,7 @@ public class ActionButton extends View {
 	 * @return Y-axis center coordinate of the entire view
 	 */
 	protected float calculateCenterY() {
-		final float centerY = getHeight() / 2;
+		final float centerY = getMeasuredHeight() / 2;
 		Log.v(LOG_TAG, "Calculated center Y = " + centerY);
 		return centerY;
 	}
@@ -1301,12 +1306,23 @@ public class ActionButton extends View {
 	 * Draws the shadow if view elevation is not enabled
 	 */
 	protected void drawShadow() {
-		if (hasElevation()) {
-			Log.w(LOG_TAG, "Elevation is enabled, skipping shadow enabling");
-		} else {
-			paint.setShadowLayer(getShadowRadius(), getShadowXOffset(), getShadowYOffset(), getShadowColor());
-			Log.v(LOG_TAG, "Shadow enabled");
-		}
+		paint.setShadowLayer(getShadowRadius(), getShadowXOffset(), getShadowYOffset(), getShadowColor());
+		Log.v(LOG_TAG, "Shadow drawn");
+	}
+	
+	/**
+	 * Draws the elevation around the main circle
+	 * <p>
+	 * Uses the stroke corrective, which helps to avoid the elevation overlapping issue     
+	 */
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+	protected void drawElevation() {
+		final int strokeWeightCorrective = (int) (getStrokeWidth() / 1.5f);
+		final int width = getWidth() - strokeWeightCorrective;
+		final int height = getHeight() - strokeWeightCorrective;
+		final ViewOutlineProvider outlineProvider = new ActionButtonOutlineProvider(width, height);
+		setOutlineProvider(outlineProvider);
+		Log.v(LOG_TAG, "Elevation drawn");
 	}
 
 	/**
@@ -1373,7 +1389,7 @@ public class ActionButton extends View {
 	 * @return measured width in actual pixels for the entire view
 	 */
 	private int calculateMeasuredWidth() {
-		final int measuredWidth = (int) (getSize() + calculateShadowWidth() * 2 + getStrokeWidth() * 2);
+		final int measuredWidth = getSize() + calculateShadowWidth() + calculateStrokeWeight();
 		Log.v(LOG_TAG, "Calculated measured width = " + measuredWidth);
 		return measuredWidth;
 	}
@@ -1384,7 +1400,7 @@ public class ActionButton extends View {
 	 * @return measured width in actual pixels for the entire view
 	 */
 	private int calculateMeasuredHeight() {
-		final int measuredHeight = (int) (getSize() + calculateShadowHeight() * 2 + getStrokeWidth() * 2);
+		final int measuredHeight = getSize() + calculateShadowHeight() + calculateStrokeWeight();
 		Log.v(LOG_TAG, "Calculated measured height = " + measuredHeight);
 		return measuredHeight;
 	}
@@ -1394,8 +1410,8 @@ public class ActionButton extends View {
 	 *  
 	 * @return shadow width in actual pixels
 	 */
-	private float calculateShadowWidth() {
-		final float shadowWidth = hasShadow() ? getShadowRadius() + Math.abs(getShadowXOffset()) : 0.0f;
+	private int calculateShadowWidth() {
+		final int shadowWidth = hasShadow() ? (int) ((getShadowRadius() + Math.abs(getShadowXOffset())) * 2) : 0;
 		Log.v(LOG_TAG, "Calculated shadow width = " + shadowWidth);
 		return shadowWidth;
 	}
@@ -1405,10 +1421,21 @@ public class ActionButton extends View {
 	 *  
 	 * @return shadow height in actual pixels
 	 */
-	private float calculateShadowHeight() {
-		final float shadowHeight = hasShadow() ? getShadowRadius() + Math.abs(getShadowYOffset()) : 0.0f;
+	private int calculateShadowHeight() {
+		final int shadowHeight = hasShadow() ? (int) ((getShadowRadius() + Math.abs(getShadowYOffset())) * 2) : 0;
 		Log.v(LOG_TAG, "Calculated shadow height = " + shadowHeight);
 		return shadowHeight;
+	}
+
+	/**
+	 * Calculates the stroke weight in actual pixels
+	 * *
+	 * @return stroke weight in actual pixels
+	 */
+	private int calculateStrokeWeight() {
+		final int strokeWeight = (int) (getStrokeWidth() * 2.0f);
+		Log.v(LOG_TAG, "Calculated stroke weight is: " + strokeWeight);
+		return strokeWeight;
 	}
 
 	/**
