@@ -36,6 +36,7 @@ import android.view.ViewOutlineProvider;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.*;
+import android.view.animation.Interpolator;
 
 /**
  * This class represents a <b>Action Button</b>, which is used in 
@@ -1389,7 +1390,7 @@ public class ActionButton extends View {
 	 * @return measured width in actual pixels for the entire view
 	 */
 	private int calculateMeasuredWidth() {
-		final int measuredWidth = getSize() + calculateShadowWidth() + calculateStrokeWeight();
+		final int measuredWidth = (int) (getSize() + calculateShadowWidth() + calculateStrokeWeight());
 		Log.v(LOG_TAG, "Calculated measured width = " + measuredWidth);
 		return measuredWidth;
 	}
@@ -1400,7 +1401,7 @@ public class ActionButton extends View {
 	 * @return measured width in actual pixels for the entire view
 	 */
 	private int calculateMeasuredHeight() {
-		final int measuredHeight = getSize() + calculateShadowHeight() + calculateStrokeWeight();
+		final int measuredHeight = (int) (getSize() + calculateShadowHeight() + calculateStrokeWeight());
 		Log.v(LOG_TAG, "Calculated measured height = " + measuredHeight);
 		return measuredHeight;
 	}
