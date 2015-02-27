@@ -37,6 +37,7 @@ import android.view.animation.*;
 import android.view.ViewOutlineProvider;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 
 /**
  * This class represents a <b>Action Button</b>, which is used in 
