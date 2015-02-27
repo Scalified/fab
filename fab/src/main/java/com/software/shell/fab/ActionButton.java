@@ -26,17 +26,11 @@ import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.*;
 import android.view.animation.*;
-import android.view.ViewOutlineProvider;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 
 /**
  * This class represents a <b>Action Button</b>, which is used in 
@@ -51,7 +45,7 @@ public class ActionButton extends View {
 	/**
 	 * Logging tag
 	 */
-	private static final String LOG_TAG = "FAB";
+	private static final String LOG_TAG = String.format("[FAB][%s]", ActionButton.class.getSimpleName());
 
 	/**
 	 * <b>Action Button</b> type
@@ -61,7 +55,7 @@ public class ActionButton extends View {
 	/**
 	 * <b>Action Button</b> size
 	 */
-	private float size = MetricsConverter.dpToPx(getContext(), type.getSize());
+	private float size = dpToPx(type.getSize());
 
 	/**
 	 * <b>Action Button</b> state
@@ -81,17 +75,17 @@ public class ActionButton extends View {
 	/**
 	 * Shadow radius expressed in actual pixels
 	 */
-	private float shadowRadius = MetricsConverter.dpToPx(getContext(), 2.0f);
+	private float shadowRadius = dpToPx(2.0f);
 
 	/**
 	 * Shadow X-axis offset expressed in actual pixels
 	 */
-	private float shadowXOffset = MetricsConverter.dpToPx(getContext(), 1.0f);
+	private float shadowXOffset = dpToPx(1.0f);
 
 	/**
 	 * Shadow Y-axis offset expressed in actual pixels 
 	 */
-	private float shadowYOffset = MetricsConverter.dpToPx(getContext(), 1.5f);
+	private float shadowYOffset = dpToPx(1.5f);
 
 	/**
 	 * Shadow color 
@@ -116,7 +110,7 @@ public class ActionButton extends View {
 	/**
 	 * Size of the <b>Action Button</b> image inside the view
 	 */
-	private float imageSize = MetricsConverter.dpToPx(getContext(), 24.0f);
+	private float imageSize = dpToPx(24.0f);
 
 	/**
 	 * Animation, which is used while showing <b>Action Button</b>
@@ -286,10 +280,10 @@ public class ActionButton extends View {
 	 */
 	private void initSize(TypedArray attrs) {
 		if (attrs.hasValue(R.styleable.ActionButton_size)) {
-			this.size = attrs.getDimension(R.styleable.ActionButton_size, getSize());
+			this.size = attrs.getDimension(R.styleable.ActionButton_size, size);
 			Log.v(LOG_TAG, "Initialized size: " + getSize());
 		} else {
-			this.size = type.getSize();
+			this.size = dpToPx(type.getSize());
 		}
 	}
 
@@ -531,82 +525,70 @@ public class ActionButton extends View {
 		return parent == null;
 	}
 	
+	private final ViewMarginMover mover = new ViewMarginMover(this);
+	
+	public void move(float xAxisDelta, float yAxisDelta, long duration, Interpolator interpolator) {
+		mover.move(dpToPx(xAxisDelta), dpToPx(yAxisDelta), duration, interpolator);
+	}
+	
+	public void move(float xAxisDelta, float yAxisDelta, long duration) {
+		mover.move(dpToPx(xAxisDelta), dpToPx(yAxisDelta), duration);
+	}
+	
+	public void move(float xAxisDelta, float yAxisDelta) {
+		mover.move(dpToPx(xAxisDelta), dpToPx(yAxisDelta));
+	}
+	
 	public void moveUp(float distance, long duration, Interpolator interpolator) {
-		final float mDistance = MetricsConverter.dpToPx(getContext(), distance);
-		final ViewGroup.MarginLayoutParams layoutParams = calculateLayoutParams(0, mDistance);
-		final MoveAnimation upAnimation = new MoveAnimation(layoutParams, duration, interpolator);
-		setLayoutParams(layoutParams);
-//		startAnimation(upAnimation);
+		move(0, -distance, duration, interpolator);
 	}
 	
 	public void moveUp(float distance, long duration) {
-		moveUp(distance, duration, DEFAULT_MOVE_ANIMATION_INTERPOLATOR);
+		move(0, -distance, duration);
 	}
 	
 	public void moveUp(float distance) {
-		moveUp(distance, DEFAULT_MOVE_ANIMATION_DURATION_MS, DEFAULT_MOVE_ANIMATION_INTERPOLATOR);
+		move(0, -distance);
 	}
-
+	
 	public void moveDown(float distance, long duration, Interpolator interpolator) {
-		final float mDistance = MetricsConverter.dpToPx(getContext(), distance);
-		final ViewGroup.MarginLayoutParams layoutParams = calculateLayoutParams(0, -mDistance);
-		final MoveAnimation downAnimation = new MoveAnimation(layoutParams, duration, interpolator);
-		setLayoutParams(layoutParams);
-//		startAnimation(downAnimation);
-		
+		move(0, distance, duration, interpolator);
 	}
 	
 	public void moveDown(float distance, long duration) {
-		moveDown(distance, duration, DEFAULT_MOVE_ANIMATION_INTERPOLATOR);
+		move(0, distance, duration);
 	}
 	
 	public void moveDown(float distance) {
-		moveDown(distance, DEFAULT_MOVE_ANIMATION_DURATION_MS);
+		move(0, distance);
 	}
 	
-	//FIXME: check positive/negative
-	protected ViewGroup.MarginLayoutParams calculateLayoutParams(float xAxisDelta, float yAxisDelta) {
-		final ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) getLayoutParams();
-		if (layoutParams.bottomMargin == 0 && layoutParams.topMargin != 0) {
-			layoutParams.topMargin -= yAxisDelta;
-		} else {
-			layoutParams.bottomMargin += yAxisDelta;
-		}
-
-		return layoutParams;
+	public void moveLeft(float distance, long duration, Interpolator interpolator) {
+		move(-distance, 0, duration, interpolator);
 	}
 	
-	private static final long DEFAULT_MOVE_ANIMATION_DURATION_MS = 1000;
-	private static final Interpolator DEFAULT_MOVE_ANIMATION_INTERPOLATOR = new AccelerateInterpolator();
+	public void moveLeft(float distance, long duration) {
+		move(-distance, 0, duration);
+	}
 	
-	class MoveAnimation extends TranslateAnimation implements Animation.AnimationListener {
-
-		/**
-		 * Default duration for move animation 
-		 */
-		
-		private final ViewGroup.LayoutParams layoutParams;
-
-		MoveAnimation(ViewGroup.MarginLayoutParams layoutParams, long duration, Interpolator interpolator) {
-			super(0, layoutParams.rightMargin, 0, layoutParams.bottomMargin);
-			this.layoutParams = layoutParams;
-			setDuration(duration);
-//			setInterpolator(interpolator);
-		}
-
-		@Override
-		public void onAnimationStart(Animation animation) {
-		}
-
-		@Override
-		public void onAnimationEnd(Animation animation) {
-			setLayoutParams(layoutParams);
-		}
-
-		@Override
-		public void onAnimationRepeat(Animation animation) {
-		}
-		
+	public void moveLeft(float distance) {
+		move(-distance, 0);
+	}
+	
+	public void moveRight(float distance, long duration, Interpolator interpolator) {
+		move(distance, 0, duration, interpolator);
+	}
+	
+	public void moveRight(float distance, long duration) {
+		move(distance, 0, duration);
+	}
+	
+	public void moveRight(float distance) {
+		move(distance, 0);
+	}
+	
+	private float dpToPx(float dp) {
+		return MetricsConverter.dpToPx(getContext(), dp);
 	}
 	
 	/**
@@ -626,7 +608,7 @@ public class ActionButton extends View {
 	 */
 	public void setType(Type type) {
 		this.type = type;
-		this.size = type.getSize();
+		this.size = dpToPx(type.getSize());
 		requestLayout();
 		Log.v(LOG_TAG, "Type changed to: " + getType());
 	}
@@ -670,7 +652,7 @@ public class ActionButton extends View {
 	 *                   (dp) pixels
 	 */
 	public void setSize(float size) {
-		this.size = MetricsConverter.dpToPx(getContext(), size);
+		this.size = dpToPx(size);
 		requestLayout();
 		Log.v(LOG_TAG, "Button size set to: " + getSize());
 	}
@@ -777,7 +759,7 @@ public class ActionButton extends View {
 	 *                     (dp) pixels
 	 */
 	public void setShadowRadius(float shadowRadius) {
-		this.shadowRadius = MetricsConverter.dpToPx(getContext(), shadowRadius);
+		this.shadowRadius = dpToPx(shadowRadius);
 		requestLayout();
 		Log.v(LOG_TAG, "Shadow radius changed to:" + getShadowRadius());
 	}
@@ -821,7 +803,7 @@ public class ActionButton extends View {
 	 *                      (dp) pixels                         
 	 */
 	public void setShadowXOffset(float shadowXOffset) {
-		this.shadowXOffset = MetricsConverter.dpToPx(getContext(), shadowXOffset);
+		this.shadowXOffset = dpToPx(shadowXOffset);
 		requestLayout();
 		Log.v(LOG_TAG, "Shadow X offset changed to: " + getShadowXOffset());
 	}
@@ -856,7 +838,7 @@ public class ActionButton extends View {
 	 *                      (dp) pixels                         
 	 */
 	public void setShadowYOffset(float shadowYOffset) {
-		this.shadowYOffset = MetricsConverter.dpToPx(getContext(), shadowYOffset);
+		this.shadowYOffset = dpToPx(shadowYOffset);
 		requestLayout();
 		Log.v(LOG_TAG, "Shadow Y offset changed to:" + getShadowYOffset());
 	}
@@ -917,7 +899,7 @@ public class ActionButton extends View {
 	 *                    (dp) pixels                       
 	 */
 	public void setStrokeWidth(float strokeWidth) {
-		this.strokeWidth = MetricsConverter.dpToPx(getContext(), strokeWidth);
+		this.strokeWidth = dpToPx(strokeWidth);
 		requestLayout();
 		Log.v(LOG_TAG, "Stroke width changed to: " + getStrokeWidth());
 	}
@@ -1046,7 +1028,7 @@ public class ActionButton extends View {
 	 *             specified in density-independent (dp) pixels                
 	 */
 	public void setImageSize(float size) {
-		this.imageSize = MetricsConverter.dpToPx(getContext(), size);
+		this.imageSize = dpToPx(size);
 		Log.v(LOG_TAG, "Image size changed to: " + getImageSize());
 	}
 
@@ -1188,11 +1170,12 @@ public class ActionButton extends View {
 	@SuppressWarnings("all")
 	@Override
 	public void startAnimation(Animation animation) {
-		if (animation != null) {
+		if (animation != null &&
+				(getAnimation() == null || getAnimation().hasEnded())) {
 			super.startAnimation(animation);
 		}
 	}
-
+	
 	/**
 	 * Resets the paint to its default values and sets initial flags to it
 	 * <p>

@@ -307,6 +307,7 @@ actionButton.removeShadow();
 ```
 
 > Shadow radius and offset must be specified in density-independent pixels.
+
 > For *API 21 Lollipop* and higher **elevation** can be enabled. In this case the default shadow becomes disabled and configuration of any of its parameters will be ignored.
 
 #### Image

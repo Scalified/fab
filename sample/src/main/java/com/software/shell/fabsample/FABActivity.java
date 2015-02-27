@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.*;
 import com.software.shell.fab.ActionButton;
+import com.software.shell.fab.MetricsConverter;
 
 import java.util.Set;
 
@@ -38,10 +39,9 @@ import java.util.Set;
 public class FABActivity extends Activity {
 	
 	private static final int SEEKBAR_PROGRESS_MULTIPLIER = 10;
-	private static final int ACTION_BUTTON_POST_DELAY_MS = 2000;
-	private static final float MOVE_DISTANCE = 200.0f;
-	private static final long MOVE_DURATION_MS = 1000;
-	
+	private static final int ACTION_BUTTON_POST_DELAY_MS = 3000;
+	private static final float MOVE_DISTANCE = 100.0f;
+
 	private ActionButton actionButton;
 	
 	private RadioGroup buttonTypeRadioGroup;
@@ -61,16 +61,16 @@ public class FABActivity extends Activity {
 		setContentView(R.layout.fab_activity_layout);
 		
 		initActionButton();
-		initButtonTypeRadioGroup();
-		initShadowRadiusSeekBar();
-		initShadowXOffsetSeekBar();
-		initShadowYOffsetSeekBar();
-		initDefaultIconPlusCheckBox();
-		initButtonBehaviorRadioGroup();
-		initButtonColorsRadioGroup();
-		initStrokeColorRadioGroup();
-		initStrokeWidthSeekBar();
-		initAnimationsRadioGroup();
+//		initButtonTypeRadioGroup();
+//		initShadowRadiusSeekBar();
+//		initShadowXOffsetSeekBar();
+//		initShadowYOffsetSeekBar();
+//		initDefaultIconPlusCheckBox();
+//		initButtonBehaviorRadioGroup();
+//		initButtonColorsRadioGroup();
+//		initStrokeColorRadioGroup();
+//		initStrokeWidthSeekBar();
+//		initAnimationsRadioGroup();
 	}
 	
 	private void initActionButton() {
@@ -92,22 +92,24 @@ public class FABActivity extends Activity {
 	
 	private void initShadowRadiusSeekBar() {
 		shadowRadiusSeekBar = (SeekBar) findViewById(R.id.fab_activity_seekbar_shadow_radius);
-		shadowRadiusSeekBar.setProgress((int) (pxToDp(actionButton.getShadowRadius()) * SEEKBAR_PROGRESS_MULTIPLIER));
+		final int progress = (int) (MetricsConverter.pxToDp(this, actionButton.getShadowRadius()) 
+				* SEEKBAR_PROGRESS_MULTIPLIER);
+		shadowRadiusSeekBar.setProgress(progress);
 		shadowRadiusSeekBar.setOnSeekBarChangeListener(new ShadowRadiusChangeListener());
 	}
 	
 	private void initShadowXOffsetSeekBar() {
 		shadowXOffsetSeekBar = (SeekBar) findViewById(R.id.fab_activity_seekbar_shadow_x_offset);
-		final int progress = (int) (pxToDp(actionButton.getShadowXOffset()) * SEEKBAR_PROGRESS_MULTIPLIER +
-				shadowXOffsetSeekBar.getMax() / 2);
+		final int progress = (int) (MetricsConverter.pxToDp(this, actionButton.getShadowXOffset()) 
+				* SEEKBAR_PROGRESS_MULTIPLIER + shadowXOffsetSeekBar.getMax() / 2);
 		shadowXOffsetSeekBar.setProgress(progress);
 		shadowXOffsetSeekBar.setOnSeekBarChangeListener(new ShadowOffsetChangeListener());
 	}
 	
 	private void initShadowYOffsetSeekBar() {
 		shadowYOffsetSeekBar = (SeekBar) findViewById(R.id.fab_activity_seekbar_shadow_y_offset);
-		final int progress = (int) (pxToDp(actionButton.getShadowYOffset()) * SEEKBAR_PROGRESS_MULTIPLIER +
-				shadowXOffsetSeekBar.getMax() / 2);
+		final int progress = (int) (MetricsConverter.pxToDp(this, actionButton.getShadowYOffset()) 
+				* SEEKBAR_PROGRESS_MULTIPLIER + shadowXOffsetSeekBar.getMax() / 2);
 		shadowYOffsetSeekBar.setProgress(progress);
 		shadowYOffsetSeekBar.setOnSeekBarChangeListener(new ShadowOffsetChangeListener());
 	}
@@ -153,7 +155,9 @@ public class FABActivity extends Activity {
 	
 	private void initStrokeWidthSeekBar() {
 		strokeWidthSeekBar = (SeekBar) findViewById(R.id.fab_activity_seekbar_stroke_width);
-		strokeWidthSeekBar.setProgress((int) (pxToDp(actionButton.getStrokeWidth()) * SEEKBAR_PROGRESS_MULTIPLIER));
+		final int progress = (int) (MetricsConverter.pxToDp(this, actionButton.getStrokeWidth()) 
+				* SEEKBAR_PROGRESS_MULTIPLIER);
+		strokeWidthSeekBar.setProgress(progress);
 		strokeWidthSeekBar.setOnSeekBarChangeListener(new StrokeWidthChangeListener());
 	}
 	
@@ -175,19 +179,24 @@ public class FABActivity extends Activity {
 	}
 	
 	public void onActionButtonClick(View v) {
-		final int checkedId = buttonBehaviorRadioGroup.getCheckedRadioButtonId();
-		switch (checkedId) {
-			case R.id.fab_activity_radiobutton_hide_and_show_on_click_radiobutton:
-				actionButton.hide();
-				new Handler().postDelayed(getShowRunnable(), ACTION_BUTTON_POST_DELAY_MS);
-				break;
-			case R.id.fab_activity_radiobutton_move_up_and_down_on_click_radiobutton:
-				actionButton.moveUp(MOVE_DISTANCE);
-				new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
-				break;
-			default:
-				break;
-		}
+//		final int checkedId = buttonBehaviorRadioGroup.getCheckedRadioButtonId();
+//		switch (checkedId) {
+//			case R.id.fab_activity_radiobutton_hide_and_show_on_click_radiobutton:
+//				actionButton.hide();
+//				new Handler().postDelayed(getShowRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+//				break;
+//			case R.id.fab_activity_radiobutton_move_up_and_down_on_click_radiobutton:
+//				actionButton.moveUp(MOVE_DISTANCE);
+//				new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+//				break;
+//			case R.id.fab_activity_radiobutton_move_left_and_right_on_click_radiobutton:
+//				actionButton.moveLeft(MOVE_DISTANCE);
+//				new Handler().postDelayed(getMoveRightRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+//			default:
+//				break;
+//		}
+		actionButton.moveUp(MOVE_DISTANCE);
+		new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
 	}
 	
 	private Runnable getShowRunnable() {
@@ -205,16 +214,20 @@ public class FABActivity extends Activity {
 			public void run() {
 				actionButton.moveDown(MOVE_DISTANCE);
 			}
-		};		
+		};
+	}
+	
+	private Runnable getMoveRightRunnable() {
+		return new Runnable() {
+			@Override
+			public void run() {
+				actionButton.moveRight(MOVE_DISTANCE);
+			}
+		};
 	}
 	
 	protected static float getSeekBarRealProgress(int progress) {
 		return (float) progress / SEEKBAR_PROGRESS_MULTIPLIER;		
-	}
-	
-	protected float pxToDp(float px) {
-		final float scale = getResources().getDisplayMetrics().density;
-		return px / scale;
 	}
 	
 	class ButtonTypeChangeListener implements RadioGroup.OnCheckedChangeListener {
