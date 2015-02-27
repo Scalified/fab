@@ -32,11 +32,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.*;
 import android.view.ViewOutlineProvider;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.*;
-import android.view.animation.Interpolator;
 
 /**
  * This class represents a <b>Action Button</b>, which is used in 
@@ -532,29 +532,26 @@ public class ActionButton extends View {
 	}
 	
 	public void moveUp(float distance, long duration, Interpolator interpolator) {
-		setY(getY() + 300);
-		getTranslationX();
-//		final float mDistance = MetricsConverter.dpToPx(getContext(), distance);
-//		final ViewGroup.MarginLayoutParams layoutParams = calculateLayoutParams(0, mDistance);
-//		final MoveAnimation upAnimation = new MoveAnimation(layoutParams, duration, interpolator);
-//		setLayoutParams(layoutParams);
+		final float mDistance = MetricsConverter.dpToPx(getContext(), distance);
+		final ViewGroup.MarginLayoutParams layoutParams = calculateLayoutParams(0, mDistance);
+		final MoveAnimation upAnimation = new MoveAnimation(layoutParams, duration, interpolator);
+		setLayoutParams(layoutParams);
 //		startAnimation(upAnimation);
 	}
-
+	
 	public void moveUp(float distance, long duration) {
 		moveUp(distance, duration, DEFAULT_MOVE_ANIMATION_INTERPOLATOR);
 	}
-
+	
 	public void moveUp(float distance) {
 		moveUp(distance, DEFAULT_MOVE_ANIMATION_DURATION_MS, DEFAULT_MOVE_ANIMATION_INTERPOLATOR);
 	}
 
 	public void moveDown(float distance, long duration, Interpolator interpolator) {
-		setY(getY() - 300);
-//		final float mDistance = MetricsConverter.dpToPx(getContext(), distance);
-//		final ViewGroup.MarginLayoutParams layoutParams = calculateLayoutParams(0, -mDistance);
-//		final MoveAnimation downAnimation = new MoveAnimation(layoutParams, duration, interpolator);
-//		setLayoutParams(layoutParams);
+		final float mDistance = MetricsConverter.dpToPx(getContext(), distance);
+		final ViewGroup.MarginLayoutParams layoutParams = calculateLayoutParams(0, -mDistance);
+		final MoveAnimation downAnimation = new MoveAnimation(layoutParams, duration, interpolator);
+		setLayoutParams(layoutParams);
 //		startAnimation(downAnimation);
 		
 	}

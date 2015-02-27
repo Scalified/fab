@@ -61,16 +61,16 @@ public class FABActivity extends Activity {
 		setContentView(R.layout.fab_activity_layout);
 		
 		initActionButton();
-//		initButtonTypeRadioGroup();
-//		initShadowRadiusSeekBar();
-//		initShadowXOffsetSeekBar();
-//		initShadowYOffsetSeekBar();
-//		initDefaultIconPlusCheckBox();
-//		initButtonBehaviorRadioGroup();
-//		initButtonColorsRadioGroup();
-//		initStrokeColorRadioGroup();
-//		initStrokeWidthSeekBar();
-//		initAnimationsRadioGroup();
+		initButtonTypeRadioGroup();
+		initShadowRadiusSeekBar();
+		initShadowXOffsetSeekBar();
+		initShadowYOffsetSeekBar();
+		initDefaultIconPlusCheckBox();
+		initButtonBehaviorRadioGroup();
+		initButtonColorsRadioGroup();
+		initStrokeColorRadioGroup();
+		initStrokeWidthSeekBar();
+		initAnimationsRadioGroup();
 	}
 	
 	private void initActionButton() {
@@ -175,19 +175,19 @@ public class FABActivity extends Activity {
 	}
 	
 	public void onActionButtonClick(View v) {
-//		final int checkedId = buttonBehaviorRadioGroup.getCheckedRadioButtonId();
-//		switch (checkedId) {
-//			case R.id.fab_activity_radiobutton_hide_and_show_on_click_radiobutton:
-//				actionButton.hide();
-//				new Handler().postDelayed(getShowRunnable(), ACTION_BUTTON_POST_DELAY_MS);
-//				break;
-//			case R.id.fab_activity_radiobutton_move_up_and_down_on_click_radiobutton:
+		final int checkedId = buttonBehaviorRadioGroup.getCheckedRadioButtonId();
+		switch (checkedId) {
+			case R.id.fab_activity_radiobutton_hide_and_show_on_click_radiobutton:
+				actionButton.hide();
+				new Handler().postDelayed(getShowRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+				break;
+			case R.id.fab_activity_radiobutton_move_up_and_down_on_click_radiobutton:
 				actionButton.moveUp(MOVE_DISTANCE);
 				new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
-//				break;
-//			default:
-//				break;
-//		}
+				break;
+			default:
+				break;
+		}
 	}
 	
 	private Runnable getShowRunnable() {
