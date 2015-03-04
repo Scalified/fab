@@ -1018,6 +1018,7 @@ public class ActionButton extends View {
 				return true;
 			default:
 				Log.v(LOG_TAG, "Unrecognized motion event detected");
+				setState(State.NORMAL);
 				return false;
 		}
 	}
