@@ -1125,6 +1125,7 @@ public class ActionButton extends View {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		super.onTouchEvent(event);
+<<<<<<< HEAD
 		if (isPointInsideCircle(event.getX(), event.getY())) {
 			final int action = event.getAction();
 			switch (action) {
@@ -1143,6 +1144,28 @@ public class ActionButton extends View {
 		} else {
 			Log.v(LOG_TAG, "Motion event skipped: touched point is not inside the circle");
 			return false;
+=======
+		final int action = event.getAction();
+		switch (action) {
+			case MotionEvent.ACTION_DOWN:
+				Log.v(LOG_TAG, "Motion event action down detected");
+				setState(State.PRESSED);
+				return true;
+			case MotionEvent.ACTION_UP:
+                        case MotionEvent.ACTION_CANCEL:
+				Log.v(LOG_TAG, "Motion event action up detected");
+				setState(State.NORMAL);
+				return true;
+                        case MotionEvent.ACTION_MOVE:
+                                if (event.getX() < 0 || event.getX() > getWidth()
+                                        || event.getY() < 0 ||event.getY() > getHeight()){
+                                        setState(State.NORMAL);
+                                }
+                                return true;
+			default:
+				Log.v(LOG_TAG, "Unrecognized motion event detected");
+				return false;
+>>>>>>> 27c6cda2250baab46976b630676b9997cc1e61b6
 		}
 	}
 
@@ -1452,7 +1475,23 @@ public class ActionButton extends View {
 			float getSize() {
 				return 40.0f;
 			}
-		};
+		},
+
+                /**
+                 * <b>Action Button</b> big (72dp) type
+                 */
+                BIG {
+                        @Override
+                        int getId() {
+                            return 2;
+                        }
+
+                        @Override
+                        float getSize(Context context) {
+                            return MetricsConverter.dpToPx(context, 72.0f);
+                        }
+                };
+
 
 		/**
 		 * Returns an {@code id} for specific <b>Action Button</b> 

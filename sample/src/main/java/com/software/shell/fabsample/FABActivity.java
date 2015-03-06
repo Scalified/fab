@@ -18,13 +18,20 @@
 
 package com.software.shell.fabsample;
 
+import com.software.shell.fab.ActionButton;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.*;
 import com.software.shell.fab.ActionButton;
 import com.software.shell.fab.MetricsConverter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.Toast;
 
 import java.util.Set;
 
@@ -60,7 +67,7 @@ public class FABActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fab_activity_layout);
 		
-		initActionButton();
+//		initActionButton();
 //		initButtonTypeRadioGroup();
 //		initShadowRadiusSeekBar();
 //		initShadowXOffsetSeekBar();
@@ -86,6 +93,9 @@ public class FABActivity extends Activity {
 			case MINI:
 				buttonTypeRadioGroup.check(R.id.fab_activity_radiobutton_mini);
 				break;
+			case BIG:
+                buttonTypeRadioGroup.check(R.id.fab_activity_radiobutton_big);
+                break;
 		}
 		buttonTypeRadioGroup.setOnCheckedChangeListener(new ButtonTypeChangeListener());
 	}
@@ -242,6 +252,9 @@ public class FABActivity extends Activity {
 					case R.id.fab_activity_radiobutton_mini:
 						actionButton.setType(ActionButton.Type.MINI);
 						break;
+                                        case R.id.fab_activity_radiobutton_big:
+                                                actionButton.setType(ActionButton.Type.BIG);
+                                                break;
 				}
 			}
 		}

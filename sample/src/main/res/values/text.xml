@@ -70,6 +70,7 @@
 	<!--RadioButton-->
 	<string name="fab_radiobutton_default_type_text">DEFAULT</string>
 	<string name="fab_radiobutton_mini_type_text">MINI</string>
+    <string name="fab_radiobutton_big_type_text">BIG</string>
 	<string name="fab_radiobutton_none_on_click_text">None</string>
 	<string name="fab_radiobutton_hide_and_show_on_click_text">Hide and show on click</string>
 	<string name="fab_radiobutton_move_up_and_down_on_click">Move up and down on click</string>
