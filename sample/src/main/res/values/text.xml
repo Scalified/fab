@@ -70,6 +70,7 @@
 	<!--RadioButton-->
 	<string name="fab_radiobutton_default_type_text">DEFAULT</string>
 	<string name="fab_radiobutton_mini_type_text">MINI</string>
+    <string name="fab_radiobutton_big_type_text">BIG</string>
 	
 	<!--CheckBox-->
 	<string name="fab_checkbox_default_icon_plus_text">Default icon plus</string>

@@ -1287,7 +1287,23 @@ public class ActionButton extends View {
 			float getSize(Context context) {
 				return MetricsConverter.dpToPx(context, 40.0f);
 			}
-		};
+		},
+
+                /**
+                 * <b>Action Button</b> big (72dp) type
+                 */
+                BIG {
+                        @Override
+                        int getId() {
+                            return 2;
+                        }
+
+                        @Override
+                        float getSize(Context context) {
+                            return MetricsConverter.dpToPx(context, 72.0f);
+                        }
+                };
+
 
 		/**
 		 * Returns an {@code id} for specific <b>Action Button</b> 

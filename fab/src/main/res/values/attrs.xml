@@ -22,6 +22,7 @@
 		<attr name="type" format="enum">
 			<enum name="DEFAULT" value="0" />
 			<enum name="MINI" value="1" />
+            <enum name="BIG" value="2" />
 			
 			<!--Deprecated and will be removed in version 2.0.0. Use DEFAULT and MINI instead-->
 			<enum name="normal" value="0" />
