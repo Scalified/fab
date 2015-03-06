@@ -1,6 +1,6 @@
 # 1.1.0
 
-3. **New** public methods and attributes:
+1. **New** public methods, classes and attributes:
 
 	1. Methods:
 
@@ -13,13 +13,20 @@
 	
 		* **size** - lets to declare the button size (the same as **setSize(float)**)
 		
-4. **Attention!** *Deprecated* methods:
+	3. Classes:
+	
+		* added new **Action Button** type - **ActionButton.Type.BIG**, which has a size of 72 density-independent pixels. Also added a correspondent value **BIG** to **type** XML attribute
+		([Pull request #16: *Added BIG size, 72dp size for fab buttons, Fix MOVE feedback, update gitignore*](https://github.com/shell-software/fab/pull/16) by [**Aracem**](https://github.com/Aracem))
+		
+2. **Attention!** *Deprecated* methods:
 
 	* **getButtonSize()** renamed to **getSize()**. You can still use **getButtonSize()** method, however it is marked as *deprecated* and will be removed in version 2.0.0.
 
-5. Added checking of the *X* and *Y* touch coordinates.
+3. Added checking of the *X* and *Y* touch coordinate
 	
-	Now if the touch *X* and *Y* coordinates are not inside the main button circle, the button won't react on click
+	* If the touch *X* and *Y* coordinates are not inside the main button circle, the button won't react on click
+	* If the button state is **PRESSED** and touch point moves outside the main circle the button state changes to **NORMAL** 
+	([Pull request #14: *Update ActionButton.java*](https://github.com/shell-software/fab/pull/14) by [**uriel-frankel**](https://github.com/uriel-frankel))
 
 # 1.0.5
 

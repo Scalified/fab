@@ -30,30 +30,50 @@ class ViewMarginMover {
 	}
 	
 	ViewGroup.MarginLayoutParams calculateLayoutParams(float xAxisDelta, float yAxisDelta) {
-//		final ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-		final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
+		final ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+		Log.d(LOG_TAG, "=============================");
+		Log.d(LOG_TAG, "old leftMargin: " + layoutParams.leftMargin);
+		Log.d(LOG_TAG, "old rightMargin: " + layoutParams.rightMargin);
+		Log.d(LOG_TAG, "old topMargin: " + layoutParams.topMargin);
+		Log.d(LOG_TAG, "old bottomMargin: " + layoutParams.bottomMargin);
+		
+//		final LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
+//		int left = view.getLeft();
+//		int top = view.getTop();
+//		int right = view.getRight();
+//		int bottom = view.getBottom();
 		if (layoutParams.rightMargin == 0 && layoutParams.leftMargin != 0) {
 			Log.v(LOG_TAG, "Right margin not set, left margin will be changed");
-			layoutParams.setMargins(layoutParams.leftMargin + (int) xAxisDelta, layoutParams.topMargin, 
+			layoutParams.setMargins(layoutParams.leftMargin + (int) xAxisDelta, layoutParams.topMargin,
 					layoutParams.rightMargin, layoutParams.bottomMargin);
 //			layoutParams.leftMargin += xAxisDelta;
+//			left += xAxisDelta;
 		} else {
 			Log.v(LOG_TAG, "Right margin set, right margin will be changed");
-			layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin, 
+			layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin,
 					layoutParams.rightMargin - (int) xAxisDelta, layoutParams.bottomMargin);
 //			layoutParams.rightMargin -= xAxisDelta;
+//			right -= xAxisDelta;
 		}
 		if (layoutParams.bottomMargin == 0 && layoutParams.topMargin != 0) {
 			Log.v(LOG_TAG, "Bottom margin not set, top margin will be changed");
-			layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin + (int) yAxisDelta, 
+			layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin + (int) yAxisDelta,
 					layoutParams.rightMargin, layoutParams.bottomMargin);
 //			layoutParams.topMargin += yAxisDelta;
+//			top += yAxisDelta;
 		} else {
 			Log.v(LOG_TAG, "Bottom margin set, bottom margin will be changed");
-			layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin, 
+			layoutParams.setMargins(layoutParams.leftMargin, layoutParams.topMargin,
 					layoutParams.rightMargin, layoutParams.bottomMargin - (int) yAxisDelta);
 //			layoutParams.bottomMargin -= yAxisDelta;
+//			bottom -= yAxisDelta;
 		}
+//		view.layout(left, top, right, bottom);
+		Log.d(LOG_TAG, "=============================");
+		Log.d(LOG_TAG, "new leftMargin: " + layoutParams.leftMargin);
+		Log.d(LOG_TAG, "new rightMargin: " + layoutParams.rightMargin);
+		Log.d(LOG_TAG, "new topMargin: " + layoutParams.topMargin);
+		Log.d(LOG_TAG, "new bottomMargin: " + layoutParams.bottomMargin);
 		return layoutParams;
 	}
 	
@@ -133,7 +153,7 @@ class ViewMarginMover {
 
 		@Override
 		public void onAnimationEnd(Animation animation) {
-			view.setLayoutParams(new LinearLayout.LayoutParams(layoutParams));
+			view.setLayoutParams(layoutParams);
 			Log.v(LOG_TAG, "View has been moved");
 		}
 

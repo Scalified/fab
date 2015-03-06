@@ -204,10 +204,11 @@ actionButton.playHideAnimation();   // plays the hide animation
 
 #### Button types
 
-There are two types of **Action Button**, which you can work with:
+There are three types of **Action Button**, which you can work with:
 
-* **DEFAULT**
-* **MINI**
+* **DEFAULT** (40dp)
+* **MINI** (56dp)
+* **BIG** (72dp)
 
 By default the button type is set to **DEFAULT**.
 

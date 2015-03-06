@@ -39,12 +39,9 @@
 				/>
 		<RadioButton
 				android:id="@+id/fab_activity_radiobutton_mini"
-				style="@style/fab_radiobutton_style"
-                android:layout_marginLeft="@dimen/fab_margin"
-                android:layout_marginStart="@dimen/fab_margin"
+				style="@style/fab_radiobutton_horizontal_next_style"
 				android:text="@string/fab_radiobutton_mini_type_text"
 				/>
-
         <RadioButton
                 android:id="@+id/fab_activity_radiobutton_big"
                 style="@style/fab_radiobutton_horizontal_next_style"

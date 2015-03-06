@@ -1116,7 +1116,10 @@ public class ActionButton extends View {
 	 *    on {@link android.view.MotionEvent#ACTION_DOWN}
 	 * 2. Changes the <b>Action Button</b> {@link #state} to {@link State#NORMAL}
 	 *    on {@link android.view.MotionEvent#ACTION_UP}
-	 *        
+	 * 3. Changes the <b>Action Button</b> {@link #state} to {@link State#NORMAL}
+	 *    on {@link android.view.MotionEvent#ACTION_MOVE} in case when touch point
+	 *    leaves the main circle
+	 *
 	 * @param event motion event
 	 * @return true if event was handled, otherwise false
 	 */
@@ -1125,48 +1128,36 @@ public class ActionButton extends View {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		super.onTouchEvent(event);
-<<<<<<< HEAD
-		if (isPointInsideCircle(event.getX(), event.getY())) {
-			final int action = event.getAction();
-			switch (action) {
-				case MotionEvent.ACTION_DOWN:
-					Log.v(LOG_TAG, "Motion event action down detected");
-					setState(State.PRESSED);
-					return true;
-				case MotionEvent.ACTION_UP:
-					Log.v(LOG_TAG, "Motion event action up detected");
-					setState(State.NORMAL);
-					return true;
-				default:
-					Log.v(LOG_TAG, "Unrecognized motion event detected");
-					return false;
-			}
-		} else {
-			Log.v(LOG_TAG, "Motion event skipped: touched point is not inside the circle");
-			return false;
-=======
 		final int action = event.getAction();
+		final boolean pointInsideCircle = isPointInsideCircle(event.getX(), event.getY());
 		switch (action) {
 			case MotionEvent.ACTION_DOWN:
-				Log.v(LOG_TAG, "Motion event action down detected");
-				setState(State.PRESSED);
-				return true;
+				if (pointInsideCircle) {
+					setState(State.PRESSED);
+					Log.v(LOG_TAG, "Motion event action down detected");
+					return true;
+				}
+				break;
 			case MotionEvent.ACTION_UP:
-                        case MotionEvent.ACTION_CANCEL:
-				Log.v(LOG_TAG, "Motion event action up detected");
-				setState(State.NORMAL);
-				return true;
-                        case MotionEvent.ACTION_MOVE:
-                                if (event.getX() < 0 || event.getX() > getWidth()
-                                        || event.getY() < 0 ||event.getY() > getHeight()){
-                                        setState(State.NORMAL);
-                                }
-                                return true;
+				if (pointInsideCircle) {
+					setState(State.NORMAL);
+					Log.v(LOG_TAG, "Motion event action up detected");
+					return true;
+				}
+				break;
+			case MotionEvent.ACTION_MOVE:
+				if (!pointInsideCircle
+						&& getState() == State.PRESSED) {
+					setState(State.NORMAL);
+					Log.v(LOG_TAG, "Touch point is outside the circle");
+					return true;
+				}
+				break;
 			default:
 				Log.v(LOG_TAG, "Unrecognized motion event detected");
-				return false;
->>>>>>> 27c6cda2250baab46976b630676b9997cc1e61b6
+				break;
 		}
+		return false;
 	}
 
 	/**
@@ -1477,21 +1468,20 @@ public class ActionButton extends View {
 			}
 		},
 
-                /**
-                 * <b>Action Button</b> big (72dp) type
-                 */
-                BIG {
-                        @Override
-                        int getId() {
-                            return 2;
-                        }
+		/**
+         * <b>Action Button</b> big (72dp) type
+         */
+		BIG {
+			@Override
+			int getId() {
+                return 2;
+			}
 
-                        @Override
-                        float getSize(Context context) {
-                            return MetricsConverter.dpToPx(context, 72.0f);
-                        }
-                };
-
+	        @Override
+            float getSize() {
+		        return 72.0f;
+	        }
+		};
 
 		/**
 		 * Returns an {@code id} for specific <b>Action Button</b> 

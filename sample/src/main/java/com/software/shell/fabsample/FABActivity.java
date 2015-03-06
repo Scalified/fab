@@ -67,17 +67,17 @@ public class FABActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fab_activity_layout);
 		
-//		initActionButton();
-//		initButtonTypeRadioGroup();
-//		initShadowRadiusSeekBar();
-//		initShadowXOffsetSeekBar();
-//		initShadowYOffsetSeekBar();
-//		initDefaultIconPlusCheckBox();
-//		initButtonBehaviorRadioGroup();
-//		initButtonColorsRadioGroup();
-//		initStrokeColorRadioGroup();
-//		initStrokeWidthSeekBar();
-//		initAnimationsRadioGroup();
+		initActionButton();
+		initButtonTypeRadioGroup();
+		initShadowRadiusSeekBar();
+		initShadowXOffsetSeekBar();
+		initShadowYOffsetSeekBar();
+		initDefaultIconPlusCheckBox();
+		initButtonBehaviorRadioGroup();
+		initButtonColorsRadioGroup();
+		initStrokeColorRadioGroup();
+		initStrokeWidthSeekBar();
+		initAnimationsRadioGroup();
 	}
 	
 	private void initActionButton() {
@@ -189,24 +189,24 @@ public class FABActivity extends Activity {
 	}
 	
 	public void onActionButtonClick(View v) {
-//		final int checkedId = buttonBehaviorRadioGroup.getCheckedRadioButtonId();
-//		switch (checkedId) {
-//			case R.id.fab_activity_radiobutton_hide_and_show_on_click_radiobutton:
-//				actionButton.hide();
-//				new Handler().postDelayed(getShowRunnable(), ACTION_BUTTON_POST_DELAY_MS);
-//				break;
-//			case R.id.fab_activity_radiobutton_move_up_and_down_on_click_radiobutton:
-//				actionButton.moveUp(MOVE_DISTANCE);
-//				new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
-//				break;
-//			case R.id.fab_activity_radiobutton_move_left_and_right_on_click_radiobutton:
-//				actionButton.moveLeft(MOVE_DISTANCE);
-//				new Handler().postDelayed(getMoveRightRunnable(), ACTION_BUTTON_POST_DELAY_MS);
-//			default:
-//				break;
-//		}
-		actionButton.moveUp(MOVE_DISTANCE);
-		new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+		final int checkedId = buttonBehaviorRadioGroup.getCheckedRadioButtonId();
+		switch (checkedId) {
+			case R.id.fab_activity_radiobutton_hide_and_show_on_click_radiobutton:
+				actionButton.hide();
+				new Handler().postDelayed(getShowRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+				break;
+			case R.id.fab_activity_radiobutton_move_up_and_down_on_click_radiobutton:
+				actionButton.moveUp(MOVE_DISTANCE);
+				new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+				break;
+			case R.id.fab_activity_radiobutton_move_left_and_right_on_click_radiobutton:
+				actionButton.moveLeft(MOVE_DISTANCE);
+				new Handler().postDelayed(getMoveRightRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+			default:
+				break;
+		}
+//		actionButton.moveUp(MOVE_DISTANCE);
+//		new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
 	}
 	
 	private Runnable getShowRunnable() {
