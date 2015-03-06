@@ -1013,9 +1013,16 @@ public class ActionButton extends View {
 				setState(State.PRESSED);
 				return true;
 			case MotionEvent.ACTION_UP:
+                        case MotionEvent.ACTION_CANCEL:
 				Log.v(LOG_TAG, "Motion event action up detected");
 				setState(State.NORMAL);
 				return true;
+                        case MotionEvent.ACTION_MOVE:
+                                if (event.getX() < 0 || event.getX() > getWidth()
+                                        || event.getY() < 0 ||event.getY() > getHeight()){
+                                        setState(State.NORMAL);
+                                }
+                                return true;
 			default:
 				Log.v(LOG_TAG, "Unrecognized motion event detected");
 				return false;
