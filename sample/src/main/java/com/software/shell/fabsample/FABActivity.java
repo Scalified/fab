@@ -32,6 +32,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Toast;
+import com.software.shell.fab.move.MovementParameters;
 
 import java.util.Set;
 
@@ -66,18 +67,18 @@ public class FABActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fab_activity_layout);
-		
+
 		initActionButton();
-		initButtonTypeRadioGroup();
-		initShadowRadiusSeekBar();
-		initShadowXOffsetSeekBar();
-		initShadowYOffsetSeekBar();
-		initDefaultIconPlusCheckBox();
-		initButtonBehaviorRadioGroup();
-		initButtonColorsRadioGroup();
-		initStrokeColorRadioGroup();
-		initStrokeWidthSeekBar();
-		initAnimationsRadioGroup();
+//		initButtonTypeRadioGroup();
+//		initShadowRadiusSeekBar();
+//		initShadowXOffsetSeekBar();
+//		initShadowYOffsetSeekBar();
+//		initDefaultIconPlusCheckBox();
+//		initButtonBehaviorRadioGroup();
+//		initButtonColorsRadioGroup();
+//		initStrokeColorRadioGroup();
+//		initStrokeWidthSeekBar();
+//		initAnimationsRadioGroup();
 	}
 	
 	private void initActionButton() {
@@ -189,24 +190,27 @@ public class FABActivity extends Activity {
 	}
 	
 	public void onActionButtonClick(View v) {
-		final int checkedId = buttonBehaviorRadioGroup.getCheckedRadioButtonId();
-		switch (checkedId) {
-			case R.id.fab_activity_radiobutton_hide_and_show_on_click_radiobutton:
-				actionButton.hide();
-				new Handler().postDelayed(getShowRunnable(), ACTION_BUTTON_POST_DELAY_MS);
-				break;
-			case R.id.fab_activity_radiobutton_move_up_and_down_on_click_radiobutton:
-				actionButton.moveUp(MOVE_DISTANCE);
-				new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
-				break;
-			case R.id.fab_activity_radiobutton_move_left_and_right_on_click_radiobutton:
-				actionButton.moveLeft(MOVE_DISTANCE);
-				new Handler().postDelayed(getMoveRightRunnable(), ACTION_BUTTON_POST_DELAY_MS);
-			default:
-				break;
-		}
+//		final int checkedId = buttonBehaviorRadioGroup.getCheckedRadioButtonId();
+//		switch (checkedId) {
+//			case R.id.fab_activity_radiobutton_hide_and_show_on_click_radiobutton:
+//				actionButton.hide();
+//				new Handler().postDelayed(getShowRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+//				break;
+//			case R.id.fab_activity_radiobutton_move_up_and_down_on_click_radiobutton:
+//				actionButton.moveUp(MOVE_DISTANCE);
+//				new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+//				break;
+//			case R.id.fab_activity_radiobutton_move_left_and_right_on_click_radiobutton:
+//				actionButton.moveLeft(MOVE_DISTANCE);
+//				new Handler().postDelayed(getMoveRightRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+//			default:
+//				break;
+//		}
 //		actionButton.moveUp(MOVE_DISTANCE);
 //		new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+		MovementParameters parameters = new MovementParameters(0, 300);
+		actionButton.move(parameters);
+		new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
 	}
 	
 	private Runnable getShowRunnable() {
@@ -222,19 +226,20 @@ public class FABActivity extends Activity {
 		return new Runnable() {
 			@Override
 			public void run() {
-				actionButton.moveDown(MOVE_DISTANCE);
+//				actionButton.moveDown(MOVE_DISTANCE);
+				actionButton.move(new MovementParameters(0, -300));
 			}
 		};
 	}
 	
-	private Runnable getMoveRightRunnable() {
-		return new Runnable() {
-			@Override
-			public void run() {
-				actionButton.moveRight(MOVE_DISTANCE);
-			}
-		};
-	}
+//	private Runnable getMoveRightRunnable() {
+//		return new Runnable() {
+//			@Override
+//			public void run() {
+//				actionButton.moveRight(MOVE_DISTANCE);
+//			}
+//		};
+//	}
 	
 	protected static float getSeekBarRealProgress(int progress) {
 		return (float) progress / SEEKBAR_PROGRESS_MULTIPLIER;		

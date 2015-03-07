@@ -92,13 +92,13 @@
 	<!--Action Button-->
 	<style name="fab_action_button_base_style" parent="fab_layout_wrap_width_wrap_height_style" />
 	<style name="fab_action_button_style" parent="fab_action_button_base_style">
-		<item name="android:layout_alignParentBottom">true</item>
-		<item name="android:layout_alignParentRight">true</item>
-		<item name="android:layout_marginRight">@dimen/fab_margin</item>
-		<item name="android:layout_marginBottom">@dimen/fab_margin</item>
+		<!--<item name="android:layout_alignParentBottom">true</item>-->
+		<!--<item name="android:layout_alignParentRight">true</item>-->
+		<!--<item name="android:layout_marginRight">@dimen/fab_margin</item>-->
+		<!--<item name="android:layout_marginBottom">@dimen/fab_margin</item>-->
 		
-		<!--<item name="android:layout_alignParentTop">true</item>-->
-		<!--<item name="android:layout_alignParentLeft">true</item>-->
+		<item name="android:layout_alignParentTop">true</item>
+		<item name="android:layout_alignParentLeft">true</item>
 		<!--<item name="android:layout_marginLeft">@dimen/fab_margin</item>-->
 		<!--<item name="android:layout_marginTop">@dimen/fab_margin</item>-->
 	</style>

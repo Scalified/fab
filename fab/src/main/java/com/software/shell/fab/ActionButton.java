@@ -30,7 +30,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.*;
 import android.view.animation.*;
-import android.view.animation.Interpolator;
+import com.software.shell.fab.move.MovementParameters;
+import com.software.shell.fab.move.ViewMover;
+import com.software.shell.fab.move.ViewMoverFactory;
 
 /**
  * This class represents a <b>Action Button</b>, which is used in 
@@ -524,70 +526,84 @@ public class ActionButton extends View {
 		ViewGroup parent = (ViewGroup) getParent();
 		return parent == null;
 	}
-	
-	private final ViewMarginMover mover = new ViewMarginMover(this);
-	
-	public void move(float xAxisDelta, float yAxisDelta, long duration, Interpolator interpolator) {
-		mover.move(dpToPx(xAxisDelta), dpToPx(yAxisDelta), duration, interpolator);
+
+	private final ViewMover mover = ViewMoverFactory.createInstance(this);
+
+	public void move(MovementParameters parameters) {
+		mover.move(parameters);
 	}
 	
-	public void move(float xAxisDelta, float yAxisDelta, long duration) {
-		mover.move(dpToPx(xAxisDelta), dpToPx(yAxisDelta), duration);
-	}
+//	private final ViewMarginMover mover = new ViewMarginMover(this);
 	
-	public void move(float xAxisDelta, float yAxisDelta) {
-		mover.move(dpToPx(xAxisDelta), dpToPx(yAxisDelta));
-	}
-	
-	public void moveUp(float distance, long duration, Interpolator interpolator) {
-		move(0, -distance, duration, interpolator);
-	}
-	
-	public void moveUp(float distance, long duration) {
-		move(0, -distance, duration);
-	}
-	
-	public void moveUp(float distance) {
-		move(0, -distance);
-	}
-	
-	public void moveDown(float distance, long duration, Interpolator interpolator) {
-		move(0, distance, duration, interpolator);
-	}
-	
-	public void moveDown(float distance, long duration) {
-		move(0, distance, duration);
-	}
-	
-	public void moveDown(float distance) {
-		move(0, distance);
-	}
-	
-	public void moveLeft(float distance, long duration, Interpolator interpolator) {
-		move(-distance, 0, duration, interpolator);
-	}
-	
-	public void moveLeft(float distance, long duration) {
-		move(-distance, 0, duration);
-	}
-	
-	public void moveLeft(float distance) {
-		move(-distance, 0);
-	}
-	
-	public void moveRight(float distance, long duration, Interpolator interpolator) {
-		move(distance, 0, duration, interpolator);
-	}
-	
-	public void moveRight(float distance, long duration) {
-		move(distance, 0, duration);
-	}
-	
-	public void moveRight(float distance) {
-		move(distance, 0);
-	}
-	
-	private float dpToPx(float dp) {
+//	public void move(float xAxisDelta, float yAxisDelta, long duration, Interpolator interpolator) {
+//		mover.move(dpToPx(xAxisDelta), dpToPx(yAxisDelta), duration, interpolator);
+//	}
+//
+//	public void move(float xAxisDelta, float yAxisDelta, long duration) {
+//		mover.move(dpToPx(xAxisDelta), dpToPx(yAxisDelta), duration);
+//	}
+//
+//	public void move(float xAxisDelta, float yAxisDelta) {
+//		mover.move(dpToPx(xAxisDelta), dpToPx(yAxisDelta));
+//	}
+//
+//	public void moveUp(float distance, long duration, Interpolator interpolator) {
+//		move(0, -distance, duration, interpolator);
+//	}
+//
+//	public void moveUp(float distance, long duration) {
+//		move(0, -distance, duration);
+//	}
+//
+//	public void moveUp(float distance) {
+//		move(0, -distance);
+//	}
+//
+//	public void moveDown(float distance, long duration, Interpolator interpolator) {
+//		move(0, distance, duration, interpolator);
+//	}
+//
+//	public void moveDown(float distance, long duration) {
+//		move(0, distance, duration);
+//	}
+//
+//	public void moveDown(float distance) {
+//		move(0, distance);
+//	}
+//
+//	public void moveLeft(float distance, long duration, Interpolator interpolator) {
+//		move(-distance, 0, duration, interpolator);
+//	}
+//
+//	public void moveLeft(float distance, long duration) {
+//		move(-distance, 0, duration);
+//	}
+//
+//	public void moveLeft(float distance) {
+//		move(-distance, 0);
+//	}
+//
+//	public void moveRight(float distance, long duration, Interpolator interpolator) {
+//		move(distance, 0, duration, interpolator);
+//	}
+//
+//	public void moveRight(float distance, long duration) {
+//		move(distance, 0, duration);
+//	}
+//
+//	public void moveRight(float distance) {
+//		move(distance, 0);
+//	}
+
+	/**
+	 * Makes a call to
+	 * {@link com.software.shell.fab.MetricsConverter#dpToPx(android.content.Context, float)}
+	 * for converting density-dependent value into density-independent one
+	 *
+	 * @param dp density-dependent value
+	 * @return density-independent value
+	 */
+	protected float dpToPx(float dp) {
 		return MetricsConverter.dpToPx(getContext(), dp);
 	}
 	
