@@ -30,9 +30,11 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.*;
 import android.view.animation.*;
-import com.software.shell.fab.move.MovementParameters;
-import com.software.shell.fab.move.ViewMover;
-import com.software.shell.fab.move.ViewMoverFactory;
+
+import com.software.shell.viewmover.configuration.MovingDetails;
+import com.software.shell.viewmover.movers.ViewMover;
+import com.software.shell.viewmover.movers.ViewMoverFactory;
+import com.software.shell.viewmover.utils.MetricsConverter;
 
 /**
  * This class represents a <b>Action Button</b>, which is used in 
@@ -55,7 +57,7 @@ public class ActionButton extends View {
 	private Type type = Type.DEFAULT;
 
 	/**
-	 * <b>Action Button</b> size
+	 * <b>Action Button</b> size in actual pixels
 	 */
 	private float size = dpToPx(type.getSize());
 
@@ -123,6 +125,11 @@ public class ActionButton extends View {
 	 * Animation, which is used while hiding or dismissing <b>Action Button</b> 
 	 */
 	private Animation hideAnimation;
+
+	/**
+	 * A view mover, which is used to move the <b>Action Button</b>
+	 */
+	protected final ViewMover mover = ViewMoverFactory.createInstance(this);
 
 	/**
 	 * {@link android.graphics.Paint}, which is used for drawing the elements of
@@ -523,81 +530,69 @@ public class ActionButton extends View {
 	 * @return true if <b>Action Button</b> is dismissed, otherwise false
 	 */
 	public boolean isDismissed() {
-		ViewGroup parent = (ViewGroup) getParent();
+		final ViewGroup parent = (ViewGroup) getParent();
 		return parent == null;
 	}
 
-	private final ViewMover mover = ViewMoverFactory.createInstance(this);
-
-	public void move(MovementParameters parameters) {
-		mover.move(parameters);
+	/**
+	 * Moves the <b>Action Button</b> to the specified position obtained from
+	 * {@link com.software.shell.viewmover.configuration.MovingDetails} object
+	 *
+	 * @param details moving details, which contain the desired position to move
+	 */
+	public void move(MovingDetails details) {
+		Log.v(LOG_TAG, String.format("View is about to move at: X-axis delta = %s Y-axis delta = %s",
+				details.getXAxisDelta(), details.getYAxisDelta()));
+		mover.move(details);
 	}
-	
-//	private final ViewMarginMover mover = new ViewMarginMover(this);
-	
-//	public void move(float xAxisDelta, float yAxisDelta, long duration, Interpolator interpolator) {
-//		mover.move(dpToPx(xAxisDelta), dpToPx(yAxisDelta), duration, interpolator);
-//	}
-//
-//	public void move(float xAxisDelta, float yAxisDelta, long duration) {
-//		mover.move(dpToPx(xAxisDelta), dpToPx(yAxisDelta), duration);
-//	}
-//
-//	public void move(float xAxisDelta, float yAxisDelta) {
-//		mover.move(dpToPx(xAxisDelta), dpToPx(yAxisDelta));
-//	}
-//
-//	public void moveUp(float distance, long duration, Interpolator interpolator) {
-//		move(0, -distance, duration, interpolator);
-//	}
-//
-//	public void moveUp(float distance, long duration) {
-//		move(0, -distance, duration);
-//	}
-//
-//	public void moveUp(float distance) {
-//		move(0, -distance);
-//	}
-//
-//	public void moveDown(float distance, long duration, Interpolator interpolator) {
-//		move(0, distance, duration, interpolator);
-//	}
-//
-//	public void moveDown(float distance, long duration) {
-//		move(0, distance, duration);
-//	}
-//
-//	public void moveDown(float distance) {
-//		move(0, distance);
-//	}
-//
-//	public void moveLeft(float distance, long duration, Interpolator interpolator) {
-//		move(-distance, 0, duration, interpolator);
-//	}
-//
-//	public void moveLeft(float distance, long duration) {
-//		move(-distance, 0, duration);
-//	}
-//
-//	public void moveLeft(float distance) {
-//		move(-distance, 0);
-//	}
-//
-//	public void moveRight(float distance, long duration, Interpolator interpolator) {
-//		move(distance, 0, duration, interpolator);
-//	}
-//
-//	public void moveRight(float distance, long duration) {
-//		move(distance, 0, duration);
-//	}
-//
-//	public void moveRight(float distance) {
-//		move(distance, 0);
-//	}
+
+	/**
+	 * Moves the <b>Action Button</b> right to a specified distance
+	 *
+	 * @param distance distance specified in density-independent pixels to move
+	 *                 the <b>Action Button</b> right
+	 */
+	public void moveRight(float distance) {
+		final MovingDetails details = new MovingDetails(getContext(), distance, 0);
+		move(details);
+	}
+
+	/**
+	 * Moves the <b>Action Button</b> down to a specified distance
+	 *
+	 * @param distance distance specified in density-independent pixels
+	 *                 to move the <b>Action Button</b> down
+	 */
+	public void moveDown(float distance) {
+		final MovingDetails details = new MovingDetails(getContext(), 0, distance);
+		move(details);
+	}
+
+	/**
+	 * Moves the <b>Action Button</b> left to a specified distance
+	 *
+	 * @param distance distance specified in density-independent pixels
+	 *                 to move the <b>Action Button</b> left
+	 */
+	public void moveLeft(float distance) {
+		final MovingDetails details = new MovingDetails(getContext(), -distance, 0);
+		move(details);
+	}
+
+	/**
+	 * Moves the <b>Action Button</b> up to a specified distance
+	 *
+	 * @param distance distance specified in density-independent pixels
+	 *                 to move the <b>Action Button</b> up
+	 */
+	public void moveUp(float distance) {
+		final MovingDetails details = new MovingDetails(getContext(), 0, -distance);
+		move(details);
+	}
 
 	/**
 	 * Makes a call to
-	 * {@link com.software.shell.fab.MetricsConverter#dpToPx(android.content.Context, float)}
+	 * {@link com.software.shell.viewmover.utils.MetricsConverter}
 	 * for converting density-dependent value into density-independent one
 	 *
 	 * @param dp density-dependent value

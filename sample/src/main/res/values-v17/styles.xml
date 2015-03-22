@@ -58,15 +58,10 @@
 
 	<!--Action Button-->
 	<style name="fab_action_button_style" parent="fab_action_button_base_style">
-		<!--<item name="android:layout_alignParentBottom">true</item>-->
-		<!--<item name="android:layout_alignParentEnd">true</item>-->
-		<!--<item name="android:layout_marginEnd">@dimen/fab_margin</item>-->
-		<!--<item name="android:layout_marginBottom">@dimen/fab_margin</item>-->
-
-		<item name="android:layout_alignParentTop">true</item>
-		<item name="android:layout_alignParentStart">true</item>
-		<!--<item name="android:layout_marginStart">@dimen/fab_margin</item>-->
-		<!--<item name="android:layout_marginTop">@dimen/fab_margin</item>-->
+		<item name="android:layout_alignParentBottom">true</item>
+		<item name="android:layout_alignParentEnd">true</item>
+		<item name="android:layout_marginEnd">@dimen/fab_margin</item>
+		<item name="android:layout_marginBottom">@dimen/fab_margin</item>
 	</style>
 	
 </resources>

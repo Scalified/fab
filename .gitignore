@@ -1,7 +1,10 @@
-# Ignore gradle files
 .gradle/
 build/
+bin/
+gen/
 **/local.properties
 .idea/
 *.iml
 .metadata/
+*.DS_Store
+proguard/

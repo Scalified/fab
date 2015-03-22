@@ -115,21 +115,6 @@
 			style="@style/fab_textview_new_block_style"
 			android:text="@string/fab_textview_button_behavior_text"
 			/>
-	<!--<CheckBox-->
-			<!--android:id="@+id/fab_activity_checkbox_hide_and_show_on_click"-->
-			<!--style="@style/fab_checkbox_style"-->
-			<!--android:text="@string/fab_checkbox_hide_and_show_on_click_text"-->
-			<!--/>-->
-	<!--<CheckBox-->
-			<!--android:id="@+id/fab_activity_checkbox_move_up_and_down_on_click"-->
-			<!--style="@style/fab_checkbox_style"-->
-			<!--android:text="@string/fab_checkbox_move_up_and_down_on_click"-->
-			<!--/>-->
-	<!--<CheckBox-->
-			<!--android:id="@+id/fab_activity_checkbox_move_left_and_right_on_click"-->
-			<!--style="@style/fab_checkbox_style"-->
-			<!--android:text="@string/fab_checkbox_move_left_and_right_on_click"-->
-			<!--/>-->
 	<RadioGroup
 			android:id="@+id/fab_activity_button_behavior_radiogroup"
 			style="@style/fab_radiogroup_style"

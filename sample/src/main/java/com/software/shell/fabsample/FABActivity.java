@@ -24,15 +24,14 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import com.software.shell.fab.ActionButton;
-import com.software.shell.fab.MetricsConverter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Toast;
-import com.software.shell.fab.move.MovementParameters;
+import com.software.shell.viewmover.configuration.MovingDetails;
+import com.software.shell.viewmover.utils.MetricsConverter;
 
 import java.util.Set;
 
@@ -69,16 +68,16 @@ public class FABActivity extends Activity {
 		setContentView(R.layout.fab_activity_layout);
 
 		initActionButton();
-//		initButtonTypeRadioGroup();
-//		initShadowRadiusSeekBar();
-//		initShadowXOffsetSeekBar();
-//		initShadowYOffsetSeekBar();
-//		initDefaultIconPlusCheckBox();
-//		initButtonBehaviorRadioGroup();
-//		initButtonColorsRadioGroup();
-//		initStrokeColorRadioGroup();
-//		initStrokeWidthSeekBar();
-//		initAnimationsRadioGroup();
+		initButtonTypeRadioGroup();
+		initShadowRadiusSeekBar();
+		initShadowXOffsetSeekBar();
+		initShadowYOffsetSeekBar();
+		initDefaultIconPlusCheckBox();
+		initButtonBehaviorRadioGroup();
+		initButtonColorsRadioGroup();
+		initStrokeColorRadioGroup();
+		initStrokeWidthSeekBar();
+		initAnimationsRadioGroup();
 	}
 	
 	private void initActionButton() {
@@ -103,7 +102,7 @@ public class FABActivity extends Activity {
 	
 	private void initShadowRadiusSeekBar() {
 		shadowRadiusSeekBar = (SeekBar) findViewById(R.id.fab_activity_seekbar_shadow_radius);
-		final int progress = (int) (MetricsConverter.pxToDp(this, actionButton.getShadowRadius()) 
+		final int progress = (int) (pxToDp(actionButton.getShadowRadius())
 				* SEEKBAR_PROGRESS_MULTIPLIER);
 		shadowRadiusSeekBar.setProgress(progress);
 		shadowRadiusSeekBar.setOnSeekBarChangeListener(new ShadowRadiusChangeListener());
@@ -111,7 +110,7 @@ public class FABActivity extends Activity {
 	
 	private void initShadowXOffsetSeekBar() {
 		shadowXOffsetSeekBar = (SeekBar) findViewById(R.id.fab_activity_seekbar_shadow_x_offset);
-		final int progress = (int) (MetricsConverter.pxToDp(this, actionButton.getShadowXOffset()) 
+		final int progress = (int) (pxToDp(actionButton.getShadowXOffset())
 				* SEEKBAR_PROGRESS_MULTIPLIER + shadowXOffsetSeekBar.getMax() / 2);
 		shadowXOffsetSeekBar.setProgress(progress);
 		shadowXOffsetSeekBar.setOnSeekBarChangeListener(new ShadowOffsetChangeListener());
@@ -119,7 +118,7 @@ public class FABActivity extends Activity {
 	
 	private void initShadowYOffsetSeekBar() {
 		shadowYOffsetSeekBar = (SeekBar) findViewById(R.id.fab_activity_seekbar_shadow_y_offset);
-		final int progress = (int) (MetricsConverter.pxToDp(this, actionButton.getShadowYOffset()) 
+		final int progress = (int) (pxToDp(actionButton.getShadowYOffset())
 				* SEEKBAR_PROGRESS_MULTIPLIER + shadowXOffsetSeekBar.getMax() / 2);
 		shadowYOffsetSeekBar.setProgress(progress);
 		shadowYOffsetSeekBar.setOnSeekBarChangeListener(new ShadowOffsetChangeListener());
@@ -133,6 +132,7 @@ public class FABActivity extends Activity {
 	
 	private void initButtonBehaviorRadioGroup() {
 		buttonBehaviorRadioGroup = (RadioGroup) findViewById(R.id.fab_activity_button_behavior_radiogroup);
+		buttonBehaviorRadioGroup.setOnCheckedChangeListener(new ButtonBehaviorChangeListener());
 		buttonBehaviorRadioGroup.check(R.id.fab_activity_radiobutton_none_on_click_radiobutton);
 	}
 	
@@ -166,7 +166,7 @@ public class FABActivity extends Activity {
 	
 	private void initStrokeWidthSeekBar() {
 		strokeWidthSeekBar = (SeekBar) findViewById(R.id.fab_activity_seekbar_stroke_width);
-		final int progress = (int) (MetricsConverter.pxToDp(this, actionButton.getStrokeWidth()) 
+		final int progress = (int) (pxToDp(actionButton.getStrokeWidth())
 				* SEEKBAR_PROGRESS_MULTIPLIER);
 		strokeWidthSeekBar.setProgress(progress);
 		strokeWidthSeekBar.setOnSeekBarChangeListener(new StrokeWidthChangeListener());
@@ -177,6 +177,7 @@ public class FABActivity extends Activity {
 		populateAnimationsRadioGroup(animationsRadioGroup, RadioButtons.ANIMATIONS);
 		animationsRadioGroup.setOnCheckedChangeListener(new AnimationsChangeListener());
 		animationsRadioGroup.check(animationsRadioGroup.getChildAt(0).getId());
+		animationsRadioGroup.setEnabled(false);
 	}
 	
 	private void populateAnimationsRadioGroup(RadioGroup group, Set<RadioButtons.AnimationInfo> animationInfos) {
@@ -190,27 +191,22 @@ public class FABActivity extends Activity {
 	}
 	
 	public void onActionButtonClick(View v) {
-//		final int checkedId = buttonBehaviorRadioGroup.getCheckedRadioButtonId();
-//		switch (checkedId) {
-//			case R.id.fab_activity_radiobutton_hide_and_show_on_click_radiobutton:
-//				actionButton.hide();
-//				new Handler().postDelayed(getShowRunnable(), ACTION_BUTTON_POST_DELAY_MS);
-//				break;
-//			case R.id.fab_activity_radiobutton_move_up_and_down_on_click_radiobutton:
-//				actionButton.moveUp(MOVE_DISTANCE);
-//				new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
-//				break;
-//			case R.id.fab_activity_radiobutton_move_left_and_right_on_click_radiobutton:
-//				actionButton.moveLeft(MOVE_DISTANCE);
-//				new Handler().postDelayed(getMoveRightRunnable(), ACTION_BUTTON_POST_DELAY_MS);
-//			default:
-//				break;
-//		}
-//		actionButton.moveUp(MOVE_DISTANCE);
-//		new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
-		MovementParameters parameters = new MovementParameters(0, 300);
-		actionButton.move(parameters);
-		new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+		final int checkedId = buttonBehaviorRadioGroup.getCheckedRadioButtonId();
+		switch (checkedId) {
+			case R.id.fab_activity_radiobutton_hide_and_show_on_click_radiobutton:
+				actionButton.hide();
+				new Handler().postDelayed(getShowRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+				break;
+			case R.id.fab_activity_radiobutton_move_up_and_down_on_click_radiobutton:
+				actionButton.moveUp(MOVE_DISTANCE);
+				new Handler().postDelayed(getMoveDownRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+				break;
+			case R.id.fab_activity_radiobutton_move_left_and_right_on_click_radiobutton:
+				actionButton.moveLeft(MOVE_DISTANCE);
+				new Handler().postDelayed(getMoveRightRunnable(), ACTION_BUTTON_POST_DELAY_MS);
+			default:
+				break;
+		}
 	}
 	
 	private Runnable getShowRunnable() {
@@ -219,27 +215,30 @@ public class FABActivity extends Activity {
 			public void run() {
 				actionButton.show();
 			}
-		};		
+		};
 	}
 	
 	private Runnable getMoveDownRunnable() {
 		return new Runnable() {
 			@Override
 			public void run() {
-//				actionButton.moveDown(MOVE_DISTANCE);
-				actionButton.move(new MovementParameters(0, -300));
+				actionButton.move(new MovingDetails(FABActivity.this, 0, MOVE_DISTANCE));
 			}
 		};
 	}
 	
-//	private Runnable getMoveRightRunnable() {
-//		return new Runnable() {
-//			@Override
-//			public void run() {
-//				actionButton.moveRight(MOVE_DISTANCE);
-//			}
-//		};
-//	}
+	private Runnable getMoveRightRunnable() {
+		return new Runnable() {
+			@Override
+			public void run() {
+				actionButton.move(new MovingDetails(FABActivity.this, MOVE_DISTANCE, 0));
+			}
+		};
+	}
+
+	private float pxToDp(float px) {
+		return MetricsConverter.pxToDp(this, px);
+	}
 	
 	protected static float getSeekBarRealProgress(int progress) {
 		return (float) progress / SEEKBAR_PROGRESS_MULTIPLIER;		
@@ -375,6 +374,18 @@ public class FABActivity extends Activity {
 				final int strokeColor = getResources().getColor(colorsInfo.primaryColorResId);
 				actionButton.setStrokeColor(strokeColor);
 			}
+		}
+
+	}
+
+	class ButtonBehaviorChangeListener extends RadioGroupChangeListener {
+
+		@Override
+		public void onCheckedChanged(RadioGroup group, int checkedId) {
+			if (buttonBehaviorRadioGroup.equals(group)) {
+				animationsRadioGroup.setEnabled(
+						checkedId == R.id.fab_activity_radiobutton_hide_and_show_on_click_radiobutton);
+ 			}
 		}
 
 	}

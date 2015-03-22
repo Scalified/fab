@@ -48,3 +48,7 @@ android {
 	}
 
 }
+
+dependencies {
+	compile 'com.github.shell-software:viewmover:0.9.0'
+}

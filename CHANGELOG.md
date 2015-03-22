@@ -1,6 +1,8 @@
 # 1.1.0
 
-1. **New** public methods, classes and attributes:
+1. **Action Button** now has a dependency on an external [**ViewMover**](https://github.com/shell-software/view-mover) library. If it is used already in the project it must be excluded as a transitive dependency
+
+2. **New** public methods, classes and attributes:
 
 	1. Methods:
 
@@ -8,6 +10,11 @@
 		Changing the default size of the button breaks the rules of <a href="http://www.google.com/design/spec/components/buttons.html">Material Design</a>.
 	    Setting the button size explicitly means, that button types with its default sizes are completely ignored. Do not use this method, unless you know what you are doing
 		* **getSize()** - returns the size of the **Action Button** in real pixels (the same as **getButtonSize()**, which is now *deprecated*).
+		* **move(MovingDetails)** - moves the **Action Button** to the specified position obtained from **MovingDetails** object
+		* **moveRight(float)** - moves the **Action Button** right to a specified distance
+		* **moveDown(float)** - moves the **Action Button** down to a specified distance
+		* **moveLeft(float)** - moves the **Action Button** left to a specified distance
+		* **moveUp(float)** - moves the **Action Button** up to a specified distance
 	
 	2. XML attributes:
 	
@@ -18,15 +25,16 @@
 		* added new **Action Button** type - **ActionButton.Type.BIG**, which has a size of 72 density-independent pixels. Also added a correspondent value **BIG** to **type** XML attribute
 		([Pull request #16: *Added BIG size, 72dp size for fab buttons, Fix MOVE feedback, update gitignore*](https://github.com/shell-software/fab/pull/16) by [**Aracem**](https://github.com/Aracem))
 		
-2. **Attention!** *Deprecated* methods:
+3. **Attention!** *Deprecated* methods:
 
 	* **getButtonSize()** renamed to **getSize()**. You can still use **getButtonSize()** method, however it is marked as *deprecated* and will be removed in version 2.0.0.
 
-3. Added checking of the *X* and *Y* touch coordinate
+4. Added checking of the *X* and *Y* touch coordinate
 	
 	* If the touch *X* and *Y* coordinates are not inside the main button circle, the button won't react on click
 	* If the button state is **PRESSED** and touch point moves outside the main circle the button state changes to **NORMAL** 
 	([Pull request #14: *Update ActionButton.java*](https://github.com/shell-software/fab/pull/14) by [**uriel-frankel**](https://github.com/uriel-frankel))
+	
 
 # 1.0.5
 

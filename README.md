@@ -28,35 +28,67 @@ dependencies {
 }
 ```
 
+> **Action Button** has a dependency on an external [**ViewMover**](https://github.com/shell-software/view-mover) library. If it is used already in the project it must be excluded as a transitive dependency
+
 ## Activity Stream
 
 [**Full ChangeLog**](https://github.com/shell-software/fab/blob/master/CHANGELOG.md)
 
-### 1.0.5 - *current*
+### 1.1.0 - *current*
+
+1. **Action Button** now has a dependency on an external [**ViewMover**](https://github.com/shell-software/view-mover) library. If it is used already in the project it must be excluded as a transitive dependency
+
+2. **New** public methods, classes and attributes:
+
+	1. Methods:
+
+		* **setSize(float)** - sets the size of the **Action Button** (in density-independent pixels).
+		Changing the default size of the button breaks the rules of <a href="http://www.google.com/design/spec/components/buttons.html">Material Design</a>.
+	    Setting the button size explicitly means, that button types with its default sizes are completely ignored. Do not use this method, unless you know what you are doing
+		* **getSize()** - returns the size of the **Action Button** in real pixels (the same as **getButtonSize()**, which is now *deprecated*).
+		* **move(MovingDetails)** - moves the **Action Button** to the specified position obtained from **MovingDetails** object
+		* **moveRight(float)** - moves the **Action Button** right to a specified distance
+		* **moveDown(float)** - moves the **Action Button** down to a specified distance
+		* **moveLeft(float)** - moves the **Action Button** left to a specified distance
+		* **moveUp(float)** - moves the **Action Button** up to a specified distance
+
+	2. XML attributes:
+
+		* **size** - lets to declare the button size (the same as **setSize(float)**)
+
+	3. Classes:
+
+		* added new **Action Button** type - **ActionButton.Type.BIG**, which has a size of 72 density-independent pixels. Also added a correspondent value **BIG** to **type** XML attribute
+		([Pull request #16: *Added BIG size, 72dp size for fab buttons, Fix MOVE feedback, update gitignore*](https://github.com/shell-software/fab/pull/16) by [**Aracem**](https://github.com/Aracem))
+
+3. **Attention!** *Deprecated* methods:
+
+	* **getButtonSize()** renamed to **getSize()**. You can still use **getButtonSize()** method, however it is marked as *deprecated* and will be removed in version 2.0.0.
+
+4. Added checking of the *X* and *Y* touch coordinate
+
+	* If the touch *X* and *Y* coordinates are not inside the main button circle, the button won't react on click
+	* If the button state is **PRESSED** and touch point moves outside the main circle the button state changes to **NORMAL**
+	([Pull request #14: *Update ActionButton.java*](https://github.com/shell-software/fab/pull/14) by [**uriel-frankel**](https://github.com/uriel-frankel))
+
+
+### 1.0.5 - *previous*
 
 1. Fixed [**issue #12**: Lollipop elevation disable shadow](https://github.com/shell-software/fab/issues/12):
-	
+
 	The fix enables elevation on devices with **API 21 Lollipop** and higher. Now if elevation is set and the device *API* meets requirements (has *API 21 Lollipop* and higher) elevation will be drawn instead of the default shadow.
 	In this case configuration of any of the default shadow's parameters will be ignored.
 	Previously elevation was not drawn for such devices if set.
-	
+
   A fix was applied to:
-    
+
   * **hasShadow()** method: now if **Action Button** has elevation enabled (for *API 21 Lollipop* and higher) the shadow won't be drawn at all
   * **calculateCenterX()** method: **getWidth()** method replaced by **getMeasuredWidth()** to calculate *X-axis* coordinate
   * **calculateCenterY()** method: **getHeight()** method replaced by **getMeasuredHeight()** is used to calculate *Y-axis* coordinate
-    
+
   New methods added:
-    
+
   * **drawElevation()**: protected void method, which is called by **onDraw(Canvas)** to draw the elevation for *API 21 Lollipop* devices and higher
-
-### 1.0.4 - *previous*
-
-1. Fixed [**issue #8**: Both buttons show up when I only want one at a time](https://github.com/shell-software/fab/issues/8):
-
-	A small fix was applied to **show()**, **hide()** and **dismiss()** methods. Previously these methods might not work properly if the call was done within **onCreate()** method.
-	This happened because of using **android.view.View#isShown()** method, which returned *false* even if the button was shown. Now these methods relay on **VISIBILITY** and work
-	as expected wherever they called.
 
 ### Features in the next versions:
 
@@ -188,14 +220,47 @@ boolean hidden = actionButton.isHidden();
 boolean dismissed = actionButton.isDismissed();
 ```
 
-There are some cases when you need to force playing the animation without calling the **show()**, 
-**hide()** or **dismiss()** methods. For instance, when your button appears within layout in the Activity
-for the first time. In such cases animations can be played apart from *showing*, *hiding*, or *dismissing*
-the button:
+There are some cases when you need to force playing the animation without calling the **show()**, **hide()** or **dismiss()** methods. 
+For instance, when your button appears within layout in the Activity for the first time. 
+In such cases animations can be played apart from *showing*, *hiding*, or *dismissing* the button:
 
 ```java
 actionButton.playShowAnimation();   // plays the show animation
 actionButton.playHideAnimation();   // plays the hide animation
+```
+
+**ActionButton** can be moved within its parent container. While moving, translate animation is used.
+There are simple methods to move the **Action Button** in a single direction:
+
+```java
+// Move right to a 100.0f distance:
+actionButton.moveRight(100.0f);
+
+// Move down to a 100.0f distance:
+actionButton.moveDown(100.0f);
+
+// Move left to a 100.0f distance:
+actionButton.moveLeft(100.0f);
+
+// Move up to a 100.0f distance:
+actionButton.moveUp(100.0f);
+```
+
+The above methods will cover the most cases, however there is a one more method, which allows to perform a more customizable movement:
+
+```java
+// Create parameters
+Context context = getContext();
+int rightDistance = 300.0f;
+int downDistance = 300.0f;
+long animationDuration = 1000;
+Interpolator animationInterpolator = new AccelerateInterpolator();
+
+// Create MovingDetails object with distances, animation duration and animation interpolator
+MovingDetails details = new MovingDetails(context, rightDistance, upDistance, animationDuration, animationInterpolator);
+
+// Move the Action Button according to moving details:
+actionButton.move(details);
 ```
 
 > Animations are played only if set. By default animations are not set.
