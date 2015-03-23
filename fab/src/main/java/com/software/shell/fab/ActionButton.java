@@ -1012,6 +1012,16 @@ public class ActionButton extends View {
 				Log.v(LOG_TAG, "Motion event action down detected");
 				setState(State.PRESSED);
 				return true;
+            case MotionEvent.ACTION_MOVE:
+                if(getState().equals(State.PRESSED)){
+                    Rect rect = new Rect(getLeft(), getTop(), getRight(), getBottom());
+                    if(!rect.contains(getLeft() + (int) event.getX(), getTop() + (int) event.getY())){
+                        Log.v(LOG_TAG, "Motion event move outside view bounds");
+                        setState(State.NORMAL);
+                        return true;
+                    }
+                }
+                return false;
 			case MotionEvent.ACTION_UP:
 				Log.v(LOG_TAG, "Motion event action up detected");
 				setState(State.NORMAL);
