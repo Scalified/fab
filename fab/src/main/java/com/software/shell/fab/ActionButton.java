@@ -1219,7 +1219,7 @@ public class ActionButton extends View {
 	 */
 	@SuppressWarnings("all")
 	@Override
-	protected void onDraw(Canvas canvas) {
+	protected void onDraw(final Canvas canvas) {
 		super.onDraw(canvas);
 		Log.v(LOG_TAG, "Action Button onDraw called");
 		drawCircle(canvas);
@@ -1233,29 +1233,36 @@ public class ActionButton extends View {
 			drawImage(canvas);
 		}
 		if (getState() == State.PRESSED) {
-			postDelayed(new InvalidationRunnable(), 16);
+			Log.d(LOG_TAG, "Drawing ripple");
+			drawRipple(canvas);
+			postDelayed(rippleRunnable, 16);
 		}
 	}
-	
-	protected void drawRipple(Canvas canvas, int radius) {
-		resetPaint();
-		paint.setStyle(Paint.Style.FILL);
-		paint.setColor(Color.parseColor("#FFFFFF"));
-		canvas.drawCircle(calculateCenterX(), calculateCenterY(), radius, paint);
-	}
-	
-	class InvalidationRunnable implements Runnable {
-		
+
+	private int rippleRadius = 0;
+
+	private RippleRunnable rippleRunnable = new RippleRunnable();
+
+	class RippleRunnable implements Runnable {
+
 		@Override
 		public void run() {
-			invalidate();
+			if (rippleRadius <= getSize()) {
+				invalidate();
+			} else {
+				rippleRadius = 0;
+			}
 		}
-		
+
 	}
+
 	
-	
-	
-	
+	protected void drawRipple(Canvas canvas) {
+		resetPaint();
+		paint.setStyle(Paint.Style.FILL);
+		paint.setColor(Color.YELLOW);
+		canvas.drawCircle(calculateCenterX(), calculateCenterY(), rippleRadius++, paint);
+	}
 	
 
 	/**
@@ -1326,8 +1333,13 @@ public class ActionButton extends View {
 		final int strokeWeightCorrective = (int) (getStrokeWidth() / 1.5f);
 		final int width = getWidth() - strokeWeightCorrective;
 		final int height = getHeight() - strokeWeightCorrective;
-		final ViewOutlineProvider outlineProvider = new ActionButtonOutlineProvider(width, height);
-		setOutlineProvider(outlineProvider);
+		final ViewOutlineProvider provider = new ViewOutlineProvider() {
+			@Override
+			public void getOutline(View view, Outline outline) {
+				outline.setOval(0, 0, width, height);
+			}
+		};
+		setOutlineProvider(provider);
 		Log.v(LOG_TAG, "Elevation drawn");
 	}
 
@@ -1545,7 +1557,10 @@ public class ActionButton extends View {
 		PRESSED
 		
 	}
-	
+
+	/**
+	 * Determines the <b>Action Button</b> animations
+	 */
 	public enum Animations {
 
 		/**
