@@ -33,8 +33,6 @@
 			android:id="@+id/fab_activity_action_button"
 			style="@style/fab_action_button_style"
 			android:onClick="onActionButtonClick"
-			fab:button_color="@color/fab_material_red_500"
-			fab:button_colorPressed="@color/fab_material_red_900"
 	        fab:type="DEFAULT"
 	        />
 </RelativeLayout>

@@ -67,14 +67,30 @@ public class ActionButton extends View {
 	private State state = State.NORMAL;
 
 	/**
-	 * <b>Action Button</b> color in {@link State#NORMAL} state 
+	 * <b>Action Button</b> color in {@link State#NORMAL} state
 	 */
-	private int buttonColor = Color.LTGRAY;
+	private int buttonColor = Color.parseColor("#FF9B9B9B");
 
 	/**
-	 * <b>Action Button</b> color in {@link State#PRESSED} state 
+	 * <b>Action Button</b> color in {@link State#PRESSED} state
 	 */
-	private int buttonColorPressed = Color.DKGRAY;
+	private int buttonColorPressed = Color.parseColor("#FF696969");
+
+	/**
+	 * A multiplier, which determines the rate of {@link #buttonColorPressed} darkening
+	 * for calculating the {@link #buttonColorRipple}
+	 */
+	private static final float RIPPLE_COLOR_DARKEN_FACTOR = 0.8f;
+
+	/**
+	 * Determines whether <b>Action Button</b> ripple effect enabled or not
+	 */
+	private boolean rippleEffectEnabled;
+
+	/**
+	 * <b>Action Button</b> ripple effect color
+	 */
+	private int buttonColorRipple = darkenButtonColorPressed();
 
 	/**
 	 * Shadow radius expressed in actual pixels
@@ -127,15 +143,25 @@ public class ActionButton extends View {
 	private Animation hideAnimation;
 
 	/**
-	 * A view mover, which is used to move the <b>Action Button</b>
+	 * <b>Action Button</b> touch point
 	 */
-	protected final ViewMover mover = ViewMoverFactory.createInstance(this);
+	private TouchPoint touchPoint = new TouchPoint(0.0f, 0.0f);
 
 	/**
 	 * {@link android.graphics.Paint}, which is used for drawing the elements of
 	 * <b>Action Button</b>
 	 */
 	protected final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+	/**
+	 * A drawer, which is used for drawing the <b>Action Button</b> ripple effect
+	 */
+	protected final RippleDrawer rippleDrawer = new RippleDrawer(this);
+
+	/**
+	 * A view mover, which is used to move the <b>Action Button</b>
+	 */
+	protected final ViewMover mover = ViewMoverFactory.createInstance(this);
 
 	/**
 	 * Creates an instance of the <b>Action Button</b>
@@ -160,7 +186,7 @@ public class ActionButton extends View {
 	 */
 	public ActionButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		initActionButton(context, attrs, 0, 0);
+		initActionButtonAttrs(context, attrs, 0, 0);
 	}
 
 	/**
@@ -177,7 +203,7 @@ public class ActionButton extends View {
 	 */
 	public ActionButton(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		initActionButton(context, attrs, defStyleAttr, 0);
+		initActionButtonAttrs(context, attrs, defStyleAttr, 0);
 	}
 
 	/**
@@ -201,7 +227,7 @@ public class ActionButton extends View {
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	public ActionButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
-		initActionButton(context, attrs, defStyleAttr, defStyleRes);
+		initActionButtonAttrs(context, attrs, defStyleAttr, defStyleRes);
 	}
 
 	/**
@@ -229,15 +255,17 @@ public class ActionButton extends View {
 	 *        defStyleAttr is 0 or can not be found in the theme. Can be 0
 	 *        to not look for defaults
 	 */
-	private void initActionButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		initLayerType();
-		TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ActionButton,
+	private void initActionButtonAttrs(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+		initActionButton();
+		final TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ActionButton,
 				defStyleAttr, defStyleRes);
 		try {
 			initType(attributes);
 			initSize(attributes);
 			initButtonColor(attributes);
 			initButtonColorPressed(attributes);
+			initRippleEffectEnabled(attributes);
+			initButtonColorRipple(attributes);
 			initShadowRadius(attributes);
 			initShadowXOffset(attributes);
 			initShadowYOffset(attributes);
@@ -253,7 +281,7 @@ public class ActionButton extends View {
 		} finally {
 			attributes.recycle();
 		}
-		Log.v(LOG_TAG, "Action Button initialized");
+		Log.v(LOG_TAG, "Action Button attributes initialized");
 	}
 
 	/**
@@ -275,8 +303,9 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initType(TypedArray attrs) {
-		if (attrs.hasValue(R.styleable.ActionButton_type)) {
-			final int id = attrs.getInteger(R.styleable.ActionButton_type, type.getId());
+		final int index = R.styleable.ActionButton_type;
+		if (attrs.hasValue(index)) {
+			final int id = attrs.getInteger(index, type.getId());
 			type = Type.forId(id);
 			Log.v(LOG_TAG, "Initialized type: " + getType());
 		}
@@ -288,8 +317,9 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initSize(TypedArray attrs) {
-		if (attrs.hasValue(R.styleable.ActionButton_size)) {
-			this.size = attrs.getDimension(R.styleable.ActionButton_size, size);
+		final int index = R.styleable.ActionButton_size;
+		if (attrs.hasValue(index)) {
+			this.size = attrs.getDimension(index, size);
 			Log.v(LOG_TAG, "Initialized size: " + getSize());
 		} else {
 			this.size = dpToPx(type.getSize());
@@ -303,23 +333,53 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initButtonColor(TypedArray attrs) {
-		if (attrs.hasValue(R.styleable.ActionButton_button_color)) {
-			buttonColor = attrs.getColor(R.styleable.ActionButton_button_color, buttonColor);
+		final int index = R.styleable.ActionButton_button_color;
+		if (attrs.hasValue(index)) {
+			buttonColor = attrs.getColor(index, buttonColor);
 			Log.v(LOG_TAG, "Initialized button color: " + getButtonColor());
 		}
 	}
 
 	/**
-	 * Initializes the <b>Action Button</b> color for
-	 * {@link #state} set to {@link State#PRESSED}
+	 * Initializes the <b>Action Button</b> color for {@link #state}
+	 * set to {@link State#PRESSED}
+	 * <p>
+	 * Initialized the <b>Action Button</b> ripple effect color
 	 * 
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initButtonColorPressed(TypedArray attrs) {
-		if (attrs.hasValue(R.styleable.ActionButton_button_colorPressed)) {
-			buttonColorPressed = attrs.getColor(R.styleable.ActionButton_button_colorPressed,
-					buttonColorPressed);
+		final int index = R.styleable.ActionButton_button_colorPressed;
+		if (attrs.hasValue(index)) {
+			buttonColorPressed = attrs.getColor(index, buttonColorPressed);
+			buttonColorRipple = darkenButtonColorPressed();
 			Log.v(LOG_TAG, "Initialized button color pressed: " + getButtonColorPressed());
+		}
+	}
+
+	/**
+	 * Initializes the <b>Action Button</b> ripple effect state
+	 *
+	 * @param attrs attributes of the XML tag that is inflating the view
+	 */
+	private void initRippleEffectEnabled(TypedArray attrs) {
+		final int index = R.styleable.ActionButton_rippleEffect_enabled;
+		if (attrs.hasValue(index)) {
+			rippleEffectEnabled = attrs.getBoolean(index, rippleEffectEnabled);
+			Log.v(LOG_TAG, "Initialized ripple effect enabled: " + hasRipple());
+		}
+	}
+
+	/**
+	 * Initializes the <b>Action Button</b> ripple effect color
+	 *
+	 * @param attrs attributes of the XML tag that is inflating the view
+	 */
+	private void initButtonColorRipple(TypedArray attrs) {
+		final int index = R.styleable.ActionButton_button_colorRipple;
+		if (attrs.hasValue(index)) {
+			buttonColorRipple = attrs.getColor(index, buttonColorRipple);
+			Log.v(LOG_TAG, "Initialized button color ripple: " + getButtonColorRipple());
 		}
 	}
 
@@ -329,8 +389,9 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initShadowRadius(TypedArray attrs) {
-		if (attrs.hasValue(R.styleable.ActionButton_shadow_radius)) {
-			shadowRadius = attrs.getDimension(R.styleable.ActionButton_shadow_radius, shadowRadius);
+		final int index = R.styleable.ActionButton_shadow_radius;
+		if (attrs.hasValue(index)) {
+			shadowRadius = attrs.getDimension(index, shadowRadius);
 			Log.v(LOG_TAG, "Initialized shadow radius: " + getShadowRadius());
 		}
 	}
@@ -341,8 +402,9 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initShadowXOffset(TypedArray attrs) {
-		if (attrs.hasValue(R.styleable.ActionButton_shadow_xOffset)) {
-			shadowXOffset = attrs.getDimension(R.styleable.ActionButton_shadow_xOffset, shadowXOffset);
+		final int index = R.styleable.ActionButton_shadow_xOffset;
+		if (attrs.hasValue(index)) {
+			shadowXOffset = attrs.getDimension(index, shadowXOffset);
 			Log.v(LOG_TAG, "Initialized shadow X-axis offset: " + getShadowXOffset());
 		}
 	}
@@ -353,8 +415,9 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initShadowYOffset(TypedArray attrs) {
-		if (attrs.hasValue(R.styleable.ActionButton_shadow_yOffset)) {
-			shadowYOffset = attrs.getDimension(R.styleable.ActionButton_shadow_yOffset, shadowYOffset);
+		final int index = R.styleable.ActionButton_shadow_yOffset;
+		if (attrs.hasValue(index)) {
+			shadowYOffset = attrs.getDimension(index, shadowYOffset);
 			Log.v(LOG_TAG, "Initialized shadow Y-axis offset: " + getShadowYOffset());
 		}
 	}
@@ -365,8 +428,9 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initShadowColor(TypedArray attrs) {
-		if (attrs.hasValue(R.styleable.ActionButton_shadow_color)) {
-			shadowColor = attrs.getColor(R.styleable.ActionButton_shadow_color, shadowColor);
+		final int index = R.styleable.ActionButton_shadow_color;
+		if (attrs.hasValue(index)) {
+			shadowColor = attrs.getColor(index, shadowColor);
 			Log.v(LOG_TAG, "Initialized shadow color: " + getShadowColor());
 		}
 	}
@@ -377,8 +441,9 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initStrokeWidth(TypedArray attrs) {
-		if (attrs.hasValue(R.styleable.ActionButton_stroke_width)) {
-			strokeWidth = attrs.getDimension(R.styleable.ActionButton_stroke_width, strokeWidth);
+		final int index = R.styleable.ActionButton_stroke_width;
+		if (attrs.hasValue(index)) {
+			strokeWidth = attrs.getDimension(index, strokeWidth);
 			Log.v(LOG_TAG, "Initialized stroke width: " + getStrokeWidth());
 		}
 	}
@@ -389,8 +454,9 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initStrokeColor(TypedArray attrs) {
-		if (attrs.hasValue(R.styleable.ActionButton_stroke_color)) {
-			strokeColor = attrs.getColor(R.styleable.ActionButton_stroke_color, strokeColor);
+		final int index = R.styleable.ActionButton_stroke_color;
+		if (attrs.hasValue(index)) {
+			strokeColor = attrs.getColor(index, strokeColor);
 			Log.v(LOG_TAG, "Initialized stroke color: " + getStrokeColor());
 		}
 	}
@@ -402,9 +468,9 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initShowAnimation(TypedArray attrs) {
-		if (attrs.hasValue(R.styleable.ActionButton_show_animation)) {
-			final int animResId = attrs.getResourceId(R.styleable.ActionButton_show_animation,
-					Animations.NONE.animResId);
+		final int index = R.styleable.ActionButton_show_animation;
+		if (attrs.hasValue(index)) {
+			final int animResId = attrs.getResourceId(index, Animations.NONE.animResId);
 			showAnimation = Animations.load(getContext(), animResId);
 			Log.v(LOG_TAG, "Initialized animation on show");
 		}
@@ -417,9 +483,9 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initHideAnimation(TypedArray attrs) {
-		if (attrs.hasValue(R.styleable.ActionButton_hide_animation)) {
-			final int animResId = attrs.getResourceId(R.styleable.ActionButton_hide_animation,
-					Animations.NONE.animResId);
+		final int index = R.styleable.ActionButton_hide_animation;
+		if (attrs.hasValue(index)) {
+			final int animResId = attrs.getResourceId(index, Animations.NONE.animResId);
 			hideAnimation = Animations.load(getContext(), animResId);
 			Log.v(LOG_TAG, "Initialized animation on hide");
 		}
@@ -431,8 +497,9 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initImage(TypedArray attrs) {
-		if (attrs.hasValue(R.styleable.ActionButton_image)) {
-			image = attrs.getDrawable(R.styleable.ActionButton_image);
+		final int index = R.styleable.ActionButton_image;
+		if (attrs.hasValue(index)) {
+			image = attrs.getDrawable(index);
 			Log.v(LOG_TAG, "Initialized image");
 		}
 	}
@@ -446,8 +513,9 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initImageSize(TypedArray attrs) {
-		if (attrs.hasValue(R.styleable.ActionButton_image_size)) {
-			imageSize = attrs.getDimension(R.styleable.ActionButton_image_size, imageSize);
+		final int index = R.styleable.ActionButton_image_size;
+		if (attrs.hasValue(index)) {
+			imageSize = attrs.getDimension(index, imageSize);
 			Log.v(LOG_TAG, "Initialized image size: " + getImageSize());
 		}
 	}
@@ -619,8 +687,7 @@ public class ActionButton extends View {
 	 */
 	public void setType(Type type) {
 		this.type = type;
-		this.size = dpToPx(type.getSize());
-		requestLayout();
+		setSize(type.getSize());
 		Log.v(LOG_TAG, "Type changed to: " + getType());
 	}
 
@@ -710,11 +777,11 @@ public class ActionButton extends View {
 	public void setButtonColor(int buttonColor) {
 		this.buttonColor = buttonColor;
 		invalidate();
-		Log.v(LOG_TAG, "Color changed to: " + getButtonColor());
+		Log.v(LOG_TAG, "Button color changed to: " + getButtonColor());
 	}
 
 	/**
-	 * Sets the <b>Action Button</b> color when in
+	 * Returns the <b>Action Button</b> color when in
 	 * {@link State#PRESSED} state
 	 *  
 	 * @return <b>Action Button</b> color when in
@@ -727,14 +794,70 @@ public class ActionButton extends View {
 	/**
 	 * Sets the <b>Action Button</b> color when in
 	 * {@link State#PRESSED} state and invalidates the view
-	 * 
+	 *
 	 * @param buttonColorPressed <b>Action Button</b> color
-	 *                           when in {@link State#PRESSED} state                              
+	 *                           when in {@link State#PRESSED} state
 	 */
 	public void setButtonColorPressed(int buttonColorPressed) {
 		this.buttonColorPressed = buttonColorPressed;
-		invalidate();
-		Log.v(LOG_TAG, "Pressed color changed to: " + getButtonColorPressed());
+		setButtonColorRipple(darkenButtonColorPressed());
+		Log.v(LOG_TAG, "Button color pressed changed to: " + getButtonColorPressed());
+	}
+
+	/**
+	 * Darkens the {@link #buttonColorPressed} using the {@link #RIPPLE_COLOR_DARKEN_FACTOR}
+	 * multiplier
+	 *
+	 * @return darker color variant of {@link #buttonColorPressed}
+	 */
+	private int darkenButtonColorPressed() {
+		return darkenColor(getButtonColorPressed(), RIPPLE_COLOR_DARKEN_FACTOR);
+	}
+
+	/**
+	 * Returns the ripple effect current state
+	 *
+	 * @return true, if ripple effect enabled, otherwise false
+	 */
+	public boolean hasRipple() {
+		return rippleEffectEnabled;
+	}
+
+	/**
+	 * Toggles the ripple effect state
+	 *
+	 * @param enabled true if ripple effect needs to be enabled, otherwise false
+	 */
+	public void setRippleEffectEnabled(boolean enabled) {
+		this.rippleEffectEnabled = enabled;
+		Log.v(LOG_TAG, "Ripple effect " + (this.rippleEffectEnabled ? "ENABLED" : "DISABLED"));
+	}
+
+	/**
+	 * Returns the <b>Action Button</b> ripple effect color
+	 *
+	 * @return <b>Action Button</b> ripple effect color
+	 */
+	public int getButtonColorRipple() {
+		return buttonColorRipple;
+	}
+
+	/**
+	 * Sets the <b>Action Button</b> ripple effect color
+	 *
+	 * @param buttonColorRipple <b>Action Button</b> ripple effect color
+	 */
+	public void setButtonColorRipple(int buttonColorRipple) {
+		this.buttonColorRipple = buttonColorRipple;
+		Log.v(LOG_TAG, "Button ripple effect color changed to: " + getButtonColorRipple());
+	}
+
+	//TODO javadoc && move to another library
+	protected static int darkenColor(int color, float factor) {
+		final float hsv[] = new float[3];
+		Color.colorToHSV(color, hsv);
+		hsv[2] *= factor;
+		return Color.HSVToColor(hsv);
 	}
 
 	/**
@@ -1120,6 +1243,24 @@ public class ActionButton extends View {
 		setHideAnimation(Animations.NONE);
 		Log.v(LOG_TAG, "Hide animation removed");
 	}
+
+	/**
+	 * Returns the <b>Action Button</b> touch point
+	 *
+	 * @return <b>Action Button</b> touch point
+	 */
+	public TouchPoint getTouchPoint() {
+		return touchPoint;
+	}
+
+	/**
+	 * Sets the <b>Action Button</b> touch point
+	 *
+	 * @param point <b>Action Button</b> touch point
+	 */
+	protected void setTouchPoint(TouchPoint point) {
+		this.touchPoint = point;
+	}
 	
 	/**
 	 * Adds additional actions on motion events:
@@ -1139,27 +1280,32 @@ public class ActionButton extends View {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		super.onTouchEvent(event);
+		final TouchPoint point = new TouchPoint(event.getX(), event.getY());
+		final boolean touchPointInsideCircle = point.isInsideCircle(calculateCenterX(), calculateCenterY(),
+				calculateCircleRadius());
 		final int action = event.getAction();
-		final boolean pointInsideCircle = isPointInsideCircle(event.getX(), event.getY());
 		switch (action) {
 			case MotionEvent.ACTION_DOWN:
-				if (pointInsideCircle) {
+				if (touchPointInsideCircle) {
 					setState(State.PRESSED);
+					setTouchPoint(point);
 					Log.v(LOG_TAG, "Motion event action down detected");
 					return true;
 				}
 				break;
 			case MotionEvent.ACTION_UP:
-				if (pointInsideCircle) {
+				if (touchPointInsideCircle) {
 					setState(State.NORMAL);
+					getTouchPoint().reset();
 					Log.v(LOG_TAG, "Motion event action up detected");
 					return true;
 				}
 				break;
 			case MotionEvent.ACTION_MOVE:
-				if (!pointInsideCircle
+				if (!touchPointInsideCircle
 						&& getState() == State.PRESSED) {
 					setState(State.NORMAL);
+					getTouchPoint().reset();
 					Log.v(LOG_TAG, "Touch point is outside the circle");
 					return true;
 				}
@@ -1169,22 +1315,6 @@ public class ActionButton extends View {
 				break;
 		}
 		return false;
-	}
-
-	/**
-	 * Checks whether point (touch point) is inside the main circle or not
-	 *
-	 * @param pointX X-axis coordinate of the point
-	 * @param pointY Y-axis coordinate of the point
-	 * @return true if point is inside the main circle, otherwise false
-	 */
-	protected boolean isPointInsideCircle(float pointX, float pointY) {
-		final double xValue = Math.pow((pointX - calculateCenterX()), 2);
-		final double yValue = Math.pow((pointY - calculateCenterY()), 2);
-		final double radiusValue = Math.pow(calculateCircleRadius(), 2);
-		final boolean pointInsideCircle = xValue + yValue <= radiusValue;
-		Log.v(LOG_TAG, String.format("Point IS %s circle", pointInsideCircle ? "INSIDE" : "NOT INSIDE"));
-		return pointInsideCircle;
 	}
 
 	/**
@@ -1223,6 +1353,9 @@ public class ActionButton extends View {
 		super.onDraw(canvas);
 		Log.v(LOG_TAG, "Action Button onDraw called");
 		drawCircle(canvas);
+		if (hasRipple()) {
+			drawRipple(canvas);
+		}
 		if (hasElevation()) {
 			drawElevation();
 		}
@@ -1232,38 +1365,7 @@ public class ActionButton extends View {
 		if (hasImage()) {
 			drawImage(canvas);
 		}
-		if (getState() == State.PRESSED) {
-			Log.d(LOG_TAG, "Drawing ripple");
-			drawRipple(canvas);
-			postDelayed(rippleRunnable, 16);
-		}
 	}
-
-	private int rippleRadius = 0;
-
-	private RippleRunnable rippleRunnable = new RippleRunnable();
-
-	class RippleRunnable implements Runnable {
-
-		@Override
-		public void run() {
-			if (rippleRadius <= getSize()) {
-				invalidate();
-			} else {
-				rippleRadius = 0;
-			}
-		}
-
-	}
-
-	
-	protected void drawRipple(Canvas canvas) {
-		resetPaint();
-		paint.setStyle(Paint.Style.FILL);
-		paint.setColor(Color.YELLOW);
-		canvas.drawCircle(calculateCenterX(), calculateCenterY(), rippleRadius++, paint);
-	}
-	
 
 	/**
 	 * Draws the main circle of the <b>Action Button</b> and calls
@@ -1277,7 +1379,8 @@ public class ActionButton extends View {
 			drawShadow();
 		}
 		paint.setStyle(Paint.Style.FILL);
-		paint.setColor(getState() == State.PRESSED ? getButtonColorPressed() : getButtonColor());
+		final boolean rippleInProgress = hasRipple() && rippleDrawer.isDrawingInProgress();
+		paint.setColor(getState() == State.PRESSED || rippleInProgress ? getButtonColorPressed() : getButtonColor());
 		canvas.drawCircle(calculateCenterX(), calculateCenterY(), calculateCircleRadius(), paint);
 		Log.v(LOG_TAG, "Circle drawn");
 	}
@@ -1322,11 +1425,26 @@ public class ActionButton extends View {
 		paint.setShadowLayer(getShadowRadius(), getShadowXOffset(), getShadowYOffset(), getShadowColor());
 		Log.v(LOG_TAG, "Shadow drawn");
 	}
+
+	/**
+	 * Draws the ripple effect
+	 *
+	 * @param canvas canvas, on which ripple effect is to be drawn
+	 */
+	protected void drawRipple(Canvas canvas) {
+		rippleDrawer.draw(canvas);
+		Log.v(LOG_TAG, "Ripple effect drawn");
+	}
 	
 	/**
 	 * Draws the elevation around the main circle
 	 * <p>
-	 * Uses the stroke corrective, which helps to avoid the elevation overlapping issue     
+	 * Stroke corrective is used due to ambiguity in drawing stroke in
+	 * combination with elevation enabled (for API 21 and higher only.
+	 * In such case there is no possibility to determine the accurate
+	 * <b>Action Button</b> size, so width and height must be corrected
+	 * <p>
+	 * This logic may be changed in future if the better solution is found
 	 */
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	protected void drawElevation() {
@@ -1633,7 +1751,7 @@ public class ActionButton extends View {
 		 */
 		final int animResId;
 		
-		private Animations(int animResId) {
+		Animations(int animResId) {
 			this.animResId = animResId;
 		}
 

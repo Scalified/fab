@@ -43,7 +43,7 @@
 	<dimen name="fab_radiogroup_bottom_margin_dimen">0dp</dimen>
 	
 	<!--RadioButton-->
-	<dimen name="fab_radiobutton_horizontal_left_start_margin">20dp</dimen>
+	<dimen name="fab_radiobutton_horizontal_left_start_margin">5dp</dimen>
 	
 	<!--SeekBar-->
 	<dimen name="fab_seekbar_width_dimen">250dp</dimen>

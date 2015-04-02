@@ -19,7 +19,7 @@
 <resources>
 	
 	<!--Application-->
-	<string name="app_name">Floating Action Button Sample</string>
+	<string name="app_name">Action Button</string>
 
 	<!--Colors-->
 	<string name="fab_default_color_text">Default</string>
@@ -62,6 +62,7 @@
 	<string name="fab_textview_shadow_x_axis_offset_text">SHADOW X-AXIS OFFSET</string>
 	<string name="fab_textview_shadow_y_axis_offset_text">SHADOW Y-AXIS OFFSET</string>
 	<string name="fab_textview_image_icon_text">IMAGE ICON</string>
+	<string name="fab_textview_ripple_effect_text">RIPPLE EFFECT</string>
 	<string name="fab_textview_button_behavior_text">BUTTON BEHAVIOR</string>
 	<string name="fab_textview_button_colors_text">BUTTON COLORS</string>
 	<string name="fab_textview_stroke_text">STROKE</string>
@@ -78,5 +79,6 @@
 
 	<!--CheckBox-->
 	<string name="fab_checkbox_default_icon_plus_text">Default icon plus</string>
-	
+	<string name="fab_checkbox_ripple_effect_enabled_text">Ripple effect enabled</string>
+
 </resources>

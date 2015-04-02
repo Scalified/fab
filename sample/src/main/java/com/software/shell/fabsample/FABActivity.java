@@ -18,6 +18,7 @@
 
 package com.software.shell.fabsample;
 
+import android.util.Log;
 import com.software.shell.fab.ActionButton;
 
 import android.app.Activity;
@@ -34,6 +35,7 @@ import com.software.shell.viewmover.configuration.MovingDetails;
 import com.software.shell.viewmover.utils.MetricsConverter;
 
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Contains a sample activity with 
@@ -56,6 +58,7 @@ public class FABActivity extends Activity {
 	private SeekBar shadowXOffsetSeekBar;
 	private SeekBar shadowYOffsetSeekBar;
 	private CheckBox defaultIconPlusCheckBox;
+	private CheckBox rippleEffectEnabledCheckBox;
 	private RadioGroup buttonColorsRadioGroup;
 	private RadioGroup strokeColorRadioGroup;
 	private SeekBar strokeWidthSeekBar;
@@ -73,6 +76,7 @@ public class FABActivity extends Activity {
 		initShadowXOffsetSeekBar();
 		initShadowYOffsetSeekBar();
 		initDefaultIconPlusCheckBox();
+		initRippleEffectEnabledCheckBox();
 		initButtonBehaviorRadioGroup();
 		initButtonColorsRadioGroup();
 		initStrokeColorRadioGroup();
@@ -129,6 +133,12 @@ public class FABActivity extends Activity {
 		defaultIconPlusCheckBox.setChecked(actionButton.hasImage());
 		defaultIconPlusCheckBox.setOnCheckedChangeListener(new DefaultIconPlusChangeListener());
 	}
+
+	private void initRippleEffectEnabledCheckBox() {
+		rippleEffectEnabledCheckBox = (CheckBox) findViewById(R.id.fab_activity_checkbox_ripple_effect_enabled);
+		rippleEffectEnabledCheckBox.setChecked(actionButton.hasRipple());
+		rippleEffectEnabledCheckBox.setOnCheckedChangeListener(new RippleEffectEnabledChangeListener());
+	}
 	
 	private void initButtonBehaviorRadioGroup() {
 		buttonBehaviorRadioGroup = (RadioGroup) findViewById(R.id.fab_activity_button_behavior_radiogroup);
@@ -157,6 +167,7 @@ public class FABActivity extends Activity {
 			final int color = getResources().getColor(colorsInfo.primaryColorResId);
 			final int textColor = color == getResources().getColor(R.color.fab_material_white) ?
 					getResources().getColor(R.color.fab_material_black) : color;
+			button.setId(generateViewId());
 			button.setText(text);
 			button.setTextColor(textColor);
 			button.setTag(colorsInfo);
@@ -184,9 +195,27 @@ public class FABActivity extends Activity {
 		for (RadioButtons.AnimationInfo animationInfo : animationInfos) {
 			final RadioButton button = new RadioButton(this);
 			final String text = getResources().getString(animationInfo.animationTextResId);
+			button.setId(generateViewId());
 			button.setText(text);
 			button.setTag(animationInfo);
+			button.setEnabled(buttonBehaviorRadioGroup.getCheckedRadioButtonId() ==
+					R.id.fab_activity_radiobutton_hide_and_show_on_click_radiobutton);
 			group.addView(button);
+		}
+	}
+
+	private static final AtomicInteger NEXT_GENERATED_ID = new AtomicInteger(1);
+
+	static int generateViewId() {
+		while (true) {
+			final int result = NEXT_GENERATED_ID.get();
+			int newValue = result + 1;
+			if (newValue > 0x00FFFFFF) {
+				newValue = 1;
+			}
+			if (NEXT_GENERATED_ID.compareAndSet(result, newValue)) {
+				return result;
+			}
 		}
 	}
 	
@@ -256,9 +285,9 @@ public class FABActivity extends Activity {
 					case R.id.fab_activity_radiobutton_mini:
 						actionButton.setType(ActionButton.Type.MINI);
 						break;
-                                        case R.id.fab_activity_radiobutton_big:
-                                                actionButton.setType(ActionButton.Type.BIG);
-                                                break;
+					case R.id.fab_activity_radiobutton_big:
+                        actionButton.setType(ActionButton.Type.BIG);
+                        break;
 				}
 			}
 		}
@@ -340,19 +369,24 @@ public class FABActivity extends Activity {
 		}
 		
 	}
-	
+
+	class RippleEffectEnabledChangeListener implements CheckBox.OnCheckedChangeListener {
+
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			if (rippleEffectEnabledCheckBox.equals(buttonView)) {
+				actionButton.setRippleEffectEnabled(isChecked);
+			}
+		}
+
+	}
+
 	abstract class RadioGroupChangeListener implements RadioGroup.OnCheckedChangeListener {
 		
 		RadioButton getCheckedRadioButton(RadioGroup group) {
-			for (int i = 0; i < group.getChildCount(); i++) {
-				RadioButton current = (RadioButton) group.getChildAt(i);
-				if (current.getId() == group.getCheckedRadioButtonId()) {
-					return current;
-				}
-			}
-			return null;
+			return (RadioButton) group.findViewById(group.getCheckedRadioButtonId());
 		}
-		
+
 		Object extractTag(RadioGroup group) {
 			return getCheckedRadioButton(group).getTag();
 		}
@@ -383,8 +417,10 @@ public class FABActivity extends Activity {
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
 			if (buttonBehaviorRadioGroup.equals(group)) {
-				animationsRadioGroup.setEnabled(
-						checkedId == R.id.fab_activity_radiobutton_hide_and_show_on_click_radiobutton);
+				for (int i = 0; i < animationsRadioGroup.getChildCount(); i++) {
+					RadioButton button = (RadioButton) animationsRadioGroup.getChildAt(i);
+					button.setEnabled(checkedId == R.id.fab_activity_radiobutton_hide_and_show_on_click_radiobutton);
+				}
  			}
 		}
 
