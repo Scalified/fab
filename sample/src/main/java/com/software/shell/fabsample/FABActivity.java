@@ -31,8 +31,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Toast;
+import com.software.shell.uitools.convert.DensityConverter;
 import com.software.shell.viewmover.configuration.MovingDetails;
-import com.software.shell.viewmover.utils.MetricsConverter;
 
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -266,7 +266,7 @@ public class FABActivity extends Activity {
 	}
 
 	private float pxToDp(float px) {
-		return MetricsConverter.pxToDp(this, px);
+		return DensityConverter.pxToDp(this, px);
 	}
 	
 	protected static float getSeekBarRealProgress(int progress) {

@@ -4,12 +4,6 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.shell-software/fab.svg)](http://search.maven.org/#search|gav|1|g%3A%22com.github.shell-software%22%20AND%20a%3A%22fab%22)
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-fab-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1522)
 
-## Donation
-
-Donation helps to improve the project development and speed up the release of new versions. I appreciate any contribution
-
-[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=44CVJBPFRKXJL)
-
 ## Description
 
 This Library contains implementation of the [**Floating Action Button**](http://www.google.com/design/spec/components/buttons.html#buttons-floating-action-button) for Android.
@@ -24,11 +18,12 @@ The Library requires **Android SDK version 9 (Gingerbread)** and higher.
 
 ```java
 dependencies {
-	compile 'com.github.shell-software:fab:1.0.5'
+	compile 'com.github.shell-software:fab:1.1.0'
 }
 ```
 
-> **Action Button** has a dependency on an external [**ViewMover**](https://github.com/shell-software/view-mover) library. If it is used already in the project it must be excluded as a transitive dependency
+> **Action Button** has a dependency on an external [**ViewMover**](https://github.com/shell-software/view-mover) library, which in turn has a transitive dependency on [**UI Tools**](https://github.com/shell-software/uitools) library. 
+If any of these libraries are already used in the project they must be excluded as transitive dependencies
 
 ## Activity Stream
 

@@ -152,7 +152,7 @@ class RippleDrawer {
 	 */
 	private void drawRipple(Canvas canvas) {
 		canvas.clipPath(getCircleClipPath(), Region.Op.INTERSECT);
-		final TouchPoint point = actionButton.getTouchPoint();
+		TouchPoint point = actionButton.getTouchPoint();
 		canvas.drawCircle(point.getLastX(), point.getLastY(), currentRadius, getPreparedPaint());
 		canvas.restore();
 	}
@@ -164,7 +164,7 @@ class RippleDrawer {
 	 * @return clipped path, which clips the ripple circle
 	 */
 	private Path getCircleClipPath() {
-		final Path path = new Path();
+		Path path = new Path();
 		path.addCircle(actionButton.calculateCenterX(), actionButton.calculateCenterY(),
 				actionButton.calculateCircleRadius(), Path.Direction.CW);
 		return path;
@@ -177,7 +177,7 @@ class RippleDrawer {
 	 */
 	private Paint getPreparedPaint() {
 		actionButton.resetPaint();
-		final Paint paint = actionButton.paint;
+		Paint paint = actionButton.paint;
 		paint.setStyle(Paint.Style.FILL);
 		paint.setColor(actionButton.getButtonColorRipple());
 		return paint;

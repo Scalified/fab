@@ -28,7 +28,7 @@ import android.util.Log;
  * @version 1.1.0
  * @since 1.1.0
  */
-public class TouchPoint {
+public final class TouchPoint {
 
 	/**
 	 * Logging tag
@@ -64,8 +64,6 @@ public class TouchPoint {
 	TouchPoint(float x, float y) {
 		setX(x);
 		setY(y);
-		setLastX(x);
-		setLastY(y);
 	}
 
 	/**
@@ -83,7 +81,7 @@ public class TouchPoint {
 	 *
 	 * @param x touch point X-axis coordinate
 	 */
-	void setX(float x) {
+	final void setX(float x) {
 		this.x = x;
 		Log.v(LOG_TAG, "Touch point X-axis coordinate set to: " + getX());
 		setLastX(x);
@@ -104,7 +102,7 @@ public class TouchPoint {
 	 *
 	 * @param y touch point Y-axis coordinate
 	 */
-	void setY(float y) {
+	final void setY(float y) {
 		this.y = y;
 		Log.v(LOG_TAG, "Touch point Y-axis coordinate set to: " + getY());
 		setLastY(y);
@@ -124,7 +122,7 @@ public class TouchPoint {
 	 *
 	 * @param x last touch point X-axis coordinate
 	 */
-	void setLastX(float x) {
+	final void setLastX(float x) {
 		if (x > 0) {
 			this.lastX = x;
 			Log.v(LOG_TAG, "Touch point last X-axis coordinate set to: " + getLastX());
@@ -145,7 +143,7 @@ public class TouchPoint {
 	 *
 	 * @param y last touch point Y-axis coordinate
 	 */
-	void setLastY(float y) {
+	final void setLastY(float y) {
 		if (y > 0) {
 			this.lastY = y;
 			Log.v(LOG_TAG, "Touch point last Y-axis coordinate set to: " + getLastY());
@@ -164,17 +162,17 @@ public class TouchPoint {
 	/**
 	 * Checks whether the touch point is inside the circle or not
 	 *
-	 * @param centerXpoint circle X-axis center coordinate
-	 * @param centerYpoint circle Y-axis center coordinate
+	 * @param centerPointX circle X-axis center coordinate
+	 * @param centerPointY circle Y-axis center coordinate
 	 * @param radius circle radius
 	 *
 	 * @return true if touch point is inside the circle, otherwise false
 	 */
-	boolean isInsideCircle(float centerXpoint, float centerYpoint, float radius) {
-		final double xValue = Math.pow((getX() - centerXpoint), 2);
-		final double yValue = Math.pow((getY() - centerYpoint), 2);
-		final double radiusValue = Math.pow(radius, 2);
-		final boolean touchPointInsideCircle = xValue + yValue <= radiusValue;
+	boolean isInsideCircle(float centerPointX, float centerPointY, float radius) {
+		double xValue = Math.pow((getX() - centerPointX), 2);
+		double yValue = Math.pow((getY() - centerPointY), 2);
+		double radiusValue = Math.pow(radius, 2);
+		boolean touchPointInsideCircle = xValue + yValue <= radiusValue;
 		Log.v(LOG_TAG, String.format("Point IS %s circle", touchPointInsideCircle ? "INSIDE" : "NOT INSIDE"));
 		return touchPointInsideCircle;
 	}

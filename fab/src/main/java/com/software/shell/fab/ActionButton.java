@@ -31,10 +31,11 @@ import android.util.Log;
 import android.view.*;
 import android.view.animation.*;
 
+import com.software.shell.uitools.convert.DensityConverter;
+import com.software.shell.uitools.resutils.color.ColorModifier;
 import com.software.shell.viewmover.configuration.MovingDetails;
 import com.software.shell.viewmover.movers.ViewMover;
 import com.software.shell.viewmover.movers.ViewMoverFactory;
-import com.software.shell.viewmover.utils.MetricsConverter;
 
 /**
  * This class represents a <b>Action Button</b>, which is used in 
@@ -67,20 +68,14 @@ public class ActionButton extends View {
 	private State state = State.NORMAL;
 
 	/**
-	 * <b>Action Button</b> color in {@link State#NORMAL} state
+	 * <b>Action Button</b> color for the {@link State#NORMAL} state
 	 */
 	private int buttonColor = Color.parseColor("#FF9B9B9B");
 
 	/**
-	 * <b>Action Button</b> color in {@link State#PRESSED} state
+	 * <b>Action Button</b> color for the {@link State#PRESSED} state
 	 */
 	private int buttonColorPressed = Color.parseColor("#FF696969");
-
-	/**
-	 * A multiplier, which determines the rate of {@link #buttonColorPressed} darkening
-	 * for calculating the {@link #buttonColorRipple}
-	 */
-	private static final float RIPPLE_COLOR_DARKEN_FACTOR = 0.8f;
 
 	/**
 	 * Determines whether <b>Action Button</b> ripple effect enabled or not
@@ -144,6 +139,9 @@ public class ActionButton extends View {
 
 	/**
 	 * <b>Action Button</b> touch point
+	 * <p>
+	 * {@link TouchPoint} contains information about X- and
+	 * Y-axis touch points within the <b>Action Button</b>
 	 */
 	private TouchPoint touchPoint = new TouchPoint(0.0f, 0.0f);
 
@@ -299,13 +297,16 @@ public class ActionButton extends View {
 
 	/**
 	 * Initializes the {@link Type} of <b>Action Button</b>
+	 * <p>
+	 * Must be called before {@link #initSize(TypedArray)} for the proper
+	 * <b>Action Button</b> {@link #size} initialization
 	 *
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initType(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_type;
+		int index = R.styleable.ActionButton_type;
 		if (attrs.hasValue(index)) {
-			final int id = attrs.getInteger(index, type.getId());
+			int id = attrs.getInteger(index, type.getId());
 			type = Type.forId(id);
 			Log.v(LOG_TAG, "Initialized type: " + getType());
 		}
@@ -313,27 +314,30 @@ public class ActionButton extends View {
 
 	/**
 	 * Initializes the {@link #size} of <b>Action Button</b>
+	 * <p>
+	 * Must be called after {@link #initType(TypedArray)} for the proper
+	 * <b>Action Button</b> {@link #size} initialization
 	 *
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initSize(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_size;
+		int index = R.styleable.ActionButton_size;
 		if (attrs.hasValue(index)) {
 			this.size = attrs.getDimension(index, size);
-			Log.v(LOG_TAG, "Initialized size: " + getSize());
 		} else {
 			this.size = dpToPx(type.getSize());
 		}
+		Log.v(LOG_TAG, "Initialized size: " + getSize());
 	}
 
 	/**
-	 * Initializes the <b>Action Button</b> color for 
-	 * {@link #state} set to {@link State#NORMAL} 
+	 * Initializes the <b>Action Button</b> color for the {@link State#NORMAL}
+	 * {@link #state}
 	 *  
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initButtonColor(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_button_color;
+		int index = R.styleable.ActionButton_button_color;
 		if (attrs.hasValue(index)) {
 			buttonColor = attrs.getColor(index, buttonColor);
 			Log.v(LOG_TAG, "Initialized button color: " + getButtonColor());
@@ -341,15 +345,18 @@ public class ActionButton extends View {
 	}
 
 	/**
-	 * Initializes the <b>Action Button</b> color for {@link #state}
-	 * set to {@link State#PRESSED}
+	 * Initializes the <b>Action Button</b> color for the {@link State#PRESSED}
+	 * {@link #state}
 	 * <p>
 	 * Initialized the <b>Action Button</b> ripple effect color
+	 * <p>
+	 * Must be called before {@link #initButtonColorRipple(TypedArray)} for proper
+	 * {@link #buttonColorRipple} initialization
 	 * 
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initButtonColorPressed(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_button_colorPressed;
+		int index = R.styleable.ActionButton_button_colorPressed;
 		if (attrs.hasValue(index)) {
 			buttonColorPressed = attrs.getColor(index, buttonColorPressed);
 			buttonColorRipple = darkenButtonColorPressed();
@@ -363,7 +370,7 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initRippleEffectEnabled(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_rippleEffect_enabled;
+		int index = R.styleable.ActionButton_rippleEffect_enabled;
 		if (attrs.hasValue(index)) {
 			rippleEffectEnabled = attrs.getBoolean(index, rippleEffectEnabled);
 			Log.v(LOG_TAG, "Initialized ripple effect enabled: " + hasRipple());
@@ -372,11 +379,14 @@ public class ActionButton extends View {
 
 	/**
 	 * Initializes the <b>Action Button</b> ripple effect color
+	 * <p>
+	 * Must be called after {@link #initButtonColorPressed(TypedArray)} for proper
+	 * {@link #buttonColorRipple} initialization
 	 *
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initButtonColorRipple(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_button_colorRipple;
+		int index = R.styleable.ActionButton_button_colorRipple;
 		if (attrs.hasValue(index)) {
 			buttonColorRipple = attrs.getColor(index, buttonColorRipple);
 			Log.v(LOG_TAG, "Initialized button color ripple: " + getButtonColorRipple());
@@ -389,7 +399,7 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initShadowRadius(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_shadow_radius;
+		int index = R.styleable.ActionButton_shadow_radius;
 		if (attrs.hasValue(index)) {
 			shadowRadius = attrs.getDimension(index, shadowRadius);
 			Log.v(LOG_TAG, "Initialized shadow radius: " + getShadowRadius());
@@ -402,7 +412,7 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initShadowXOffset(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_shadow_xOffset;
+		int index = R.styleable.ActionButton_shadow_xOffset;
 		if (attrs.hasValue(index)) {
 			shadowXOffset = attrs.getDimension(index, shadowXOffset);
 			Log.v(LOG_TAG, "Initialized shadow X-axis offset: " + getShadowXOffset());
@@ -415,7 +425,7 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initShadowYOffset(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_shadow_yOffset;
+		int index = R.styleable.ActionButton_shadow_yOffset;
 		if (attrs.hasValue(index)) {
 			shadowYOffset = attrs.getDimension(index, shadowYOffset);
 			Log.v(LOG_TAG, "Initialized shadow Y-axis offset: " + getShadowYOffset());
@@ -428,7 +438,7 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initShadowColor(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_shadow_color;
+		int index = R.styleable.ActionButton_shadow_color;
 		if (attrs.hasValue(index)) {
 			shadowColor = attrs.getColor(index, shadowColor);
 			Log.v(LOG_TAG, "Initialized shadow color: " + getShadowColor());
@@ -441,7 +451,7 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initStrokeWidth(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_stroke_width;
+		int index = R.styleable.ActionButton_stroke_width;
 		if (attrs.hasValue(index)) {
 			strokeWidth = attrs.getDimension(index, strokeWidth);
 			Log.v(LOG_TAG, "Initialized stroke width: " + getStrokeWidth());
@@ -454,7 +464,7 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initStrokeColor(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_stroke_color;
+		int index = R.styleable.ActionButton_stroke_color;
 		if (attrs.hasValue(index)) {
 			strokeColor = attrs.getColor(index, strokeColor);
 			Log.v(LOG_TAG, "Initialized stroke color: " + getStrokeColor());
@@ -468,9 +478,9 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initShowAnimation(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_show_animation;
+		int index = R.styleable.ActionButton_show_animation;
 		if (attrs.hasValue(index)) {
-			final int animResId = attrs.getResourceId(index, Animations.NONE.animResId);
+			int animResId = attrs.getResourceId(index, Animations.NONE.animResId);
 			showAnimation = Animations.load(getContext(), animResId);
 			Log.v(LOG_TAG, "Initialized animation on show");
 		}
@@ -483,9 +493,9 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initHideAnimation(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_hide_animation;
+		int index = R.styleable.ActionButton_hide_animation;
 		if (attrs.hasValue(index)) {
-			final int animResId = attrs.getResourceId(index, Animations.NONE.animResId);
+			int animResId = attrs.getResourceId(index, Animations.NONE.animResId);
 			hideAnimation = Animations.load(getContext(), animResId);
 			Log.v(LOG_TAG, "Initialized animation on hide");
 		}
@@ -497,7 +507,7 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initImage(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_image;
+		int index = R.styleable.ActionButton_image;
 		if (attrs.hasValue(index)) {
 			image = attrs.getDrawable(index);
 			Log.v(LOG_TAG, "Initialized image");
@@ -513,7 +523,7 @@ public class ActionButton extends View {
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
 	private void initImageSize(TypedArray attrs) {
-		final int index = R.styleable.ActionButton_image_size;
+		int index = R.styleable.ActionButton_image_size;
 		if (attrs.hasValue(index)) {
 			imageSize = attrs.getDimension(index, imageSize);
 			Log.v(LOG_TAG, "Initialized image size: " + getImageSize());
@@ -535,7 +545,7 @@ public class ActionButton extends View {
 	}
 
 	/**
-	 * Makes the <b>Action Button</b> to appear and 
+	 * Makes the <b>Action Button</b> to appear if it is hidden and
 	 * sets its visibility to {@link #VISIBLE}
 	 * <p>
 	 * {@link #showAnimation} is played if set
@@ -549,7 +559,7 @@ public class ActionButton extends View {
 	}
 
 	/**
-	 * Makes the <b>Action Button</b> to disappear and
+	 * Makes the <b>Action Button</b> to disappear if it is showing and
 	 * sets its visibility to {@link #INVISIBLE}
 	 * <p>
 	 * {@link #hideAnimation} is played if set
@@ -598,13 +608,12 @@ public class ActionButton extends View {
 	 * @return true if <b>Action Button</b> is dismissed, otherwise false
 	 */
 	public boolean isDismissed() {
-		final ViewGroup parent = (ViewGroup) getParent();
-		return parent == null;
+		return getParent() == null;
 	}
 
 	/**
-	 * Moves the <b>Action Button</b> to the specified position obtained from
-	 * {@link com.software.shell.viewmover.configuration.MovingDetails} object
+	 * Moves the <b>Action Button</b> to a specified position defined in moving
+	 * details object
 	 *
 	 * @param details moving details, which contain the desired position to move
 	 */
@@ -659,18 +668,6 @@ public class ActionButton extends View {
 	}
 
 	/**
-	 * Makes a call to
-	 * {@link com.software.shell.viewmover.utils.MetricsConverter}
-	 * for converting density-dependent value into density-independent one
-	 *
-	 * @param dp density-dependent value
-	 * @return density-independent value
-	 */
-	protected float dpToPx(float dp) {
-		return MetricsConverter.dpToPx(getContext(), dp);
-	}
-	
-	/**
 	 * Returns the type of the <b>Action Button</b>
 	 *  
 	 * @return type of the <b>Action Button</b>
@@ -680,15 +677,15 @@ public class ActionButton extends View {
 	}
 
 	/**
-	 * Sets the type of the <b>Action Button</b> and 
-	 * calls {@link #setSize(float)} to invalidate the layout of the view
+	 * Sets the <b>Action Button</b> {@link com.software.shell.fab.ActionButton.Type}
+	 * and calls {@link #setSize(float)} to set the size depending on {@link #type} set
 	 *
 	 * @param type type of the <b>Action Button</b>
 	 */
 	public void setType(Type type) {
 		this.type = type;
-		setSize(type.getSize());
 		Log.v(LOG_TAG, "Type changed to: " + getType());
+		setSize(getType().getSize());
 	}
 
 	/**
@@ -805,17 +802,17 @@ public class ActionButton extends View {
 	}
 
 	/**
-	 * Darkens the {@link #buttonColorPressed} using the {@link #RIPPLE_COLOR_DARKEN_FACTOR}
-	 * multiplier
+	 * Darkens the {@link #buttonColorPressed} using the darkening factor
 	 *
 	 * @return darker color variant of {@link #buttonColorPressed}
 	 */
 	private int darkenButtonColorPressed() {
-		return darkenColor(getButtonColorPressed(), RIPPLE_COLOR_DARKEN_FACTOR);
+		final float darkenFactor = 0.8f;
+		return ColorModifier.modifyExposure(getButtonColorPressed(), darkenFactor);
 	}
 
 	/**
-	 * Returns the ripple effect current state
+	 * Checks whether <b>Action Button</b> ripple effect enabled
 	 *
 	 * @return true, if ripple effect enabled, otherwise false
 	 */
@@ -850,14 +847,6 @@ public class ActionButton extends View {
 	public void setButtonColorRipple(int buttonColorRipple) {
 		this.buttonColorRipple = buttonColorRipple;
 		Log.v(LOG_TAG, "Button ripple effect color changed to: " + getButtonColorRipple());
-	}
-
-	//TODO javadoc && move to another library
-	protected static int darkenColor(int color, float factor) {
-		final float hsv[] = new float[3];
-		Color.colorToHSV(color, hsv);
-		hsv[2] *= factor;
-		return Color.HSVToColor(hsv);
 	}
 
 	/**
@@ -1246,6 +1235,9 @@ public class ActionButton extends View {
 
 	/**
 	 * Returns the <b>Action Button</b> touch point
+	 * <p>
+	 * {@link TouchPoint} contains information about X- and
+	 * Y-axis touch points within the <b>Action Button</b>
 	 *
 	 * @return <b>Action Button</b> touch point
 	 */
@@ -1280,10 +1272,10 @@ public class ActionButton extends View {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		super.onTouchEvent(event);
-		final TouchPoint point = new TouchPoint(event.getX(), event.getY());
-		final boolean touchPointInsideCircle = point.isInsideCircle(calculateCenterX(), calculateCenterY(),
+		TouchPoint point = new TouchPoint(event.getX(), event.getY());
+		boolean touchPointInsideCircle = point.isInsideCircle(calculateCenterX(), calculateCenterY(),
 				calculateCircleRadius());
-		final int action = event.getAction();
+		int action = event.getAction();
 		switch (action) {
 			case MotionEvent.ACTION_DOWN:
 				if (touchPointInsideCircle) {
@@ -1379,7 +1371,7 @@ public class ActionButton extends View {
 			drawShadow();
 		}
 		paint.setStyle(Paint.Style.FILL);
-		final boolean rippleInProgress = hasRipple() && rippleDrawer.isDrawingInProgress();
+		boolean rippleInProgress = hasRipple() && rippleDrawer.isDrawingInProgress();
 		paint.setColor(getState() == State.PRESSED || rippleInProgress ? getButtonColorPressed() : getButtonColor());
 		canvas.drawCircle(calculateCenterX(), calculateCenterY(), calculateCircleRadius(), paint);
 		Log.v(LOG_TAG, "Circle drawn");
@@ -1391,7 +1383,7 @@ public class ActionButton extends View {
 	 * @return X-axis center coordinate of the entire view
 	 */
 	protected float calculateCenterX() {
-		final float centerX = getMeasuredWidth() / 2;
+		float centerX = getMeasuredWidth() / 2;
 		Log.v(LOG_TAG, "Calculated center X = " + centerX);
 		return centerX;
 	}
@@ -1402,7 +1394,7 @@ public class ActionButton extends View {
 	 * @return Y-axis center coordinate of the entire view
 	 */
 	protected float calculateCenterY() {
-		final float centerY = getMeasuredHeight() / 2;
+		float centerY = getMeasuredHeight() / 2;
 		Log.v(LOG_TAG, "Calculated center Y = " + centerY);
 		return centerY;
 	}
@@ -1413,7 +1405,7 @@ public class ActionButton extends View {
 	 * @return radius of the main circle
 	 */
 	protected final float calculateCircleRadius() {
-		final float circleRadius = getSize() / 2;
+		float circleRadius = getSize() / 2;
 		Log.v(LOG_TAG, "Calculated circle circleRadius = " + circleRadius);
 		return circleRadius;
 	}
@@ -1448,10 +1440,10 @@ public class ActionButton extends View {
 	 */
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	protected void drawElevation() {
-		final int strokeWeightCorrective = (int) (getStrokeWidth() / 1.5f);
+		int strokeWeightCorrective = (int) (getStrokeWidth() / 1.5f);
 		final int width = getWidth() - strokeWeightCorrective;
 		final int height = getHeight() - strokeWeightCorrective;
-		final ViewOutlineProvider provider = new ViewOutlineProvider() {
+		ViewOutlineProvider provider = new ViewOutlineProvider() {
 			@Override
 			public void getOutline(View view, Outline outline) {
 				outline.setOval(0, 0, width, height);
@@ -1491,10 +1483,10 @@ public class ActionButton extends View {
 	 * @param canvas canvas, on which circle is to be drawn
 	 */
 	protected void drawImage(Canvas canvas) {
-		final int startPointX = (int) (calculateCenterX() - getImageSize() / 2);
-		final int startPointY = (int) (calculateCenterY() - getImageSize() / 2);
-		final int endPointX = (int) (startPointX + getImageSize());
-		final int endPointY = (int) (startPointY + getImageSize());
+		int startPointX = (int) (calculateCenterX() - getImageSize() / 2);
+		int startPointY = (int) (calculateCenterY() - getImageSize() / 2);
+		int endPointX = (int) (startPointX + getImageSize());
+		int endPointY = (int) (startPointY + getImageSize());
 		getImage().setBounds(startPointX, startPointY, endPointX, endPointY);
 		getImage().draw(canvas);
 		Log.v(LOG_TAG, String.format("Image drawn on canvas with coordinates: startPointX = %s, startPointY = %s, " +
@@ -1525,7 +1517,7 @@ public class ActionButton extends View {
 	 * @return measured width in actual pixels for the entire view
 	 */
 	private int calculateMeasuredWidth() {
-		final int measuredWidth = (int) (getSize() + calculateShadowWidth() + calculateStrokeWeight());
+		int measuredWidth = (int) (getSize() + calculateShadowWidth() + calculateStrokeWeight());
 		Log.v(LOG_TAG, "Calculated measured width = " + measuredWidth);
 		return measuredWidth;
 	}
@@ -1536,7 +1528,7 @@ public class ActionButton extends View {
 	 * @return measured width in actual pixels for the entire view
 	 */
 	private int calculateMeasuredHeight() {
-		final int measuredHeight = (int) (getSize() + calculateShadowHeight() + calculateStrokeWeight());
+		int measuredHeight = (int) (getSize() + calculateShadowHeight() + calculateStrokeWeight());
 		Log.v(LOG_TAG, "Calculated measured height = " + measuredHeight);
 		return measuredHeight;
 	}
@@ -1547,7 +1539,7 @@ public class ActionButton extends View {
 	 * @return shadow width in actual pixels
 	 */
 	private int calculateShadowWidth() {
-		final int shadowWidth = hasShadow() ? (int) ((getShadowRadius() + Math.abs(getShadowXOffset())) * 2) : 0;
+		int shadowWidth = hasShadow() ? (int) ((getShadowRadius() + Math.abs(getShadowXOffset())) * 2) : 0;
 		Log.v(LOG_TAG, "Calculated shadow width = " + shadowWidth);
 		return shadowWidth;
 	}
@@ -1558,7 +1550,7 @@ public class ActionButton extends View {
 	 * @return shadow height in actual pixels
 	 */
 	private int calculateShadowHeight() {
-		final int shadowHeight = hasShadow() ? (int) ((getShadowRadius() + Math.abs(getShadowYOffset())) * 2) : 0;
+		int shadowHeight = hasShadow() ? (int) ((getShadowRadius() + Math.abs(getShadowYOffset())) * 2) : 0;
 		Log.v(LOG_TAG, "Calculated shadow height = " + shadowHeight);
 		return shadowHeight;
 	}
@@ -1569,9 +1561,19 @@ public class ActionButton extends View {
 	 * @return stroke weight in actual pixels
 	 */
 	private int calculateStrokeWeight() {
-		final int strokeWeight = (int) (getStrokeWidth() * 2.0f);
+		int strokeWeight = (int) (getStrokeWidth() * 2.0f);
 		Log.v(LOG_TAG, "Calculated stroke weight is: " + strokeWeight);
 		return strokeWeight;
+	}
+
+	/**
+	 * Converts the density-independent value into density-dependent one
+	 *
+	 * @param dp density-independent value
+	 * @return density-dependent value
+	 */
+	protected float dpToPx(float dp) {
+		return DensityConverter.dpToPx(getContext(), dp);
 	}
 
 	/**
