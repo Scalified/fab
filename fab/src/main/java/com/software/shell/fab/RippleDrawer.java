@@ -137,12 +137,20 @@ class RippleDrawer {
 		drawRipple(canvas);
 		if (isDrawingInProgress()) {
 			actionButton.postInvalidate();
+//			invalidationRequired = true;
 			Log.v(LOG_TAG, "Ripple effect drawing in progress, invalidating the Action Button");
 		} else if (isDrawingFinished() && !isPressed()) {
 			actionButton.postInvalidateDelayed(POST_INVALIDATION_DELAY_MS);
+//			invalidateionDelayedRequired = true;
 			Log.v(LOG_TAG, "Ripple effect drawing finished, posting the last invalidate");
+		} else {
+			invalidationRequired = false;
+			invalidateionDelayedRequired = false;
 		}
 	}
+
+	boolean invalidationRequired;
+	boolean invalidateionDelayedRequired;
 
 	/**
 	 * Draws the single frame of the ripple effect depending on ripple effect

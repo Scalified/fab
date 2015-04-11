@@ -90,22 +90,36 @@ public class ActionButton extends View {
 	/**
 	 * Shadow radius expressed in actual pixels
 	 */
-	private float shadowRadius = dpToPx(2.0f);
+	private float shadowRadius = dpToPx(8.0f);
 
 	/**
 	 * Shadow X-axis offset expressed in actual pixels
 	 */
-	private float shadowXOffset = dpToPx(1.0f);
+	private float shadowXOffset = dpToPx(0.0f);
 
 	/**
 	 * Shadow Y-axis offset expressed in actual pixels 
 	 */
-	private float shadowYOffset = dpToPx(1.5f);
+	private float shadowYOffset = dpToPx(8.0f);
 
 	/**
 	 * Shadow color 
 	 */
-	private int shadowColor = Color.parseColor("#757575");
+	private int shadowColor = Color.parseColor("#42000000");
+
+	/**
+	 * Determines whether shadow is responsive
+	 * <p>
+	 * Responsive shadow means that shadow is enlarged up to the certain limits
+	 * while in the {@link com.software.shell.fab.ActionButton.State#PRESSED} state
+	 */
+	private boolean shadowResponsive = true;
+
+	/**
+	 * The default factor, which is used as multiplier for determining
+	 * the enlargement limits of the shadow
+	 */
+	private static final float SHADOW_RESPONSE_FACTOR = 1.75f;
 
 	/**
 	 * Stroke width 
@@ -442,6 +456,19 @@ public class ActionButton extends View {
 		if (attrs.hasValue(index)) {
 			shadowColor = attrs.getColor(index, shadowColor);
 			Log.v(LOG_TAG, "Initialized shadow color: " + getShadowColor());
+		}
+	}
+
+	/**
+	 * Initializes the responsive shadow effect
+	 *
+	 * @param attrs attributes of the XML tag that is inflating the view
+	 */
+	private void initShadowResponsive(TypedArray attrs) {
+		int index = R.styleable.ActionButton_shadow_responsive;
+		if (attrs.hasValue(index)) {
+			shadowResponsive = attrs.getBoolean(index, shadowResponsive);
+			Log.v(LOG_TAG, "Initialized shadow responsive: " + isShadowResponsive());
 		}
 	}
 
@@ -988,6 +1015,31 @@ public class ActionButton extends View {
 	}
 
 	/**
+	 * Returns whether shadow is responsive
+	 * <p>
+	 * Responsive shadow means that shadow is enlarged up to the certain limits
+	 * while in the {@link com.software.shell.fab.ActionButton.State#PRESSED} state
+	 *
+	 * @return true if <b>Action Button</b> shadow is responsive, otherwise false
+	 */
+	public boolean isShadowResponsive() {
+		return shadowResponsive;
+	}
+
+	/**
+	 * Sets the responsive shadow effect
+	 * <p>
+	 * Responsive shadow means that shadow is enlarged up to the certain limits
+	 * while in the {@link com.software.shell.fab.ActionButton.State#PRESSED} state
+	 *
+	 * @param shadowResponsive true if shadow must be responsive, otherwise false
+	 */
+	public void setShadowResponsive(boolean shadowResponsive) {
+		this.shadowResponsive = shadowResponsive;
+		Log.v(LOG_TAG, "Shadow responsive is set to: " + isShadowResponsive());
+	}
+
+	/**
 	 * Returns the <b>Action Button</b> stroke width in actual 
 	 * pixels (px)
 	 *  
@@ -1357,6 +1409,11 @@ public class ActionButton extends View {
 		if (hasImage()) {
 			drawImage(canvas);
 		}
+//		if (rippleDrawer.invalidationRequired) {
+//			postInvalidate();
+//		} else if (rippleDrawer.invalidateionDelayedRequired) {
+//			postInvalidateDelayed(100);
+//		}
 	}
 
 	/**

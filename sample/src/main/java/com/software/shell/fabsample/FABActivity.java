@@ -18,7 +18,6 @@
 
 package com.software.shell.fabsample;
 
-import android.util.Log;
 import com.software.shell.fab.ActionButton;
 
 import android.app.Activity;
@@ -32,10 +31,10 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Toast;
 import com.software.shell.uitools.convert.DensityConverter;
+import com.software.shell.uitools.resutils.id.IdGenerator;
 import com.software.shell.viewmover.configuration.MovingDetails;
 
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Contains a sample activity with 
@@ -167,7 +166,7 @@ public class FABActivity extends Activity {
 			final int color = getResources().getColor(colorsInfo.primaryColorResId);
 			final int textColor = color == getResources().getColor(R.color.fab_material_white) ?
 					getResources().getColor(R.color.fab_material_black) : color;
-			button.setId(generateViewId());
+			button.setId(IdGenerator.next());
 			button.setText(text);
 			button.setTextColor(textColor);
 			button.setTag(colorsInfo);
@@ -195,7 +194,7 @@ public class FABActivity extends Activity {
 		for (RadioButtons.AnimationInfo animationInfo : animationInfos) {
 			final RadioButton button = new RadioButton(this);
 			final String text = getResources().getString(animationInfo.animationTextResId);
-			button.setId(generateViewId());
+			button.setId(IdGenerator.next());
 			button.setText(text);
 			button.setTag(animationInfo);
 			button.setEnabled(buttonBehaviorRadioGroup.getCheckedRadioButtonId() ==
@@ -204,21 +203,6 @@ public class FABActivity extends Activity {
 		}
 	}
 
-	private static final AtomicInteger NEXT_GENERATED_ID = new AtomicInteger(1);
-
-	static int generateViewId() {
-		while (true) {
-			final int result = NEXT_GENERATED_ID.get();
-			int newValue = result + 1;
-			if (newValue > 0x00FFFFFF) {
-				newValue = 1;
-			}
-			if (NEXT_GENERATED_ID.compareAndSet(result, newValue)) {
-				return result;
-			}
-		}
-	}
-	
 	public void onActionButtonClick(View v) {
 		final int checkedId = buttonBehaviorRadioGroup.getCheckedRadioButtonId();
 		switch (checkedId) {
