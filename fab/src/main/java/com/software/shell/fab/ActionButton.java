@@ -884,7 +884,8 @@ public class ActionButton extends View {
 	 * @return true if <b>Action Button</b> has radius, otherwise false
 	 */
 	public boolean hasShadow() {
-		return !hasElevation() && getShadowRadius() > 0.0f;
+//		return !hasElevation() && getShadowRadius() > 0.0f;
+		return getShadowRadius() > 0.0f;
 	}
 
 	/**
@@ -1396,6 +1397,17 @@ public class ActionButton extends View {
 	protected void onDraw(final Canvas canvas) {
 		super.onDraw(canvas);
 		Log.v(LOG_TAG, "Action Button onDraw called");
+		if (getState() == State.PRESSED) {
+			if (currentShadowRadius < getShadowRadius() * SHADOW_RESPONSE_FACTOR) {
+				currentShadowRadius += 0.5f;
+				invalidator.setInvalidationRequired(true);
+			}
+		} else {
+			if (currentShadowRadius > getShadowRadius()) {
+				currentShadowRadius -= 0.5f;
+				invalidator.setInvalidationRequired(true);
+			}
+		}
 		drawCircle(canvas);
 		if (hasRipple()) {
 			drawRipple(canvas);
@@ -1409,12 +1421,19 @@ public class ActionButton extends View {
 		if (hasImage()) {
 			drawImage(canvas);
 		}
-//		if (rippleDrawer.invalidationRequired) {
-//			postInvalidate();
-//		} else if (rippleDrawer.invalidateionDelayedRequired) {
-//			postInvalidateDelayed(100);
-//		}
+
+		getInvalidator().invalidate();
+
 	}
+
+	private float currentShadowRadius = getShadowRadius();
+
+	private final Invalidator invalidator = new Invalidator(this);
+
+	protected Invalidator getInvalidator() {
+		return invalidator;
+	}
+
 
 	/**
 	 * Draws the main circle of the <b>Action Button</b> and calls
@@ -1425,7 +1444,11 @@ public class ActionButton extends View {
 	protected void drawCircle(Canvas canvas) {
 		resetPaint();
 		if (hasShadow()) {
-			drawShadow();
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+				drawShadow();
+			} else {
+				setElevation(currentShadowRadius);
+			}
 		}
 		paint.setStyle(Paint.Style.FILL);
 		boolean rippleInProgress = hasRipple() && rippleDrawer.isDrawingInProgress();
@@ -1471,7 +1494,8 @@ public class ActionButton extends View {
 	 * Draws the shadow if view elevation is not enabled
 	 */
 	protected void drawShadow() {
-		paint.setShadowLayer(getShadowRadius(), getShadowXOffset(), getShadowYOffset(), getShadowColor());
+//		paint.setShadowLayer(getShadowRadius(), getShadowXOffset(), getShadowYOffset(), getShadowColor());
+		paint.setShadowLayer(currentShadowRadius, getShadowXOffset(), getShadowYOffset(), getShadowColor());
 		Log.v(LOG_TAG, "Shadow drawn");
 	}
 
@@ -1596,7 +1620,8 @@ public class ActionButton extends View {
 	 * @return shadow width in actual pixels
 	 */
 	private int calculateShadowWidth() {
-		int shadowWidth = hasShadow() ? (int) ((getShadowRadius() + Math.abs(getShadowXOffset())) * 2) : 0;
+		int shadowWidth = hasShadow() ? (int) ((getShadowRadius() * SHADOW_RESPONSE_FACTOR
+				+ Math.abs(getShadowXOffset())) * 2) : 0;
 		Log.v(LOG_TAG, "Calculated shadow width = " + shadowWidth);
 		return shadowWidth;
 	}
@@ -1607,7 +1632,8 @@ public class ActionButton extends View {
 	 * @return shadow height in actual pixels
 	 */
 	private int calculateShadowHeight() {
-		int shadowHeight = hasShadow() ? (int) ((getShadowRadius() + Math.abs(getShadowYOffset())) * 2) : 0;
+		int shadowHeight = hasShadow() ? (int) ((getShadowRadius() * SHADOW_RESPONSE_FACTOR
+				+ Math.abs(getShadowYOffset())) * 2) : 0;
 		Log.v(LOG_TAG, "Calculated shadow height = " + shadowHeight);
 		return shadowHeight;
 	}

@@ -135,22 +135,16 @@ class RippleDrawer {
 	void draw(Canvas canvas) {
 		updateRadius();
 		drawRipple(canvas);
+		Invalidator invalidator = actionButton.getInvalidator();
 		if (isDrawingInProgress()) {
-			actionButton.postInvalidate();
-//			invalidationRequired = true;
+			invalidator.setInvalidationRequired(true);
 			Log.v(LOG_TAG, "Ripple effect drawing in progress, invalidating the Action Button");
 		} else if (isDrawingFinished() && !isPressed()) {
-			actionButton.postInvalidateDelayed(POST_INVALIDATION_DELAY_MS);
-//			invalidateionDelayedRequired = true;
+			invalidator.setInvalidationDelayedRequired(true);
+			invalidator.setInvalidationDelay(POST_INVALIDATION_DELAY_MS);
 			Log.v(LOG_TAG, "Ripple effect drawing finished, posting the last invalidate");
-		} else {
-			invalidationRequired = false;
-			invalidateionDelayedRequired = false;
 		}
 	}
-
-	boolean invalidationRequired;
-	boolean invalidateionDelayedRequired;
 
 	/**
 	 * Draws the single frame of the ripple effect depending on ripple effect
