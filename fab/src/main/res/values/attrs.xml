@@ -37,7 +37,7 @@
 		<attr name="shadow_xOffset" format="dimension" />
 		<attr name="shadow_yOffset" format="dimension" />
 		<attr name="shadow_color" format="color" />
-		<attr name="shadow_responsive" format="boolean" />
+		<attr name="shadowResponsiveEffect_enabled" format="boolean" />
 		<attr name="stroke_width" format="dimension" />
 		<attr name="stroke_color" format="color" />
 		<attr name="show_animation" format="reference" />

@@ -33,7 +33,8 @@ import android.view.animation.*;
 
 import com.software.shell.uitools.convert.DensityConverter;
 import com.software.shell.uitools.resutils.color.ColorModifier;
-import com.software.shell.viewmover.configuration.MovingDetails;
+import com.software.shell.uitools.resutils.id.IdGenerator;
+import com.software.shell.viewmover.configuration.MovingParams;
 import com.software.shell.viewmover.movers.ViewMover;
 import com.software.shell.viewmover.movers.ViewMoverFactory;
 
@@ -78,12 +79,12 @@ public class ActionButton extends View {
 	private int buttonColorPressed = Color.parseColor("#FF696969");
 
 	/**
-	 * Determines whether <b>Action Button</b> ripple effect enabled or not
+	 * Determines whether <b>Action Button</b> Ripple Effect enabled or not
 	 */
 	private boolean rippleEffectEnabled;
 
 	/**
-	 * <b>Action Button</b> ripple effect color
+	 * <b>Action Button</b> Ripple Effect color
 	 */
 	private int buttonColorRipple = darkenButtonColorPressed();
 
@@ -108,18 +109,12 @@ public class ActionButton extends View {
 	private int shadowColor = Color.parseColor("#42000000");
 
 	/**
-	 * Determines whether shadow is responsive
+	 * Determines whether Shadow Responsive Effect enabled
 	 * <p>
-	 * Responsive shadow means that shadow is enlarged up to the certain limits
+	 * Responsive Shadow means that shadow is enlarged up to the certain limits
 	 * while in the {@link com.software.shell.fab.ActionButton.State#PRESSED} state
 	 */
-	private boolean shadowResponsive = true;
-
-	/**
-	 * The default factor, which is used as multiplier for determining
-	 * the enlargement limits of the shadow
-	 */
-	private static final float SHADOW_RESPONSE_FACTOR = 1.75f;
+	private boolean shadowResponsiveEffectEnabled = true;
 
 	/**
 	 * Stroke width 
@@ -163,12 +158,22 @@ public class ActionButton extends View {
 	 * {@link android.graphics.Paint}, which is used for drawing the elements of
 	 * <b>Action Button</b>
 	 */
-	protected final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
 	/**
-	 * A drawer, which is used for drawing the <b>Action Button</b> ripple effect
+	 * A view invalidator, which is used to invalidate the <b>Action Button</b>
 	 */
-	protected final RippleDrawer rippleDrawer = new RippleDrawer(this);
+	private final ViewInvalidator invalidator = new ViewInvalidator(this);
+
+	/**
+	 * A drawer, which is used for drawing the <b>Action Button</b> Ripple Effect
+	 */
+	protected final EffectDrawer rippleEffectDrawer = new RippleEffectDrawer(this);
+
+	/**
+	 * A drawer, which is used for drawing the <b>Action Button</b> Shadow Responsive Effect
+	 */
+	protected final EffectDrawer shadowResponsiveDrawer = new ShadowResponsiveDrawer(this);
 
 	/**
 	 * A view mover, which is used to move the <b>Action Button</b>
@@ -198,6 +203,7 @@ public class ActionButton extends View {
 	 */
 	public ActionButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		initActionButton();
 		initActionButtonAttrs(context, attrs, 0, 0);
 	}
 
@@ -215,6 +221,7 @@ public class ActionButton extends View {
 	 */
 	public ActionButton(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
+		initActionButton();
 		initActionButtonAttrs(context, attrs, defStyleAttr, 0);
 	}
 
@@ -239,6 +246,7 @@ public class ActionButton extends View {
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	public ActionButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
+		initActionButton();
 		initActionButtonAttrs(context, attrs, defStyleAttr, defStyleRes);
 	}
 
@@ -251,7 +259,7 @@ public class ActionButton extends View {
 	}
 
 	/**
-	 * Initializes the <b>Action Button</b>, which is declared within XML resource
+	 * Initializes the <b>Action Button</b> attributes, declared within XML resource
 	 * <p>
 	 * Makes calls to different initialization methods for parameters initialization.
 	 * For those parameters, which are not declared in the XML resource, 
@@ -268,8 +276,7 @@ public class ActionButton extends View {
 	 *        to not look for defaults
 	 */
 	private void initActionButtonAttrs(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		initActionButton();
-		final TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ActionButton,
+		TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ActionButton,
 				defStyleAttr, defStyleRes);
 		try {
 			initType(attributes);
@@ -282,6 +289,7 @@ public class ActionButton extends View {
 			initShadowXOffset(attributes);
 			initShadowYOffset(attributes);
 			initShadowColor(attributes);
+			initShadowResponsiveEffectEnabled(attributes);
 			initStrokeWidth(attributes);
 			initStrokeColor(attributes);
 			initImage(attributes);
@@ -299,12 +307,12 @@ public class ActionButton extends View {
 	/**
 	 * Initializes the layer type needed for shadows drawing
 	 * <p>
-	 * Might be called if target API is HONEYCOMB (11) and higher
+	 * Might be called if target API is {@code HONEYCOMB (11)} and higher
 	 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void initLayerType() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			setLayerType(LAYER_TYPE_SOFTWARE, paint);
+			setLayerType(LAYER_TYPE_SOFTWARE, getPaint());
 			Log.v(LOG_TAG, "Layer type initialized");
 		}
 	}
@@ -362,7 +370,7 @@ public class ActionButton extends View {
 	 * Initializes the <b>Action Button</b> color for the {@link State#PRESSED}
 	 * {@link #state}
 	 * <p>
-	 * Initialized the <b>Action Button</b> ripple effect color
+	 * Initialized the <b>Action Button</b> default Ripple Effect color
 	 * <p>
 	 * Must be called before {@link #initButtonColorRipple(TypedArray)} for proper
 	 * {@link #buttonColorRipple} initialization
@@ -379,7 +387,7 @@ public class ActionButton extends View {
 	}
 
 	/**
-	 * Initializes the <b>Action Button</b> ripple effect state
+	 * Initializes the <b>Action Button</b> Ripple Effect state
 	 *
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
@@ -387,12 +395,12 @@ public class ActionButton extends View {
 		int index = R.styleable.ActionButton_rippleEffect_enabled;
 		if (attrs.hasValue(index)) {
 			rippleEffectEnabled = attrs.getBoolean(index, rippleEffectEnabled);
-			Log.v(LOG_TAG, "Initialized ripple effect enabled: " + hasRipple());
+			Log.v(LOG_TAG, "Initialized ripple effect enabled: " + isRippleEffectEnabled());
 		}
 	}
 
 	/**
-	 * Initializes the <b>Action Button</b> ripple effect color
+	 * Initializes the <b>Action Button</b> Ripple Effect color
 	 * <p>
 	 * Must be called after {@link #initButtonColorPressed(TypedArray)} for proper
 	 * {@link #buttonColorRipple} initialization
@@ -460,15 +468,15 @@ public class ActionButton extends View {
 	}
 
 	/**
-	 * Initializes the responsive shadow effect
+	 * Initializes the Shadow Responsive Effect
 	 *
 	 * @param attrs attributes of the XML tag that is inflating the view
 	 */
-	private void initShadowResponsive(TypedArray attrs) {
-		int index = R.styleable.ActionButton_shadow_responsive;
+	private void initShadowResponsiveEffectEnabled(TypedArray attrs) {
+		int index = R.styleable.ActionButton_shadowResponsiveEffect_enabled;
 		if (attrs.hasValue(index)) {
-			shadowResponsive = attrs.getBoolean(index, shadowResponsive);
-			Log.v(LOG_TAG, "Initialized shadow responsive: " + isShadowResponsive());
+			shadowResponsiveEffectEnabled = attrs.getBoolean(index, shadowResponsiveEffectEnabled);
+			Log.v(LOG_TAG, "Initialized shadow responsive: " + isShadowResponsiveEffectEnabled());
 		}
 	}
 
@@ -640,14 +648,14 @@ public class ActionButton extends View {
 
 	/**
 	 * Moves the <b>Action Button</b> to a specified position defined in moving
-	 * details object
+	 * parameters
 	 *
-	 * @param details moving details, which contain the desired position to move
+	 * @param params moving parameters, which contain the desired position to move
 	 */
-	public void move(MovingDetails details) {
+	public void move(MovingParams params) {
 		Log.v(LOG_TAG, String.format("View is about to move at: X-axis delta = %s Y-axis delta = %s",
-				details.getXAxisDelta(), details.getYAxisDelta()));
-		mover.move(details);
+				params.getXAxisDelta(), params.getYAxisDelta()));
+		mover.move(params);
 	}
 
 	/**
@@ -657,8 +665,8 @@ public class ActionButton extends View {
 	 *                 the <b>Action Button</b> right
 	 */
 	public void moveRight(float distance) {
-		final MovingDetails details = new MovingDetails(getContext(), distance, 0);
-		move(details);
+		final MovingParams params = new MovingParams(getContext(), distance, 0);
+		move(params);
 	}
 
 	/**
@@ -668,8 +676,8 @@ public class ActionButton extends View {
 	 *                 to move the <b>Action Button</b> down
 	 */
 	public void moveDown(float distance) {
-		final MovingDetails details = new MovingDetails(getContext(), 0, distance);
-		move(details);
+		final MovingParams params = new MovingParams(getContext(), 0, distance);
+		move(params);
 	}
 
 	/**
@@ -679,8 +687,8 @@ public class ActionButton extends View {
 	 *                 to move the <b>Action Button</b> left
 	 */
 	public void moveLeft(float distance) {
-		final MovingDetails details = new MovingDetails(getContext(), -distance, 0);
-		move(details);
+		final MovingParams params = new MovingParams(getContext(), -distance, 0);
+		move(params);
 	}
 
 	/**
@@ -690,8 +698,8 @@ public class ActionButton extends View {
 	 *                 to move the <b>Action Button</b> up
 	 */
 	public void moveUp(float distance) {
-		final MovingDetails details = new MovingDetails(getContext(), 0, -distance);
-		move(details);
+		final MovingParams params = new MovingParams(getContext(), 0, -distance);
+		move(params);
 	}
 
 	/**
@@ -834,33 +842,33 @@ public class ActionButton extends View {
 	 * @return darker color variant of {@link #buttonColorPressed}
 	 */
 	private int darkenButtonColorPressed() {
-		final float darkenFactor = 0.8f;
+		float darkenFactor = 0.8f;
 		return ColorModifier.modifyExposure(getButtonColorPressed(), darkenFactor);
 	}
 
 	/**
-	 * Checks whether <b>Action Button</b> ripple effect enabled
+	 * Checks whether <b>Action Button</b> Ripple Effect enabled
 	 *
-	 * @return true, if ripple effect enabled, otherwise false
+	 * @return true, if Ripple Effect enabled, otherwise false
 	 */
-	public boolean hasRipple() {
+	public boolean isRippleEffectEnabled() {
 		return rippleEffectEnabled;
 	}
 
 	/**
-	 * Toggles the ripple effect state
+	 * Toggles the Ripple Effect state
 	 *
-	 * @param enabled true if ripple effect needs to be enabled, otherwise false
+	 * @param enabled true if Ripple Effect needs to be enabled, otherwise false
 	 */
 	public void setRippleEffectEnabled(boolean enabled) {
 		this.rippleEffectEnabled = enabled;
-		Log.v(LOG_TAG, "Ripple effect " + (this.rippleEffectEnabled ? "ENABLED" : "DISABLED"));
+		Log.v(LOG_TAG, "Ripple effect " + (isRippleEffectEnabled() ? "ENABLED" : "DISABLED"));
 	}
 
 	/**
-	 * Returns the <b>Action Button</b> ripple effect color
+	 * Returns the <b>Action Button</b> Ripple Effect color
 	 *
-	 * @return <b>Action Button</b> ripple effect color
+	 * @return <b>Action Button</b> Ripple Effect color
 	 */
 	public int getButtonColorRipple() {
 		return buttonColorRipple;
@@ -879,13 +887,12 @@ public class ActionButton extends View {
 	/**
 	 * Checks whether <b>Action Button</b> has shadow by determining shadow radius
 	 * <p>
-	 * Shadow is disabled if elevation is set API level is {@code 21 Lollipop} and higher     
+	 * Shadow is disabled if elevation is set
 	 *  
 	 * @return true if <b>Action Button</b> has radius, otherwise false
 	 */
 	public boolean hasShadow() {
-//		return !hasElevation() && getShadowRadius() > 0.0f;
-		return getShadowRadius() > 0.0f;
+		return !hasElevation() && getShadowRadius() > 0.0f;
 	}
 
 	/**
@@ -905,12 +912,18 @@ public class ActionButton extends View {
 	 * Must be specified in density-independent (dp) pixels, which are
 	 * then converted into actual pixels (px). If shadow radius is set to 0, 
 	 * shadow is removed
+	 * <p>
+	 * Additionally sets the {@link #shadowResponsiveDrawer} current radius
+	 * in case if Shadow Responsive Effect enabled
 	 *
 	 * @param shadowRadius shadow radius specified in density-independent 
 	 *                     (dp) pixels
 	 */
 	public void setShadowRadius(float shadowRadius) {
 		this.shadowRadius = dpToPx(shadowRadius);
+		if (isShadowResponsiveEffectEnabled()) {
+			((ShadowResponsiveDrawer) shadowResponsiveDrawer).setCurrentShadowRadius(getShadowRadius());
+		}
 		requestLayout();
 		Log.v(LOG_TAG, "Shadow radius changed to:" + getShadowRadius());
 	}
@@ -1016,28 +1029,30 @@ public class ActionButton extends View {
 	}
 
 	/**
-	 * Returns whether shadow is responsive
+	 * Checks whether Shadow Responsive Effect enabled
 	 * <p>
-	 * Responsive shadow means that shadow is enlarged up to the certain limits
+	 * Shadow Responsive Effect means that shadow is enlarged up to the certain limits
 	 * while in the {@link com.software.shell.fab.ActionButton.State#PRESSED} state
 	 *
-	 * @return true if <b>Action Button</b> shadow is responsive, otherwise false
+	 * @return true if <b>Action Button</b> Shadow Responsive Effect enabled, otherwise false
 	 */
-	public boolean isShadowResponsive() {
-		return shadowResponsive;
+	public boolean isShadowResponsiveEffectEnabled() {
+		return shadowResponsiveEffectEnabled;
 	}
 
 	/**
-	 * Sets the responsive shadow effect
+	 * Toggles the Shadow Responsive Effect
 	 * <p>
-	 * Responsive shadow means that shadow is enlarged up to the certain limits
+	 * Shadow Responsive Effect means that shadow is enlarged up to the certain limits
 	 * while in the {@link com.software.shell.fab.ActionButton.State#PRESSED} state
 	 *
-	 * @param shadowResponsive true if shadow must be responsive, otherwise false
+	 * @param shadowResponsiveEffectEnabled true if Shadow Responsive Effect must be
+	 *                                      enabled, otherwise false
 	 */
-	public void setShadowResponsive(boolean shadowResponsive) {
-		this.shadowResponsive = shadowResponsive;
-		Log.v(LOG_TAG, "Shadow responsive is set to: " + isShadowResponsive());
+	public void setShadowResponsiveEffectEnabled(boolean shadowResponsiveEffectEnabled) {
+		this.shadowResponsiveEffectEnabled = shadowResponsiveEffectEnabled;
+		requestLayout();
+		Log.v(LOG_TAG, "Shadow responsive is set to: " + isShadowResponsiveEffectEnabled());
 	}
 
 	/**
@@ -1375,6 +1390,15 @@ public class ActionButton extends View {
 			super.startAnimation(animation);
 		}
 	}
+
+	/**
+	 * Returns the paint, which is used for drawing the <b>Action Button</b> elements
+	 *
+	 * return paint, which is used for drawing the <b>Action Button</b> elements
+	 */
+	protected Paint getPaint() {
+		return paint;
+	}
 	
 	/**
 	 * Resets the paint to its default values and sets initial flags to it
@@ -1382,9 +1406,19 @@ public class ActionButton extends View {
 	 * Use this method before drawing the new element of the view     
 	 */
 	protected final void resetPaint() {
-		paint.reset();
-		paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+		getPaint().reset();
+		getPaint().setFlags(Paint.ANTI_ALIAS_FLAG);
 		Log.v(LOG_TAG, "Paint reset");
+	}
+
+	/**
+	 * Returns the view invalidator, which is used to invalidate the
+	 * <b>Action Button</b>
+	 *
+	 * @return view invalidator, which is used to invalidate the <b>Action Button</b>
+	 */
+	protected ViewInvalidator getInvalidator() {
+		return invalidator;
 	}
 
 	/**
@@ -1397,19 +1431,8 @@ public class ActionButton extends View {
 	protected void onDraw(final Canvas canvas) {
 		super.onDraw(canvas);
 		Log.v(LOG_TAG, "Action Button onDraw called");
-		if (getState() == State.PRESSED) {
-			if (currentShadowRadius < getShadowRadius() * SHADOW_RESPONSE_FACTOR) {
-				currentShadowRadius += 0.5f;
-				invalidator.setInvalidationRequired(true);
-			}
-		} else {
-			if (currentShadowRadius > getShadowRadius()) {
-				currentShadowRadius -= 0.5f;
-				invalidator.setInvalidationRequired(true);
-			}
-		}
 		drawCircle(canvas);
-		if (hasRipple()) {
+		if (isRippleEffectEnabled()) {
 			drawRipple(canvas);
 		}
 		if (hasElevation()) {
@@ -1421,19 +1444,8 @@ public class ActionButton extends View {
 		if (hasImage()) {
 			drawImage(canvas);
 		}
-
 		getInvalidator().invalidate();
-
 	}
-
-	private float currentShadowRadius = getShadowRadius();
-
-	private final Invalidator invalidator = new Invalidator(this);
-
-	protected Invalidator getInvalidator() {
-		return invalidator;
-	}
-
 
 	/**
 	 * Draws the main circle of the <b>Action Button</b> and calls
@@ -1444,16 +1456,18 @@ public class ActionButton extends View {
 	protected void drawCircle(Canvas canvas) {
 		resetPaint();
 		if (hasShadow()) {
-			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-				drawShadow();
+			if (isShadowResponsiveEffectEnabled()) {
+				shadowResponsiveDrawer.draw(canvas);
 			} else {
-				setElevation(currentShadowRadius);
+				drawShadow();
 			}
 		}
-		paint.setStyle(Paint.Style.FILL);
-		boolean rippleInProgress = hasRipple() && rippleDrawer.isDrawingInProgress();
-		paint.setColor(getState() == State.PRESSED || rippleInProgress ? getButtonColorPressed() : getButtonColor());
-		canvas.drawCircle(calculateCenterX(), calculateCenterY(), calculateCircleRadius(), paint);
+		getPaint().setStyle(Paint.Style.FILL);
+		boolean rippleInProgress = isRippleEffectEnabled()
+				&& ((RippleEffectDrawer) rippleEffectDrawer).isDrawingInProgress();
+		getPaint().setColor(getState() == State.PRESSED || rippleInProgress ?
+				getButtonColorPressed() : getButtonColor());
+		canvas.drawCircle(calculateCenterX(), calculateCenterY(), calculateCircleRadius(), getPaint());
 		Log.v(LOG_TAG, "Circle drawn");
 	}
 
@@ -1494,18 +1508,17 @@ public class ActionButton extends View {
 	 * Draws the shadow if view elevation is not enabled
 	 */
 	protected void drawShadow() {
-//		paint.setShadowLayer(getShadowRadius(), getShadowXOffset(), getShadowYOffset(), getShadowColor());
-		paint.setShadowLayer(currentShadowRadius, getShadowXOffset(), getShadowYOffset(), getShadowColor());
+		getPaint().setShadowLayer(getShadowRadius(), getShadowXOffset(), getShadowYOffset(), getShadowColor());
 		Log.v(LOG_TAG, "Shadow drawn");
 	}
 
 	/**
-	 * Draws the ripple effect
+	 * Draws the Ripple Effect
 	 *
 	 * @param canvas canvas, on which ripple effect is to be drawn
 	 */
 	protected void drawRipple(Canvas canvas) {
-		rippleDrawer.draw(canvas);
+		rippleEffectDrawer.draw(canvas);
 		Log.v(LOG_TAG, "Ripple effect drawn");
 	}
 	
@@ -1521,13 +1534,15 @@ public class ActionButton extends View {
 	 */
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	protected void drawElevation() {
-		int strokeWeightCorrective = (int) (getStrokeWidth() / 1.5f);
-		final int width = getWidth() - strokeWeightCorrective;
-		final int height = getHeight() - strokeWeightCorrective;
+		float halfSize = getSize() / 2;
+		final int left = (int) (calculateCenterX() - halfSize);
+		final int top = (int) (calculateCenterY() - halfSize);
+		final int right = (int) (calculateCenterX() + halfSize);
+		final int bottom = (int) (calculateCenterY() + halfSize);
 		ViewOutlineProvider provider = new ViewOutlineProvider() {
 			@Override
 			public void getOutline(View view, Outline outline) {
-				outline.setOval(0, 0, width, height);
+				outline.setOval(left, top, right, bottom);
 			}
 		};
 		setOutlineProvider(provider);
@@ -1551,10 +1566,10 @@ public class ActionButton extends View {
 	 */
 	protected void drawStroke(Canvas canvas) {
 		resetPaint();
-		paint.setStyle(Paint.Style.STROKE);
-		paint.setStrokeWidth(getStrokeWidth());
-		paint.setColor(getStrokeColor());
-		canvas.drawCircle(calculateCenterX(), calculateCenterY(), calculateCircleRadius(), paint);
+		getPaint().setStyle(Paint.Style.STROKE);
+		getPaint().setStrokeWidth(getStrokeWidth());
+		getPaint().setColor(getStrokeColor());
+		canvas.drawCircle(calculateCenterX(), calculateCenterY(), calculateCircleRadius(), getPaint());
 		Log.v(LOG_TAG, "Stroke drawn");
 	}
 
@@ -1620,8 +1635,9 @@ public class ActionButton extends View {
 	 * @return shadow width in actual pixels
 	 */
 	private int calculateShadowWidth() {
-		int shadowWidth = hasShadow() ? (int) ((getShadowRadius() * SHADOW_RESPONSE_FACTOR
-				+ Math.abs(getShadowXOffset())) * 2) : 0;
+		float mShadowRadius = isShadowResponsiveEffectEnabled() ?
+				((ShadowResponsiveDrawer) shadowResponsiveDrawer).getMaxShadowRadius() : getShadowRadius();
+		int shadowWidth = hasShadow() ? (int) ((mShadowRadius	+ Math.abs(getShadowXOffset())) * 2) : 0;
 		Log.v(LOG_TAG, "Calculated shadow width = " + shadowWidth);
 		return shadowWidth;
 	}
@@ -1632,8 +1648,9 @@ public class ActionButton extends View {
 	 * @return shadow height in actual pixels
 	 */
 	private int calculateShadowHeight() {
-		int shadowHeight = hasShadow() ? (int) ((getShadowRadius() * SHADOW_RESPONSE_FACTOR
-				+ Math.abs(getShadowYOffset())) * 2) : 0;
+		float mShadowRadius = isShadowResponsiveEffectEnabled() ?
+				((ShadowResponsiveDrawer) shadowResponsiveDrawer).getMaxShadowRadius() : getShadowRadius();
+		int shadowHeight = hasShadow() ? (int) ((mShadowRadius + Math.abs(getShadowYOffset())) * 2) : 0;
 		Log.v(LOG_TAG, "Calculated shadow height = " + shadowHeight);
 		return shadowHeight;
 	}
@@ -1769,7 +1786,7 @@ public class ActionButton extends View {
 		/**
 		 * None. Animation absent 
 		 */
-		NONE                (0),
+		NONE                (IdGenerator.next()),
 
 		/**
 		 * Fade in animation 

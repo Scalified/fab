@@ -50,5 +50,5 @@ android {
 }
 
 dependencies {
-	compile 'com.github.shell-software:viewmover:0.9.1'
+	compile 'com.github.shell-software:viewmover:1.0.1'
 }

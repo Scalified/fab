@@ -31,39 +31,72 @@ If any of these libraries are already used in the project they must be excluded 
 
 ### 1.1.0 - *current*
 
-1. **Action Button** now has a dependency on an external [**ViewMover**](https://github.com/shell-software/view-mover) library. If it is used already in the project it must be excluded as a transitive dependency
+# 1.1.0
 
-2. **New** public methods, classes and attributes:
+1. Added Ripple Effect - [**issue #2: ripple effect**](https://github.com/shell-software/fab/issues/2). Disabled by default.
+See [**README.md**](https://github.com/shell-software/fab/blob/master/README.md) for more info
+
+2. Added Shadow Responsive Effect - [**issue #11: Question - Pressed State**](https://github.com/shell-software/fab/issues/11). Enabled by default.
+See [**README.md**](https://github.com/shell-software/fab/blob/master/README.md) for more info
+
+3. Added possibility to move the **Action Button** - [**issue #9: Move button up and down**](https://github.com/shell-software/fab/issues/9). 
+See [**README.md**](https://github.com/shell-software/fab/blob/master/README.md) for more info
+
+4. **Action Button** now has a dependency on an external [**ViewMover**](https://github.com/shell-software/view-mover) library. 
+If it is used already in the project it must be excluded as a transitive dependency
+
+5. Changed the **Action Button** default values:
+
+	1. Button default color for **NORMAL** state changed from **Color.LTGRAY** to **#FF9B9B9B**
+    2. Button default color for **PRESSED** state changed from **Color.DKGRAY** to **#FF696969**
+    3. Shadow default color changed from **#757575** to **#42000000** according to Material Design Guidelines
+    4. Shadow default radius changed from **2.0f** to **8.0f** (in density-independent pixels)
+    5. Shadow default X-axis offset changed from **1.0f** to **0.0f** (in density-independent pixels)
+    6. Shadow default Y-axis offset changed from **1.5f** to **8.0f** (in density-independent pixels)
+
+6. **New** public methods, classes and attributes:
 
 	1. Methods:
 
 		* **setSize(float)** - sets the size of the **Action Button** (in density-independent pixels).
-		Changing the default size of the button breaks the rules of <a href="http://www.google.com/design/spec/components/buttons.html">Material Design</a>.
+		Changing the default size of the button breaks the rules of [Material Design](http://www.google.com/design/spec/components/buttons.html).
 	    Setting the button size explicitly means, that button types with its default sizes are completely ignored. Do not use this method, unless you know what you are doing
-		* **getSize()** - returns the size of the **Action Button** in real pixels (the same as **getButtonSize()**, which is now *deprecated*).
-		* **move(MovingDetails)** - moves the **Action Button** to the specified position obtained from **MovingDetails** object
-		* **moveRight(float)** - moves the **Action Button** right to a specified distance
-		* **moveDown(float)** - moves the **Action Button** down to a specified distance
-		* **moveLeft(float)** - moves the **Action Button** left to a specified distance
-		* **moveUp(float)** - moves the **Action Button** up to a specified distance
-
+		* **getSize()** - returns the size of the **Action Button** in real pixels (the same as **getButtonSize()**, which is now marked as *deprecated*).
+		* **move(MovingParams)** - moves the **Action Button** to the specified position obtained from **MovingParams** object
+		* **moveRight(float)** - moves the **Action Button** right to a specified distance (in density-independent pixels)
+		* **moveDown(float)** - moves the **Action Button** down to a specified distance (in density-independent pixels)
+		* **moveLeft(float)** - moves the **Action Button** left to a specified distance (in density-independent pixels)
+		* **moveUp(float)** - moves the **Action Button** up to a specified distance (in density-independent pixels)
+		* **isRippleEffectEnabled()** - checks whether **Action Button** Ripple Effect enabled
+		* **setRippleEffectEnabled(boolean)** - toggles the Ripple Effect state
+		* **getButtonColorRipple()** - returns the **Action Button** Ripple Effect color
+		* **setButtonColorRipple(int)** - sets the **Action Button** Ripple Effect color
+		* **isShadowResponsiveEffectEnabled()** - returns whether Shadow Responsive Effect enabled
+		* **setShadowResponsiveEffectEnabled(boolean)** - sets the Shadow Responsive Effect
+		* **getTouchPoint()** - returns the **Action Button** touch point
+			
 	2. XML attributes:
-
-		* **size** - lets to declare the button size (the same as **setSize(float)**)
-
+	
+		* **size** - dimension, declares the button size (the same as **setSize(float)**)
+		* **BIG** - enum (value **2**), declares the **Action Button** **BIG** type, which has the size of **72.0dp** (the same as **setType(ActionButton.Type.BIG)**)
+		* **rippleEffect_enabled** - boolean, enables the **Action Button** Ripple Effect (the same as **setRippleEffectEnabled(boolean)**)
+		* **button_colorRipple** - color, declares the **Action Button** Ripple Effect color (the same as **setButtonColorRipple(int)**)
+		* **shadowResponsiveEffect_enabled** - boolean, enables the **Action Button** Shadow Responsive Effect (the same as **setShadowResponsiveEffectEnabled(boolean)**)
+		
 	3. Classes:
-
-		* added new **Action Button** type - **ActionButton.Type.BIG**, which has a size of 72 density-independent pixels. Also added a correspondent value **BIG** to **type** XML attribute
+	
+		* added new **Action Button** type - **ActionButton.Type.BIG**, which has a size of ***72*** density-independent pixels. Also added a correspondent value **BIG** to **type** XML attribute
 		([Pull request #16: *Added BIG size, 72dp size for fab buttons, Fix MOVE feedback, update gitignore*](https://github.com/shell-software/fab/pull/16) by [**Aracem**](https://github.com/Aracem))
-
-3. **Attention!** *Deprecated* methods:
+        * **TouchPoint** - an entity class, which contains the information about X- and Y-axis coordinates of the touch point (can't be instantiated).
+		
+7. **Attention!** *Deprecated* methods:
 
 	* **getButtonSize()** renamed to **getSize()**. You can still use **getButtonSize()** method, however it is marked as *deprecated* and will be removed in version 2.0.0.
 
-4. Added checking of the *X* and *Y* touch coordinate
-
+8. Added checking of the *X* and *Y* touch points coordinates
+	
 	* If the touch *X* and *Y* coordinates are not inside the main button circle, the button won't react on click
-	* If the button state is **PRESSED** and touch point moves outside the main circle the button state changes to **NORMAL**
+	* If the button state is **PRESSED** and touch point moves outside the main circle the button state changes to **NORMAL** 
 	([Pull request #14: *Update ActionButton.java*](https://github.com/shell-software/fab/pull/14) by [**uriel-frankel**](https://github.com/uriel-frankel))
 
 
@@ -87,25 +120,27 @@ If any of these libraries are already used in the project they must be excluded 
 
 ### Features in the next versions:
 
-* **1.1.0**:
+* **2.0.0**:
 
-	New features - **confirmed**:
-	* [**issue #2**: ripple effect](https://github.com/shell-software/fab/issues/2)
-	* [**issue #9**: Move button up and down](https://github.com/shell-software/fab/issues/9)
+    1. **API** change. Major refactoring. **Deprecated API** removal.
+    2. New features - **confirmed**:
+		* [**issue #13**: Request - Circular ProgressBar](https://github.com/shell-software/fab/issues/13)
 	
-* **2.0.0**: Action Menu - *TBD* - please <a href="mailto:com.software.shell@gmail.com?subject=[Action Button]: Add Action Menu TBD">send me</a> your propositions.
-
 ## Demo
 
-Watch the [**Full Demo Video**](https://www.youtube.com/watch?v=skSApXvi4xM) on YouTube
+Subscribe the [**ActionButton YouTube Channel**](https://www.youtube.com/channel/UC_ER2kmJfAcGwt6V77i4uGg)
 
 ### Button types
 
-Floating action buttons come in two sizes: the **DEFAULT**, which should be used in most cases, and the **MINI**, which should only be used to create visual continuity with other elements on the screen.
+Floating action buttons come in 3 sizes: 
 
-DEFAULT | MINI
-:-:|:-:
-![Default](https://github.com/shell-software/fab/blob/master/demo/button_type_default.png) | ![Mini](https://github.com/shell-software/fab/blob/master/demo/button_type_mini.png)
+* **DEFAULT (56dp)** - used in most cases
+* **MINI (40dp)** - used to create visual continuity with other elements on the screen
+* **BIG (72dp)** - additional button size, useful for large screens (not covered by Material Design)
+
+DEFAULT | MINI | BIG
+:-:|:-:|:-:
+![Default](https://github.com/shell-software/fab/blob/master/demo/button_type_default.png) | ![Mini](https://github.com/shell-software/fab/blob/master/demo/button_type_mini.png) | ![Big](https://github.com/shell-software/fab/blob/master/demo/button_type_big.png)
 
 ### Color palette
 
@@ -113,13 +148,13 @@ The Library contains all of the colors **500** and **900** of the [**Material Co
 
 Colors **500** are used for the **NORMAL** button state while **900** ones for the **PRESSED** state:
 
-Green 500 | Amber 500 | Blue Grey 500
+Green 500 | Amber 500 | Blue 500
 :-:|:-:|:-:
-![Green 500](https://github.com/shell-software/fab/blob/master/demo/color_green.png) | ![Amber Color](https://github.com/shell-software/fab/blob/master/demo/color_amber.png) | ![Blue Grey](https://github.com/shell-software/fab/blob/master/demo/color_blue_grey.png)
+![Green 500](https://github.com/shell-software/fab/blob/master/demo/color_green.png) | ![Amber Color](https://github.com/shell-software/fab/blob/master/demo/color_amber.png) | ![Blue Grey](https://github.com/shell-software/fab/blob/master/demo/color_blue.png)
 
 ### Shadow
 
-Shadow is **enabled** by default and has standard settings. These settings are suitable in most cases. However, shadow can be modified in three ways: *radius*, *X-* or *Y-axis offset* and *color*.
+Shadow is **enabled** by default and has standard settings according to [Material Design Guidelines](http://www.google.com/design/spec/what-is-material/objects-in-3d-space.html). These settings are suitable in most cases. However, shadow can be modified in three ways: *radius*, *X-* or *Y-axis offset* and *color*.
 
 Default | Radius | X- and Y- axis offset
 :-:|:-:|:-:
@@ -134,6 +169,29 @@ Thin | Medium | Thick
 :-:|:-:|:-:
 ![Thin Stroke](https://github.com/shell-software/fab/blob/master/demo/stroke_thin.png) | ![Medium Stroke](https://github.com/shell-software/fab/blob/master/demo/stroke_medium.png) | ![Thick Stroke](https://github.com/shell-software/fab/blob/master/demo/stroke_thick.png)
 
+### Effects
+
+#### Shadow Responsive Effect
+
+Shadow Responsive Effect means that shadow is changed in response to user input.
+Shadow Responsive Effect **enabled** by default.
+
+#### Ripple Effect
+
+A touch Ripple Effect indicates where and when a touch occurs within the **ActionButton** and acknowledges that the touch input was received.
+Ripple Effect **disabled** by default.
+
+Shadow Responsive Effect | Ripple Effect
+:-:|:-:
+![Shadow Responsive Effect](https://github.com/shell-software/fab/blob/master/demo/shadow_responsive_effect.gif) | ![Ripple Effect](https://github.com/shell-software/fab/blob/master/demo/ripple_effect.gif)
+
+### Moving
+
+**ActionButton** can be moved in any direction. [ViewMover Library](https://github.com/shell-software/viewmover) is used for performing the **ActionButton** moving
+
+Left-Right Move | Up-Down Move
+:-:|:-:
+![Left-Right Move](https://github.com/shell-software/fab/blob/master/demo/move_left_right.gif) | ![Up-Down Move](https://github.com/shell-software/fab/blob/master/demo/move_up_down.gif)
 
 ### Animations
 
@@ -192,6 +250,8 @@ ActionButton actionButton = new ActionButton(context);
 
 ### Button actions
 
+#### Showing and Hiding
+
 **Action Button** can be *shown*, *hidden* or completely *dismissed*:
 
 ```java
@@ -215,6 +275,8 @@ boolean hidden = actionButton.isHidden();
 boolean dismissed = actionButton.isDismissed();
 ```
 
+#### Playing animations
+
 There are some cases when you need to force playing the animation without calling the **show()**, **hide()** or **dismiss()** methods. 
 For instance, when your button appears within layout in the Activity for the first time. 
 In such cases animations can be played apart from *showing*, *hiding*, or *dismissing* the button:
@@ -224,41 +286,49 @@ actionButton.playShowAnimation();   // plays the show animation
 actionButton.playHideAnimation();   // plays the hide animation
 ```
 
+> Animations are played only if set. By default animations are not set.
+
+#### Moving ActionButton
+
 **ActionButton** can be moved within its parent container. While moving, translate animation is used.
-There are simple methods to move the **Action Button** in a single direction:
+There are methods for moving **ActionButton** in 4 standard directions:
 
 ```java
-// Move right to a 100.0f distance:
-actionButton.moveRight(100.0f);
+// Initialize the moving distance
+int distance = 100.0f // in density-independent pixels
 
-// Move down to a 100.0f distance:
-actionButton.moveDown(100.0f);
+// Move ActionButton left
+actionButton.moveLeft(distance);
 
-// Move left to a 100.0f distance:
-actionButton.moveLeft(100.0f);
+// Move ActionButton up
+actionButton.moveUp(distance);
 
-// Move up to a 100.0f distance:
-actionButton.moveUp(100.0f);
+// Move ActionButton right
+actionButton.moveRight(distance);
+
+// Move ActionButton down
+actionButton.moveDown(distance);
 ```
 
-The above methods will cover the most cases, however there is a one more method, which allows to perform a more customizable movement:
+The above methods will cover the most cases, however movement can also be customized in more advanced way:
 
 ```java
-// Create parameters
-Context context = getContext();
-int rightDistance = 300.0f;
-int downDistance = 300.0f;
-long animationDuration = 1000;
+// Initialize the moving parameters
+int xAxisDelta = 100.0f // in density-independent pixels
+int yAxisDelta = 100.0f // in density-independent pixels
+long animationDuration = 500L
 Interpolator animationInterpolator = new AccelerateInterpolator();
 
-// Create MovingDetails object with distances, animation duration and animation interpolator
-MovingDetails details = new MovingDetails(context, rightDistance, upDistance, animationDuration, animationInterpolator);
+// Create the moving parameters instance
+MovingParams params = new MovingParams(getContext(), xAxisDelta, yAxisDelta, animationDuration, animationInterpolator);
 
-// Move the Action Button according to moving details:
-actionButton.move(details);
+// Move the ActionButton
+actionButton.move(params);
 ```
 
-> Animations are played only if set. By default animations are not set.
+> [ViewMover Library](https://github.com/shell-software/viewmover) is used for performing the **ActionButton** moving.
+>
+> For API lower than **Jelly Bean** *(version code 16)* moving is guaranteed to work as expected with **FrameLayout** and **RelativeLayout**. Working as expected with other layouts **not guaranteed**
 
 ### Customization
 
@@ -281,6 +351,22 @@ actionButton.setType(ActionButton.Type.MINI);
 // To get the button type:
 ActionButton.Type type = actionButton.getType();
 ```
+
+#### Button size
+
+To work with **ActionButton** size use:
+
+```java
+// To get the ActionButton size
+float size = actionButton.getSize();
+
+// To set the ActionButton size
+actionButton.setSize(60.0f); // in density-independent pixels
+```
+
+> Changing the default size of the button *breaks the rules* of [**Material Design**](http://www.google.com/design/spec/components/buttons.html)
+>
+> Setting the button size explicitly means, that button types with its default sizes are **completely ignored**. Do not use this method, unless you know what you are doing
 	
 #### Button states
 
@@ -304,9 +390,9 @@ ActionButton.State state = actionButton.getState();
 Button colors can be set as for the **NORMAL** state, so for the **PRESSED** one. 
 By default the following colors are set:
 
-* **Color.LTGRAY** for the **NORMAL** state
-* **Color.DKGRAY** for the **PRESSED** state
-	
+* **#FF9B9B9B** for the **NORMAL** state
+* **#FF696969** for the **PRESSED** state
+
 To work with button colors use:
 
 ```java
@@ -328,10 +414,10 @@ int buttonColorPressed = actionButton.getButtonColorPressed();
 Shadow can be customized in three ways: *color*, *radius* and *offset*.
 By default shadow is **enabled** and has the following default values:
 	
-* **shadowColor** = **#757575** (~ middle-grey)
-* **shadowRadius** = **2.0f**   (in density-independent pixels)
-* **shadowXOffset** = **1.0f**  (in density-independent pixels)
-* **shadowYOffset** = **1.5f**  (in density-independent pixels)
+* **shadowColor** = **#42000000** (~ light-grey)
+* **shadowRadius** = **8.0f**   (in density-independent pixels)
+* **shadowXOffset** = **0.0f**  (in density-independent pixels)
+* **shadowYOffset** = **8.0f**  (in density-independent pixels)
 
 To work with shadow use:
 
@@ -368,7 +454,7 @@ actionButton.removeShadow();
 ```
 
 > Shadow radius and offset must be specified in density-independent pixels.
-
+>
 > For *API 21 Lollipop* and higher **elevation** can be enabled. In this case the default shadow becomes disabled and configuration of any of its parameters will be ignored.
 
 #### Image
@@ -414,7 +500,7 @@ Stroke can be customized in two ways: *width* and the *color*. Stroke is **disab
 To work with stroke use:
 
 ```java
-// To check whether stroke is enabled:
+// To check whether stroke enabled:
 boolean hasStroke = actionButton.hasStroke();
 
 // To set stroke color:
@@ -434,6 +520,52 @@ actionButton.removeStroke();
 ```
 
 > Stroke width must be specified in density-independent pixels
+
+#### Effects
+
+##### Shadow Responsive Effect
+
+Shadow Responsive Effect means that shadow is changed in response to the user input. When user clicks the button and holds it, shadow radius increased to a certain value. Then, when user releases the button, shadow radius decreased to its initial value.
+Shadow Responsive Effect **enabled** by default.
+
+To work with the Shadow Responsive Effect use:
+
+```java
+// To check whether Shadow Responsive Effect enabled:
+boolean shadowResponsiveEffectEnabled = actionButton.isShadowResponsiveEffectEnabled();
+
+//To enable or disable Shadow Responsive Effect:
+actionButton.setShadowResponsiveEffectEnabled(true);
+actionButton.setShadowResponsiveEffectEnabled(false);
+```
+
+> For *API 21 Lollipop* and higher **elevation** can be enabled. Shadow Responsive Effect won't be available in this case.
+>
+> Shadow maximum radius value is calculated by multiplying the shadow initial radius and shadow response factor, which is by default 1.75f. Shadow response factor can't be changed.
+>
+> Note, that having Shadow Responsive Effect enabled leads to **increasing** of the **ActionButton** general view size. In this case view size calculated based on the maximum value of the shadow radius. This means, that event if there is a place near the **ActionButton** unfilled, it is actually used by Shadow Responsive Effect
+
+##### Ripple Effect
+
+A touch Ripple Effect indicates where and when a touch occurs within the **ActionButton** and acknowledges that the touch input was received.
+Ripple Effect **disabled** by default. Ripple Effect color by default is a darken variant (***20%*** darker) of the color for the **PRESSED** state
+
+To work with Ripple Effect use:
+
+```java
+// To check whether Ripple Effect enabled:
+boolean rippleEffectEnabled = actionButton.isRippleEffectEnabled();
+
+// To enable or disable Ripple Effect:
+actionButton.setRippleEffectEnabled(true);
+actionButton.setRippleEffectEnabled(false);
+
+// To set button color ripple:
+actionButton.setButtonColorRipple(getResources().getColor(R.color.fab_material_grey_900));
+
+// To get button color ripple:
+int buttonColorRipple = actionButton.getButtonColorRipple();
+```
 
 #### Animations
 
@@ -491,6 +623,9 @@ Then refer the added namespace to configure **Action Button** parameters
             fab:shadow_yOffset="1.0dp"
             fab:stroke_color="@color/fab_material_blue_grey_500"
             fab:stroke_width="1.0dp"
+            fab:button_colorRipple="@color/fab_material_black"
+            fab:rippleEffect_enabled="false"
+            fab:shadowResponsiveEffect_enabled="true"
             fab:show_animation="@anim/fab_roll_from_down"
             fab:hide_animation="@anim/fab_roll_to_down"
             />
@@ -518,5 +653,7 @@ Then refer the added namespace to configure **Action Button** parameters
 
 ## Shell Software Inc. links
 
-* [Google+](https://plus.google.com/112119444427380215269)
-* [Twitter Page](https://twitter.com/shell_software)
+* [ActionButton Google+ Page](https://plus.google.com/b/104319136856457489585/104319136856457489585/posts)
+* [ActionButton YouTube Channel](https://www.youtube.com/channel/UC_ER2kmJfAcGwt6V77i4uGg)
+* [Shell Software Google+ Page](https://plus.google.com/112119444427380215269)
+* [Shell Software Twitter Page](https://twitter.com/shell_software)

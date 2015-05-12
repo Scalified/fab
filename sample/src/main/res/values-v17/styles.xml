@@ -37,7 +37,7 @@
 	
 	<!--RadioButton-->
 	<style name="fab_radiobutton_horizontal_next_style" parent="fab_radiogroup_base_style">
-		<item name="android:layout_marginLeft">@dimen/fab_radiobutton_horizontal_left_start_margin</item>
+		<item name="android:layout_marginStart">@dimen/fab_radiobutton_horizontal_left_start_margin</item>
 	</style>
 
 	<!--SeekBar-->

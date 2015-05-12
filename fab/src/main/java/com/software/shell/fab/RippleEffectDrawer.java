@@ -25,18 +25,18 @@ import android.graphics.Region;
 import android.util.Log;
 
 /**
- * A class responsible for drawing the <b>Action Button</b> ripple effect
+ * A class responsible for drawing the <b>Action Button</b> Ripple Effect
  *
  * @author shell
  * @version 1.1.0
  * @since 1.1.0
  */
-class RippleDrawer {
+class RippleEffectDrawer extends EffectDrawer {
 
 	/**
 	 * Logging tag
 	 */
-	private static final String LOG_TAG = String.format("[FAB][%s]", RippleDrawer.class.getSimpleName());
+	private static final String LOG_TAG = String.format("[FAB][%s]", RippleEffectDrawer.class.getSimpleName());
 
 	/**
 	 * Default value, which current {@link #currentRadius} is incremented by
@@ -49,34 +49,17 @@ class RippleDrawer {
 	private static final long POST_INVALIDATION_DELAY_MS = 100;
 
 	/**
-	 * <b>Action Button</b> instance
-	 */
-	private final ActionButton actionButton;
-
-	/**
-	 * Current ripple effect radius
+	 * Current Ripple Effect radius
 	 */
 	private int currentRadius;
 
 	/**
-	 * Creates the {@link RippleDrawer} instance
+	 * Creates the {@link RippleEffectDrawer} instance
 	 *
 	 * @param actionButton <b>Action Button</b> instance
 	 */
-	RippleDrawer(ActionButton actionButton) {
-		this.actionButton = actionButton;
-	}
-
-	/**
-	 * Checks whether <b>Action Button</b> is in
-	 * {@link com.software.shell.fab.ActionButton.State#PRESSED} state
-	 *
-	 * @return true if <b>Action Button</b> is in
-	 *         {@link com.software.shell.fab.ActionButton.State#PRESSED} state,
-	 *         otherwise false
-	 */
-	boolean isPressed() {
-		return actionButton.getState() == ActionButton.State.PRESSED;
+	RippleEffectDrawer(ActionButton actionButton) {
+		super(actionButton);
 	}
 
 	/**
@@ -98,16 +81,16 @@ class RippleDrawer {
 	}
 
 	/**
-	 * Returns the end ripple effect radius
+	 * Returns the end Ripple Effect radius
 	 *
-	 * @return end ripple radius
+	 * @return end Ripple Effect radius
 	 */
 	private int getEndRippleRadius() {
-		return (int) (actionButton.calculateCircleRadius() * 2);
+		return (int) (getActionButton().calculateCircleRadius() * 2);
 	}
 
 	/**
-	 * Updates the ripple effect {@link #currentRadius}
+	 * Updates the Ripple Effect {@link #currentRadius}
 	 */
 	private void updateRadius() {
 		if (isPressed()) {
@@ -125,36 +108,36 @@ class RippleDrawer {
 	}
 
 	/**
-	 * Performs the entire ripple effect drawing frame by frame animating the process
+	 * Performs the entire Ripple Effect drawing frame by frame animating the process
 	 * <p>
 	 * Calls the {@link ActionButton#postInvalidate()} after each {@link #currentRadius} update
 	 * to draw the current frame animating the ripple effect drawing
 	 *
-	 * @param canvas canvas, which the ripple effect is drawing on
+	 * @param canvas canvas, which the Ripple Effect is drawing on
 	 */
 	void draw(Canvas canvas) {
 		updateRadius();
 		drawRipple(canvas);
-		Invalidator invalidator = actionButton.getInvalidator();
+		ViewInvalidator invalidator = getActionButton().getInvalidator();
 		if (isDrawingInProgress()) {
-			invalidator.setInvalidationRequired(true);
-			Log.v(LOG_TAG, "Ripple effect drawing in progress, invalidating the Action Button");
+			invalidator.requireInvalidation();
+			Log.v(LOG_TAG, "Ripple Effect drawing in progress, invalidating the Action Button");
 		} else if (isDrawingFinished() && !isPressed()) {
-			invalidator.setInvalidationDelayedRequired(true);
+			invalidator.requireDelayedInvalidation();
 			invalidator.setInvalidationDelay(POST_INVALIDATION_DELAY_MS);
-			Log.v(LOG_TAG, "Ripple effect drawing finished, posting the last invalidate");
+			Log.v(LOG_TAG, "Ripple Effect drawing finished, posting the last invalidate");
 		}
 	}
 
 	/**
-	 * Draws the single frame of the ripple effect depending on ripple effect
+	 * Draws the single frame of the Ripple Effect depending on Ripple Effect
 	 * {@link #currentRadius}
 	 *
-	 * @param canvas canvas, which the ripple effect is drawing on
+	 * @param canvas canvas, which the Ripple Effect is drawing on
 	 */
 	private void drawRipple(Canvas canvas) {
 		canvas.clipPath(getCircleClipPath(), Region.Op.INTERSECT);
-		TouchPoint point = actionButton.getTouchPoint();
+		TouchPoint point = getActionButton().getTouchPoint();
 		canvas.drawCircle(point.getLastX(), point.getLastY(), currentRadius, getPreparedPaint());
 		canvas.restore();
 	}
@@ -167,21 +150,21 @@ class RippleDrawer {
 	 */
 	private Path getCircleClipPath() {
 		Path path = new Path();
-		path.addCircle(actionButton.calculateCenterX(), actionButton.calculateCenterY(),
-				actionButton.calculateCircleRadius(), Path.Direction.CW);
+		path.addCircle(getActionButton().calculateCenterX(), getActionButton().calculateCenterY(),
+				getActionButton().calculateCircleRadius(), Path.Direction.CW);
 		return path;
 	}
 
 	/**
-	 * Returns the paint, which is prepared for ripple effect drawing
+	 * Returns the paint, which is prepared for Ripple Effect drawing
 	 *
-	 * @return paint, which is prepared for ripple effect drawing
+	 * @return paint, which is prepared for Ripple Effect drawing
 	 */
 	private Paint getPreparedPaint() {
-		actionButton.resetPaint();
-		Paint paint = actionButton.paint;
+		getActionButton().resetPaint();
+		Paint paint = getActionButton().getPaint();
 		paint.setStyle(Paint.Style.FILL);
-		paint.setColor(actionButton.getButtonColorRipple());
+		paint.setColor(getActionButton().getButtonColorRipple());
 		return paint;
 	}
 

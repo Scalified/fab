@@ -1,58 +1,68 @@
 # 1.1.0
 
-1. Added ripple effect - [**issue #2: ripple effect**](https://github.com/shell-software/fab/issues/2). Disabled by default.
+Watch [Demo Video about new features](https://www.youtube.com/watch?v=7GHAcX2myh8)
+
+1. Added Ripple Effect - [**issue #2: ripple effect**](https://github.com/shell-software/fab/issues/2). Disabled by default.
 See [**README.md**](https://github.com/shell-software/fab/blob/master/README.md) for more info
 
-2. Added possibility to move the **Action Button** - [**issue #9: Move button up and down**](https://github.com/shell-software/fab/issues/9). 
+2. Added Shadow Responsive Effect - [**issue #11: Question - Pressed State**](https://github.com/shell-software/fab/issues/11). Enabled by default.
 See [**README.md**](https://github.com/shell-software/fab/blob/master/README.md) for more info
 
-3. **Action Button** now has a dependency on an external [**ViewMover**](https://github.com/shell-software/view-mover) library. 
+3. Added possibility to move the **Action Button** - [**issue #9: Move button up and down**](https://github.com/shell-software/fab/issues/9). 
+See [**README.md**](https://github.com/shell-software/fab/blob/master/README.md) for more info
+
+4. **Action Button** now has a dependency on an external [**ViewMover**](https://github.com/shell-software/view-mover) library. 
 If it is used already in the project it must be excluded as a transitive dependency
 
-4. Changed the **Action Button** default values:
+5. Changed the **Action Button** default values:
 
 	1. Button default color for **NORMAL** state changed from **Color.LTGRAY** to **#FF9B9B9B**
     2. Button default color for **PRESSED** state changed from **Color.DKGRAY** to **#FF696969**
+    3. Shadow default color changed from **#757575** to **#42000000** according to Material Design Guidelines
+    4. Shadow default radius changed from **2.0f** to **8.0f** (in density-independent pixels)
+    5. Shadow default X-axis offset changed from **1.0f** to **0.0f** (in density-independent pixels)
+    6. Shadow default Y-axis offset changed from **1.5f** to **8.0f** (in density-independent pixels)
 
-5. **New** public methods, classes and attributes:
+6. **New** public methods, classes and attributes:
 
 	1. Methods:
 
 		* **setSize(float)** - sets the size of the **Action Button** (in density-independent pixels).
-		Changing the default size of the button breaks the rules of <a href="http://www.google.com/design/spec/components/buttons.html">Material Design</a>.
+		Changing the default size of the button breaks the rules of [Material Design](http://www.google.com/design/spec/components/buttons.html).
 	    Setting the button size explicitly means, that button types with its default sizes are completely ignored. Do not use this method, unless you know what you are doing
 		* **getSize()** - returns the size of the **Action Button** in real pixels (the same as **getButtonSize()**, which is now marked as *deprecated*).
-		* **move(MovingDetails)** - moves the **Action Button** to the specified position obtained from **MovingDetails** object
+		* **move(MovingParams)** - moves the **Action Button** to the specified position obtained from **MovingParams** object
 		* **moveRight(float)** - moves the **Action Button** right to a specified distance (in density-independent pixels)
 		* **moveDown(float)** - moves the **Action Button** down to a specified distance (in density-independent pixels)
 		* **moveLeft(float)** - moves the **Action Button** left to a specified distance (in density-independent pixels)
 		* **moveUp(float)** - moves the **Action Button** up to a specified distance (in density-independent pixels)
-		* **hasRipple()** - checks whether **Action Button** ripple effect enabled
-		* **setRippleEffectEnabled(boolean)** - toggles the ripple effect state
-		* **getButtonColorRipple()** - returns the **Action Button** ripple effect color
-		* **setButtonColorRipple(int)** - sets the **Action Button** ripple effect color
+		* **isRippleEffectEnabled()** - checks whether **Action Button** Ripple Effect enabled
+		* **setRippleEffectEnabled(boolean)** - toggles the Ripple Effect state
+		* **getButtonColorRipple()** - returns the **Action Button** Ripple Effect color
+		* **setButtonColorRipple(int)** - sets the **Action Button** Ripple Effect color
+		* **isShadowResponsiveEffectEnabled()** - returns whether Shadow Responsive Effect enabled
+		* **setShadowResponsiveEffectEnabled(boolean)** - sets the Shadow Responsive Effect
 		* **getTouchPoint()** - returns the **Action Button** touch point
-		* **setTouchPoint(TouchPoint)** - sets the **Action Button** touch point
-	
+			
 	2. XML attributes:
 	
 		* **size** - dimension, declares the button size (the same as **setSize(float)**)
 		* **BIG** - enum (value **2**), declares the **Action Button** **BIG** type, which has the size of **72.0dp** (the same as **setType(ActionButton.Type.BIG)**)
-		* **rippleEffect_enabled** - boolean, enables the **Action Button** ripple effect (the same as **setRippleEffectEnabled(boolean)**)
-		* **button_colorRipple** - color, declares the **Action Button** ripple effect color (the same as **setButtonColorRipple(int)**)
+		* **rippleEffect_enabled** - boolean, enables the **Action Button** Ripple Effect (the same as **setRippleEffectEnabled(boolean)**)
+		* **button_colorRipple** - color, declares the **Action Button** Ripple Effect color (the same as **setButtonColorRipple(int)**)
+		* **shadowResponsiveEffect_enabled** - boolean, enables the **Action Button** Shadow Responsive Effect (the same as **setShadowResponsiveEffectEnabled(boolean)**)
 		
 	3. Classes:
 	
 		* added new **Action Button** type - **ActionButton.Type.BIG**, which has a size of ***72*** density-independent pixels. Also added a correspondent value **BIG** to **type** XML attribute
 		([Pull request #16: *Added BIG size, 72dp size for fab buttons, Fix MOVE feedback, update gitignore*](https://github.com/shell-software/fab/pull/16) by [**Aracem**](https://github.com/Aracem))
         * **TouchPoint** - an entity class, which contains the information about X- and Y-axis coordinates of the touch point (can't be instantiated).
-        * **RippleDrawer** - a class responsible for drawing the **Action Button** ripple effect
 		
-6. **Attention!** *Deprecated* methods:
+7. **Attention!** *Deprecated* methods:
 
 	* **getButtonSize()** renamed to **getSize()**. You can still use **getButtonSize()** method, however it is marked as *deprecated* and will be removed in version 2.0.0.
 
-7. Added checking of the *X* and *Y* touch points coordinates
+8. Added checking of the *X* and *Y* touch points coordinates
 	
 	* If the touch *X* and *Y* coordinates are not inside the main button circle, the button won't react on click
 	* If the button state is **PRESSED** and touch point moves outside the main circle the button state changes to **NORMAL** 
@@ -104,7 +114,7 @@ If it is used already in the project it must be excluded as a transitive depende
     1. Classes:
 
     	* **FloatingActionButton** class renamed to **ActionButton** class.
-        You can still use **FloatingActionButton** class, however it is marked as *deprecated* and wiil be removed in version 2.0.0.
+        You can still use **FloatingActionButton** class, however it is marked as *deprecated* and will be removed in version 2.0.0.
 
 	2. Public methods in **ActionButton** **(FloatingActionButton)** class:
 
@@ -150,4 +160,4 @@ If it is used already in the project it must be excluded as a transitive depende
 
 # 1.0.0
 
-1. The first release! Everything is new.
+1. The first release! Everything is new. Watch [Full Demo Video](https://www.youtube.com/watch?v=bIT_LAZoukg)

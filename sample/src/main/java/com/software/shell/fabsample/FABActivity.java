@@ -32,7 +32,7 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 import com.software.shell.uitools.convert.DensityConverter;
 import com.software.shell.uitools.resutils.id.IdGenerator;
-import com.software.shell.viewmover.configuration.MovingDetails;
+import com.software.shell.viewmover.configuration.MovingParams;
 
 import java.util.Set;
 
@@ -58,6 +58,7 @@ public class FABActivity extends Activity {
 	private SeekBar shadowYOffsetSeekBar;
 	private CheckBox defaultIconPlusCheckBox;
 	private CheckBox rippleEffectEnabledCheckBox;
+	private CheckBox shadowResponsiveEffectEnabledCheckBox;
 	private RadioGroup buttonColorsRadioGroup;
 	private RadioGroup strokeColorRadioGroup;
 	private SeekBar strokeWidthSeekBar;
@@ -76,6 +77,7 @@ public class FABActivity extends Activity {
 		initShadowYOffsetSeekBar();
 		initDefaultIconPlusCheckBox();
 		initRippleEffectEnabledCheckBox();
+		initShadowResponsiveEffectEnabledCheckBox();
 		initButtonBehaviorRadioGroup();
 		initButtonColorsRadioGroup();
 		initStrokeColorRadioGroup();
@@ -135,8 +137,16 @@ public class FABActivity extends Activity {
 
 	private void initRippleEffectEnabledCheckBox() {
 		rippleEffectEnabledCheckBox = (CheckBox) findViewById(R.id.fab_activity_checkbox_ripple_effect_enabled);
-		rippleEffectEnabledCheckBox.setChecked(actionButton.hasRipple());
+		rippleEffectEnabledCheckBox.setChecked(actionButton.isRippleEffectEnabled());
 		rippleEffectEnabledCheckBox.setOnCheckedChangeListener(new RippleEffectEnabledChangeListener());
+	}
+
+	private void initShadowResponsiveEffectEnabledCheckBox() {
+		shadowResponsiveEffectEnabledCheckBox =
+				(CheckBox) findViewById(R.id.fab_activity_checkbox_shadow_responsive_effect_enabled);
+		shadowResponsiveEffectEnabledCheckBox.setChecked(actionButton.isShadowResponsiveEffectEnabled());
+		shadowResponsiveEffectEnabledCheckBox
+				.setOnCheckedChangeListener(new ShadowResponsiveEffectEnabledChangeListener());
 	}
 	
 	private void initButtonBehaviorRadioGroup() {
@@ -235,7 +245,7 @@ public class FABActivity extends Activity {
 		return new Runnable() {
 			@Override
 			public void run() {
-				actionButton.move(new MovingDetails(FABActivity.this, 0, MOVE_DISTANCE));
+				actionButton.move(new MovingParams(FABActivity.this, 0, MOVE_DISTANCE));
 			}
 		};
 	}
@@ -244,7 +254,7 @@ public class FABActivity extends Activity {
 		return new Runnable() {
 			@Override
 			public void run() {
-				actionButton.move(new MovingDetails(FABActivity.this, MOVE_DISTANCE, 0));
+				actionButton.move(new MovingParams(FABActivity.this, MOVE_DISTANCE, 0));
 			}
 		};
 	}
@@ -360,6 +370,17 @@ public class FABActivity extends Activity {
 		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 			if (rippleEffectEnabledCheckBox.equals(buttonView)) {
 				actionButton.setRippleEffectEnabled(isChecked);
+			}
+		}
+
+	}
+
+	class ShadowResponsiveEffectEnabledChangeListener implements CheckBox.OnCheckedChangeListener {
+
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			if (shadowResponsiveEffectEnabledCheckBox.equals(buttonView)) {
+				actionButton.setShadowResponsiveEffectEnabled(isChecked);
 			}
 		}
 

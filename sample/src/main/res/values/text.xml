@@ -80,5 +80,6 @@
 	<!--CheckBox-->
 	<string name="fab_checkbox_default_icon_plus_text">Default icon plus</string>
 	<string name="fab_checkbox_ripple_effect_enabled_text">Ripple effect enabled</string>
+	<string name="fab_checkbox_shadow_responsive_effect_enabled_text">Shadow Responsive effect enabled</string>
 
 </resources>
