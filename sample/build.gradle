@@ -34,6 +34,7 @@ allprojects {
 
 	repositories {
 		jcenter()
+		mavenCentral()
 	}
 
 }
@@ -60,6 +61,6 @@ android {
 }
 
 dependencies {
-	compile 'com.android.support:appcompat-v7:22.1.1' // Used only for application theme
+	compile 'com.android.support:appcompat-v7:21.0.+' // Used only for application theme
 	compile project(':fab')
 }
