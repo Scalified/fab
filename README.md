@@ -33,6 +33,8 @@ If any of these libraries are already used in the project they must be excluded 
 
 # 1.1.0
 
+Watch [Demo Video about new features](https://www.youtube.com/watch?v=7GHAcX2myh8)
+
 1. Added Ripple Effect - [**issue #2: ripple effect**](https://github.com/shell-software/fab/issues/2). Disabled by default.
 See [**README.md**](https://github.com/shell-software/fab/blob/master/README.md) for more info
 
