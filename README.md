@@ -653,9 +653,10 @@ Then refer the added namespace to configure **Action Button** parameters
   limitations under the License.
 ```
 
-## Shell Software Inc. links
+## Shell Software Inc. Links
 
 * [ActionButton Google+ Page](https://plus.google.com/b/104319136856457489585/104319136856457489585/posts)
 * [ActionButton YouTube Channel](https://www.youtube.com/channel/UC_ER2kmJfAcGwt6V77i4uGg)
-* [Shell Software Google+ Page](https://plus.google.com/112119444427380215269)
-* [Shell Software Twitter Page](https://twitter.com/shell_software)
+* [Shell Software Inc. Google+ Official Page](https://plus.google.com/112119444427380215269)
+* <a href="mailto:com.software.shell@gmail.com?subject=[FAB]: Proposals And Suggestions">Shell Software Inc. Gmail</a>
+* [Shell Software Inc. Twitter Official Page](https://twitter.com/shell_software)
