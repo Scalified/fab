@@ -1,3 +1,10 @@
+# 1.1.1
+
+1. Fixed [**issue #27**: Icon is outside the circle](https://github.com/shell-software/fab/issues/27):
+
+	A call to **Canvas.restore()** without calling the **Canvas.save()** first resulted in the unpredictable behaviour.
+	Added call to **Canvas.save()** before **Canvas.restore()** in the **RippleEffectDrawer** class
+
 # 1.1.0
 
 Watch [Demo Video about new features](https://www.youtube.com/watch?v=7GHAcX2myh8)

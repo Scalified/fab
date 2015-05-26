@@ -136,6 +136,7 @@ class RippleEffectDrawer extends EffectDrawer {
 	 * @param canvas canvas, which the Ripple Effect is drawing on
 	 */
 	private void drawRipple(Canvas canvas) {
+		canvas.save();
 		canvas.clipPath(getCircleClipPath(), Region.Op.INTERSECT);
 		TouchPoint point = getActionButton().getTouchPoint();
 		canvas.drawCircle(point.getLastX(), point.getLastY(), currentRadius, getPreparedPaint());

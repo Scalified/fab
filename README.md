@@ -18,7 +18,7 @@ The Library requires **Android SDK version 9 (Gingerbread)** and higher.
 
 ```java
 dependencies {
-	compile 'com.github.shell-software:fab:1.1.0'
+	compile 'com.github.shell-software:fab:1.1.1'
 }
 ```
 
@@ -29,9 +29,14 @@ If any of these libraries are already used in the project they must be excluded 
 
 [**Full ChangeLog**](https://github.com/shell-software/fab/blob/master/CHANGELOG.md)
 
-### 1.1.0 - *current*
+### 1.1.1 - *current*
 
-# 1.1.0
+1. Fixed [**issue #27**: Icon is outside the circle](https://github.com/shell-software/fab/issues/27):
+
+	A call to **Canvas.restore()** without calling the **Canvas.save()** first resulted in the unpredictable behaviour.
+	Added call to **Canvas.save()** before **Canvas.restore()** in the **RippleEffectDrawer** class
+
+### 1.0.5 - *previous*
 
 Watch [Demo Video about new features](https://www.youtube.com/watch?v=7GHAcX2myh8)
 
@@ -100,25 +105,6 @@ If it is used already in the project it must be excluded as a transitive depende
 	* If the touch *X* and *Y* coordinates are not inside the main button circle, the button won't react on click
 	* If the button state is **PRESSED** and touch point moves outside the main circle the button state changes to **NORMAL** 
 	([Pull request #14: *Update ActionButton.java*](https://github.com/shell-software/fab/pull/14) by [**uriel-frankel**](https://github.com/uriel-frankel))
-
-
-### 1.0.5 - *previous*
-
-1. Fixed [**issue #12**: Lollipop elevation disable shadow](https://github.com/shell-software/fab/issues/12):
-
-	The fix enables elevation on devices with **API 21 Lollipop** and higher. Now if elevation is set and the device *API* meets requirements (has *API 21 Lollipop* and higher) elevation will be drawn instead of the default shadow.
-	In this case configuration of any of the default shadow's parameters will be ignored.
-	Previously elevation was not drawn for such devices if set.
-
-  A fix was applied to:
-
-  * **hasShadow()** method: now if **Action Button** has elevation enabled (for *API 21 Lollipop* and higher) the shadow won't be drawn at all
-  * **calculateCenterX()** method: **getWidth()** method replaced by **getMeasuredWidth()** to calculate *X-axis* coordinate
-  * **calculateCenterY()** method: **getHeight()** method replaced by **getMeasuredHeight()** is used to calculate *Y-axis* coordinate
-
-  New methods added:
-
-  * **drawElevation()**: protected void method, which is called by **onDraw(Canvas)** to draw the elevation for *API 21 Lollipop* devices and higher
 
 ### Features in the next versions:
 
