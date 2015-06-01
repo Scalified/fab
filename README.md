@@ -36,7 +36,7 @@ If any of these libraries are already used in the project they must be excluded 
 	A call to **Canvas.restore()** without calling the **Canvas.save()** first resulted in the unpredictable behaviour.
 	Added call to **Canvas.save()** before **Canvas.restore()** in the **RippleEffectDrawer** class
 
-### 1.0.5 - *previous*
+### 1.1.0 - *previous*
 
 Watch [Demo Video about new features](https://www.youtube.com/watch?v=7GHAcX2myh8)
 
