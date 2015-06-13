@@ -14,9 +14,20 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~
-  ~ File created: 2015-06-13 14:22:01
+  ~ File created: 2015-06-07 21:40:52
   -->
 
-<lint>
-	<issue id="UnusedResources" severity="ignore" />
-</lint>
+<configuration>
+	<appender name="LOGCAT" class="ch.qos.logback.classic.android.LogcatAppender">
+		<tagEncoder>
+			<pattern>%logger{0}</pattern>
+		</tagEncoder>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] [%logger{0}] - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<root level="TRACE" additivity="false">
+		<appender-ref ref="LOGCAT" />
+	</root>
+</configuration>

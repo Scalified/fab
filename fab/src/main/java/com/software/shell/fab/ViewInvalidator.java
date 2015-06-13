@@ -20,6 +20,8 @@ package com.software.shell.fab;
 
 import android.util.Log;
 import android.view.View;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Used to invalidate the view
@@ -34,9 +36,9 @@ import android.view.View;
 class ViewInvalidator {
 
 	/**
-	 * Logging tag
+	 * Logger
 	 */
-	private static final String LOG_TAG = String.format("[FAB][%s]", ViewInvalidator.class.getSimpleName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(ViewInvalidator.class);
 
 	/**
 	 * Indicates whether invalidation required
@@ -82,7 +84,7 @@ class ViewInvalidator {
 	 */
 	void requireInvalidation() {
 		this.invalidationRequired = true;
-		Log.v(LOG_TAG, "Invalidation required set");
+		LOGGER.trace("Set invalidation required");
 	}
 
 	/**
@@ -99,7 +101,7 @@ class ViewInvalidator {
 	 */
 	void requireDelayedInvalidation() {
 		this.invalidationDelayedRequired = true;
-		Log.v(LOG_TAG, "Delayed invalidation required set");
+		LOGGER.trace("Set delayed invalidation required");
 	}
 
 	/**
@@ -126,11 +128,11 @@ class ViewInvalidator {
 	void invalidate() {
 		if (isInvalidationRequired()) {
 			view.postInvalidate();
-			Log.v(LOG_TAG, "View invalidation called");
+			LOGGER.trace("Called view invalidation");
 		}
 		if (isInvalidationDelayedRequired()) {
 			view.postInvalidateDelayed(getInvalidationDelay());
-			Log.v(LOG_TAG, "View delay invalidation called. Delay time is: " + getInvalidationDelay());
+			LOGGER.trace("Called view delayed invalidation. Delay time is: {}", getInvalidationDelay());
 		}
 		reset();
 	}
@@ -142,7 +144,7 @@ class ViewInvalidator {
 		invalidationRequired = false;
 		invalidationDelayedRequired = false;
 		setInvalidationDelay(0L);
-		Log.v(LOG_TAG, "View invalidator configuration reset");
+		LOGGER.trace("Reset the view invalidator configuration");
 	}
 
 }

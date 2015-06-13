@@ -20,6 +20,8 @@ package com.software.shell.fab;
 
 import android.graphics.Canvas;
 import android.util.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A class responsible for drawing the <b>Action Button</b>
@@ -32,9 +34,9 @@ import android.util.Log;
 class ShadowResponsiveDrawer extends EffectDrawer {
 
 	/**
-	 * Logging tag
+	 * Logger
 	 */
-	private static final String LOG_TAG = String.format("[FAB][%s]", ShadowResponsiveDrawer.class.getSimpleName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(ShadowResponsiveDrawer.class);
 
 	/**
 	 * The default factor, which is used as multiplier for determining
@@ -73,7 +75,7 @@ class ShadowResponsiveDrawer extends EffectDrawer {
 		updateRadius();
 		getActionButton().getPaint().setShadowLayer(currentShadowRadius, getActionButton().getShadowXOffset(),
 				getActionButton().getShadowYOffset(), getActionButton().getShadowColor());
-		Log.v(LOG_TAG, "Shadow responsive step drawn");
+		LOGGER.trace("Drawn the next Shadow Responsive Effect step");
 	}
 
 	/**
@@ -96,7 +98,7 @@ class ShadowResponsiveDrawer extends EffectDrawer {
 		} else if (!isPressed()){
 			currentShadowRadius = getActionButton().getShadowRadius();
 		}
-		Log.v(LOG_TAG, "Shadow responsive current radius updated to: " + currentShadowRadius);
+		LOGGER.trace("Updated Shadow Responsive Effect current radius to: {}", currentShadowRadius);
 	}
 
 	/**

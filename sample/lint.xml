@@ -14,9 +14,11 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   ~
-  ~ File created: 2015-06-13 14:22:01
+  ~ File created: 2015-06-09 20:20:38
   -->
 
 <lint>
-	<issue id="UnusedResources" severity="ignore" />
+	<issue id="InvalidPackage" >
+		<ignore path="**/logback-android-core/*" />
+	</issue>
 </lint>

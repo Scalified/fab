@@ -15,15 +15,10 @@
 #
 # File created: 2015-01-31 13:01:50
 
--dontobfuscate
-
 -keep class *
 
 -keepclassmembers class * {
 	*;
 }
 
--assumenosideeffects class android.util.Log {
-    public static int v(...);
-    public static int d(...);
-}
+-keepattributes InnerClasses, EnclosingMethod

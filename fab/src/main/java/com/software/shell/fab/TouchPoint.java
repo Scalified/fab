@@ -19,6 +19,8 @@
 package com.software.shell.fab;
 
 import android.util.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Entity class, which contains the information about X- and Y-axis
@@ -31,9 +33,9 @@ import android.util.Log;
 public final class TouchPoint {
 
 	/**
-	 * Logging tag
+	 * Logger
 	 */
-	private static final String LOG_TAG = String.format("[FAB][%s]", TouchPoint.class.getSimpleName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(TouchPoint.class);
 
 	/**
 	 * Touch point X-axis coordinate
@@ -83,7 +85,7 @@ public final class TouchPoint {
 	 */
 	final void setX(float x) {
 		this.x = x;
-		Log.v(LOG_TAG, "Touch point X-axis coordinate set to: " + getX());
+		LOGGER.trace("Set touch point X-axis coordinate to: {}", getX());
 		setLastX(x);
 	}
 
@@ -104,7 +106,7 @@ public final class TouchPoint {
 	 */
 	final void setY(float y) {
 		this.y = y;
-		Log.v(LOG_TAG, "Touch point Y-axis coordinate set to: " + getY());
+		LOGGER.trace("Set touch point Y-axis coordinate to: {}", getY());
 		setLastY(y);
 	}
 
@@ -125,7 +127,7 @@ public final class TouchPoint {
 	final void setLastX(float x) {
 		if (x > 0) {
 			this.lastX = x;
-			Log.v(LOG_TAG, "Touch point last X-axis coordinate set to: " + getLastX());
+			LOGGER.trace("Set touch point last X-axis coordinate to: {}", getLastX());
 		}
 	}
 
@@ -146,7 +148,7 @@ public final class TouchPoint {
 	final void setLastY(float y) {
 		if (y > 0) {
 			this.lastY = y;
-			Log.v(LOG_TAG, "Touch point last Y-axis coordinate set to: " + getLastY());
+			LOGGER.trace("Set touch point last Y-axis coordinate to: {}", getLastY());
 		}
 	}
 
@@ -156,7 +158,7 @@ public final class TouchPoint {
 	void reset() {
 		setX(0.0f);
 		setY(0.0f);
-		Log.v(LOG_TAG, "Touch point reset");
+		LOGGER.trace("Reset touch point");
 	}
 
 	/**
@@ -173,7 +175,7 @@ public final class TouchPoint {
 		double yValue = Math.pow((getY() - centerPointY), 2);
 		double radiusValue = Math.pow(radius, 2);
 		boolean touchPointInsideCircle = xValue + yValue <= radiusValue;
-		Log.v(LOG_TAG, String.format("Point IS %s circle", touchPointInsideCircle ? "INSIDE" : "NOT INSIDE"));
+		LOGGER.trace("Detected touch point {} inside the main circle", touchPointInsideCircle ? "IS" : "IS NOT");
 		return touchPointInsideCircle;
 	}
 

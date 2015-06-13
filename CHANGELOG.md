@@ -1,3 +1,11 @@
+# 1.1.2
+
+1. Fixed [**issue #28**: move() method smearing on KitKat with snackbar](https://github.com/shell-software/fab/issues/28):
+	* A fix was made within the dependent **ViewMover** library.
+	  Only **ActionButton** dependency on **ViewMover** library was updated
+        
+2. Changed the standard Android logging API to **SLF4J Logging API**
+
 # 1.1.1
 
 1. Fixed [**issue #27**: Icon is outside the circle](https://github.com/shell-software/fab/issues/27):

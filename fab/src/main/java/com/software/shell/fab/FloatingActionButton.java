@@ -23,6 +23,8 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.animation.Animation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Deprecated since version <b>1.0.2</b>. Use {@link com.software.shell.fab.ActionButton}
@@ -39,8 +41,11 @@ import android.view.animation.Animation;
  */
 @Deprecated
 public class FloatingActionButton extends ActionButton{
-	
-	private static final String LOG_TAG = "FAB";
+
+	/**
+	 * Logger
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(FloatingActionButton.class);
 	
 	@Deprecated
 	public FloatingActionButton(Context context) {
@@ -150,18 +155,18 @@ public class FloatingActionButton extends ActionButton{
 			initShowAnimation(attributes);
 			initHideAnimation(attributes);
 		} catch (Exception e) {
-			Log.e(LOG_TAG, "Unable to read attr", e);
+			LOGGER.error("Failed to read the attribute", e);
 		} finally {
 			attributes.recycle();
 		}
-		Log.v(LOG_TAG, "Floating Action Button initialized");
+		LOGGER.trace("Initialized Floating Action Button");
 	}
 
 	private void initType(TypedArray attrs) {
 		if (attrs.hasValue(R.styleable.ActionButton_type)) {
 			final int id = attrs.getInteger(R.styleable.ActionButton_type, 0);
 			setType(Type.forId(id));
-			Log.v(LOG_TAG, "Initialized type: " + getType());
+			LOGGER.trace("Initialized type: {}", getType());
 		}
 	}
 

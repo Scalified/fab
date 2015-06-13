@@ -51,5 +51,7 @@ android {
 }
 
 dependencies {
-	compile 'com.github.shell-software:viewmover:1.0.1'
+	compile 'org.slf4j:slf4j-api:1.7.9'
+	compile 'com.github.shell-software:viewmover:1.1.0'
+	compile 'com.github.shell-software:uitools:1.1.0'
 }

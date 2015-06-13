@@ -23,6 +23,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Region;
 import android.util.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A class responsible for drawing the <b>Action Button</b> Ripple Effect
@@ -34,9 +36,9 @@ import android.util.Log;
 class RippleEffectDrawer extends EffectDrawer {
 
 	/**
-	 * Logging tag
+	 * Logger
 	 */
-	private static final String LOG_TAG = String.format("[FAB][%s]", RippleEffectDrawer.class.getSimpleName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(RippleEffectDrawer.class);
 
 	/**
 	 * Default value, which current {@link #currentRadius} is incremented by
@@ -104,7 +106,7 @@ class RippleEffectDrawer extends EffectDrawer {
 				currentRadius = 0;
 			}
 		}
-		Log.v(LOG_TAG, "Ripple effect radius updated to: " + currentRadius);
+		LOGGER.trace("Updated Ripple Effect radius to: {}", currentRadius);
 	}
 
 	/**
@@ -121,11 +123,11 @@ class RippleEffectDrawer extends EffectDrawer {
 		ViewInvalidator invalidator = getActionButton().getInvalidator();
 		if (isDrawingInProgress()) {
 			invalidator.requireInvalidation();
-			Log.v(LOG_TAG, "Ripple Effect drawing in progress, invalidating the Action Button");
+			LOGGER.trace("Drawing Ripple Effect in progress, invalidating the Action Button");
 		} else if (isDrawingFinished() && !isPressed()) {
 			invalidator.requireDelayedInvalidation();
 			invalidator.setInvalidationDelay(POST_INVALIDATION_DELAY_MS);
-			Log.v(LOG_TAG, "Ripple Effect drawing finished, posting the last invalidate");
+			LOGGER.trace("Completed Ripple Effect drawing, posting the last invalidate");
 		}
 	}
 

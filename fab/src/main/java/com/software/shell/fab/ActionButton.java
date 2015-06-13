@@ -27,16 +27,20 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.*;
-import android.view.animation.*;
-
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import com.software.shell.uitools.convert.DensityConverter;
 import com.software.shell.uitools.resutils.color.ColorModifier;
 import com.software.shell.uitools.resutils.id.IdGenerator;
 import com.software.shell.viewmover.configuration.MovingParams;
 import com.software.shell.viewmover.movers.ViewMover;
 import com.software.shell.viewmover.movers.ViewMoverFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class represents a <b>Action Button</b>, which is used in 
@@ -49,9 +53,9 @@ import com.software.shell.viewmover.movers.ViewMoverFactory;
 public class ActionButton extends View {
 
 	/**
-	 * Logging tag
+	 * Logger
 	 */
-	private static final String LOG_TAG = String.format("[FAB][%s]", ActionButton.class.getSimpleName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(ActionButton.class);
 
 	/**
 	 * <b>Action Button</b> type
@@ -255,7 +259,7 @@ public class ActionButton extends View {
 	 */
 	private void initActionButton() {
 		initLayerType();
-		Log.v(LOG_TAG, "Action Button initialized");
+		LOGGER.trace("Initialized the Action Button");
 	}
 
 	/**
@@ -297,11 +301,11 @@ public class ActionButton extends View {
 			initShowAnimation(attributes);
 			initHideAnimation(attributes);
 		} catch (Exception e) {
-			Log.e(LOG_TAG, "Unable to read attr", e);
+			LOGGER.trace("Failed to read attribute", e);
 		} finally {
 			attributes.recycle();
 		}
-		Log.v(LOG_TAG, "Action Button attributes initialized");
+		LOGGER.trace("Successfully initialized the Action Button attributes");
 	}
 
 	/**
@@ -313,7 +317,7 @@ public class ActionButton extends View {
 	private void initLayerType() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			setLayerType(LAYER_TYPE_SOFTWARE, getPaint());
-			Log.v(LOG_TAG, "Layer type initialized");
+			LOGGER.trace("Initialized the layer type");
 		}
 	}
 
@@ -330,7 +334,7 @@ public class ActionButton extends View {
 		if (attrs.hasValue(index)) {
 			int id = attrs.getInteger(index, type.getId());
 			type = Type.forId(id);
-			Log.v(LOG_TAG, "Initialized type: " + getType());
+			LOGGER.trace("Initialized Action Button type: {}", getType());
 		}
 	}
 
@@ -349,7 +353,7 @@ public class ActionButton extends View {
 		} else {
 			this.size = dpToPx(type.getSize());
 		}
-		Log.v(LOG_TAG, "Initialized size: " + getSize());
+		LOGGER.trace("Initialized Action Button size: {}", getSize());
 	}
 
 	/**
@@ -362,7 +366,7 @@ public class ActionButton extends View {
 		int index = R.styleable.ActionButton_button_color;
 		if (attrs.hasValue(index)) {
 			buttonColor = attrs.getColor(index, buttonColor);
-			Log.v(LOG_TAG, "Initialized button color: " + getButtonColor());
+			LOGGER.trace("Initialized Action Button color: {}", getButtonColor());
 		}
 	}
 
@@ -382,7 +386,7 @@ public class ActionButton extends View {
 		if (attrs.hasValue(index)) {
 			buttonColorPressed = attrs.getColor(index, buttonColorPressed);
 			buttonColorRipple = darkenButtonColorPressed();
-			Log.v(LOG_TAG, "Initialized button color pressed: " + getButtonColorPressed());
+			LOGGER.trace("Initialized Action Button color pressed: {}", getButtonColorPressed());
 		}
 	}
 
@@ -395,7 +399,7 @@ public class ActionButton extends View {
 		int index = R.styleable.ActionButton_rippleEffect_enabled;
 		if (attrs.hasValue(index)) {
 			rippleEffectEnabled = attrs.getBoolean(index, rippleEffectEnabled);
-			Log.v(LOG_TAG, "Initialized ripple effect enabled: " + isRippleEffectEnabled());
+			LOGGER.trace("Initialized Action Button Ripple Effect enabled: {}", isRippleEffectEnabled());
 		}
 	}
 
@@ -411,7 +415,7 @@ public class ActionButton extends View {
 		int index = R.styleable.ActionButton_button_colorRipple;
 		if (attrs.hasValue(index)) {
 			buttonColorRipple = attrs.getColor(index, buttonColorRipple);
-			Log.v(LOG_TAG, "Initialized button color ripple: " + getButtonColorRipple());
+			LOGGER.trace("Initialized Action Button Ripple Effect color: {}", getButtonColorRipple());
 		}
 	}
 
@@ -424,7 +428,7 @@ public class ActionButton extends View {
 		int index = R.styleable.ActionButton_shadow_radius;
 		if (attrs.hasValue(index)) {
 			shadowRadius = attrs.getDimension(index, shadowRadius);
-			Log.v(LOG_TAG, "Initialized shadow radius: " + getShadowRadius());
+			LOGGER.trace("Initialized Action Button shadow radius: {}", getShadowRadius());
 		}
 	}
 
@@ -437,7 +441,7 @@ public class ActionButton extends View {
 		int index = R.styleable.ActionButton_shadow_xOffset;
 		if (attrs.hasValue(index)) {
 			shadowXOffset = attrs.getDimension(index, shadowXOffset);
-			Log.v(LOG_TAG, "Initialized shadow X-axis offset: " + getShadowXOffset());
+			LOGGER.trace("Initialized Action Button X-axis offset: {}", getShadowXOffset());
 		}
 	}
 
@@ -450,7 +454,7 @@ public class ActionButton extends View {
 		int index = R.styleable.ActionButton_shadow_yOffset;
 		if (attrs.hasValue(index)) {
 			shadowYOffset = attrs.getDimension(index, shadowYOffset);
-			Log.v(LOG_TAG, "Initialized shadow Y-axis offset: " + getShadowYOffset());
+			LOGGER.trace("Initialized Action Button shadow Y-axis offset: {}", getShadowYOffset());
 		}
 	}
 
@@ -463,7 +467,7 @@ public class ActionButton extends View {
 		int index = R.styleable.ActionButton_shadow_color;
 		if (attrs.hasValue(index)) {
 			shadowColor = attrs.getColor(index, shadowColor);
-			Log.v(LOG_TAG, "Initialized shadow color: " + getShadowColor());
+			LOGGER.trace("Initialized Action Button shadow color: {}", getShadowColor());
 		}
 	}
 
@@ -476,7 +480,8 @@ public class ActionButton extends View {
 		int index = R.styleable.ActionButton_shadowResponsiveEffect_enabled;
 		if (attrs.hasValue(index)) {
 			shadowResponsiveEffectEnabled = attrs.getBoolean(index, shadowResponsiveEffectEnabled);
-			Log.v(LOG_TAG, "Initialized shadow responsive: " + isShadowResponsiveEffectEnabled());
+			LOGGER.trace("Initialized Action Button Shadow Responsive Effect enabled: {}",
+					isShadowResponsiveEffectEnabled());
 		}
 	}
 
@@ -489,7 +494,7 @@ public class ActionButton extends View {
 		int index = R.styleable.ActionButton_stroke_width;
 		if (attrs.hasValue(index)) {
 			strokeWidth = attrs.getDimension(index, strokeWidth);
-			Log.v(LOG_TAG, "Initialized stroke width: " + getStrokeWidth());
+			LOGGER.trace("Initialized Action Button stroke width: {}", getStrokeWidth());
 		}
 	}
 
@@ -502,7 +507,7 @@ public class ActionButton extends View {
 		int index = R.styleable.ActionButton_stroke_color;
 		if (attrs.hasValue(index)) {
 			strokeColor = attrs.getColor(index, strokeColor);
-			Log.v(LOG_TAG, "Initialized stroke color: " + getStrokeColor());
+			LOGGER.trace("Initialized Action Button stroke color: {}", getStrokeColor());
 		}
 	}
 
@@ -517,7 +522,7 @@ public class ActionButton extends View {
 		if (attrs.hasValue(index)) {
 			int animResId = attrs.getResourceId(index, Animations.NONE.animResId);
 			showAnimation = Animations.load(getContext(), animResId);
-			Log.v(LOG_TAG, "Initialized animation on show");
+			LOGGER.trace("Initialized Action Button show animation");
 		}
 	}
 
@@ -532,7 +537,7 @@ public class ActionButton extends View {
 		if (attrs.hasValue(index)) {
 			int animResId = attrs.getResourceId(index, Animations.NONE.animResId);
 			hideAnimation = Animations.load(getContext(), animResId);
-			Log.v(LOG_TAG, "Initialized animation on hide");
+			LOGGER.trace("Initialized Action Button hide animation");
 		}
 	}
 
@@ -545,7 +550,7 @@ public class ActionButton extends View {
 		int index = R.styleable.ActionButton_image;
 		if (attrs.hasValue(index)) {
 			image = attrs.getDrawable(index);
-			Log.v(LOG_TAG, "Initialized image");
+			LOGGER.trace("Initialized Action Button image");
 		}
 	}
 
@@ -561,7 +566,7 @@ public class ActionButton extends View {
 		int index = R.styleable.ActionButton_image_size;
 		if (attrs.hasValue(index)) {
 			imageSize = attrs.getDimension(index, imageSize);
-			Log.v(LOG_TAG, "Initialized image size: " + getImageSize());
+			LOGGER.trace("Initialized Action Button image size: {}", getImageSize());
 		}
 	}
 
@@ -589,7 +594,7 @@ public class ActionButton extends View {
 		if (isHidden()) {
 			playShowAnimation();
 			setVisibility(VISIBLE);
-			Log.v(LOG_TAG, "Action Button shown");
+			LOGGER.trace("Shown the Action Button");
 		}
 	}
 
@@ -603,7 +608,7 @@ public class ActionButton extends View {
 		if (!isHidden() && !isDismissed()) {
 			playHideAnimation();
 			setVisibility(INVISIBLE);
-			Log.v(LOG_TAG, "Action Button hidden");
+			LOGGER.trace("Hidden the Action Button");
 		}
 	}
 
@@ -624,7 +629,7 @@ public class ActionButton extends View {
 			setVisibility(GONE);
 			ViewGroup parent = (ViewGroup) getParent();
 			parent.removeView(this);
-			Log.v(LOG_TAG, "Action Button dismissed");
+			LOGGER.trace("Dismissed the Action Button");
 		}
 	}
 
@@ -653,8 +658,8 @@ public class ActionButton extends View {
 	 * @param params moving parameters, which contain the desired position to move
 	 */
 	public void move(MovingParams params) {
-		Log.v(LOG_TAG, String.format("View is about to move at: X-axis delta = %s Y-axis delta = %s",
-				params.getXAxisDelta(), params.getYAxisDelta()));
+		LOGGER.trace("About to move the Action Button: X-axis delta = {}, Y-axis delta = {}",
+				params.getXAxisDelta(), params.getYAxisDelta());
 		mover.move(params);
 	}
 
@@ -719,7 +724,7 @@ public class ActionButton extends View {
 	 */
 	public void setType(Type type) {
 		this.type = type;
-		Log.v(LOG_TAG, "Type changed to: " + getType());
+		LOGGER.trace("Changed the Action Button type to: {}", getType());
 		setSize(getType().getSize());
 	}
 
@@ -764,7 +769,7 @@ public class ActionButton extends View {
 	public void setSize(float size) {
 		this.size = dpToPx(size);
 		requestLayout();
-		Log.v(LOG_TAG, "Button size set to: " + getSize());
+		LOGGER.trace("Set the Action Button size to: {}", getSize());
 	}
 
 	/**
@@ -785,7 +790,7 @@ public class ActionButton extends View {
 	public void setState(State state) {
 		this.state = state;
 		invalidate();
-		Log.v(LOG_TAG, "State changed to: " + getState());
+		LOGGER.trace("Changed the Action Button state to: {}", getState());
 	}
 
 	/**
@@ -809,7 +814,7 @@ public class ActionButton extends View {
 	public void setButtonColor(int buttonColor) {
 		this.buttonColor = buttonColor;
 		invalidate();
-		Log.v(LOG_TAG, "Button color changed to: " + getButtonColor());
+		LOGGER.trace("Changed the Action Button color to: {}", getButtonColor());
 	}
 
 	/**
@@ -833,7 +838,7 @@ public class ActionButton extends View {
 	public void setButtonColorPressed(int buttonColorPressed) {
 		this.buttonColorPressed = buttonColorPressed;
 		setButtonColorRipple(darkenButtonColorPressed());
-		Log.v(LOG_TAG, "Button color pressed changed to: " + getButtonColorPressed());
+		LOGGER.trace("Changed the Action Button color pressed to: {}", getButtonColorPressed());
 	}
 
 	/**
@@ -862,7 +867,7 @@ public class ActionButton extends View {
 	 */
 	public void setRippleEffectEnabled(boolean enabled) {
 		this.rippleEffectEnabled = enabled;
-		Log.v(LOG_TAG, "Ripple effect " + (isRippleEffectEnabled() ? "ENABLED" : "DISABLED"));
+		LOGGER.trace("{} the Action Button Ripple Effect", isRippleEffectEnabled() ? "Enabled" : "Disabled");
 	}
 
 	/**
@@ -881,7 +886,7 @@ public class ActionButton extends View {
 	 */
 	public void setButtonColorRipple(int buttonColorRipple) {
 		this.buttonColorRipple = buttonColorRipple;
-		Log.v(LOG_TAG, "Button ripple effect color changed to: " + getButtonColorRipple());
+		LOGGER.trace("Action Button Ripple Effect color changed to: {}", getButtonColorRipple());
 	}
 
 	/**
@@ -925,7 +930,7 @@ public class ActionButton extends View {
 			((ShadowResponsiveDrawer) shadowResponsiveDrawer).setCurrentShadowRadius(getShadowRadius());
 		}
 		requestLayout();
-		Log.v(LOG_TAG, "Shadow radius changed to:" + getShadowRadius());
+		LOGGER.trace("Action Button shadow radius changed to: {}", getShadowRadius());
 	}
 
 	/**
@@ -969,7 +974,7 @@ public class ActionButton extends View {
 	public void setShadowXOffset(float shadowXOffset) {
 		this.shadowXOffset = dpToPx(shadowXOffset);
 		requestLayout();
-		Log.v(LOG_TAG, "Shadow X offset changed to: " + getShadowXOffset());
+		LOGGER.trace("Changed the Action Button shadow X offset to: {}", getShadowXOffset());
 	}
 
 	/**
@@ -1004,7 +1009,7 @@ public class ActionButton extends View {
 	public void setShadowYOffset(float shadowYOffset) {
 		this.shadowYOffset = dpToPx(shadowYOffset);
 		requestLayout();
-		Log.v(LOG_TAG, "Shadow Y offset changed to:" + getShadowYOffset());
+		LOGGER.trace("Changed the Action Button shadow Y offset to: {}", getShadowYOffset());
 	}
 
 	/**
@@ -1025,7 +1030,7 @@ public class ActionButton extends View {
 	public void setShadowColor(int shadowColor) {
 		this.shadowColor = shadowColor;
 		invalidate();
-		Log.v(LOG_TAG, "Shadow color changed to: " + getShadowColor());
+		LOGGER.trace("Changed the Action Button shadow color to: {}", getShadowColor());
 	}
 
 	/**
@@ -1052,7 +1057,7 @@ public class ActionButton extends View {
 	public void setShadowResponsiveEffectEnabled(boolean shadowResponsiveEffectEnabled) {
 		this.shadowResponsiveEffectEnabled = shadowResponsiveEffectEnabled;
 		requestLayout();
-		Log.v(LOG_TAG, "Shadow responsive is set to: " + isShadowResponsiveEffectEnabled());
+		LOGGER.trace("{} the Shadow Responsive Effect", isShadowResponsiveEffectEnabled() ? "Enabled" : "Disabled");
 	}
 
 	/**
@@ -1092,7 +1097,7 @@ public class ActionButton extends View {
 	public void setStrokeWidth(float strokeWidth) {
 		this.strokeWidth = dpToPx(strokeWidth);
 		requestLayout();
-		Log.v(LOG_TAG, "Stroke width changed to: " + getStrokeWidth());
+		LOGGER.trace("Changed the stroke width to: {}", getStrokeWidth());
 	}
 
 	/**
@@ -1122,7 +1127,7 @@ public class ActionButton extends View {
 	public void setStrokeColor(int strokeColor) {
 		this.strokeColor = strokeColor;
 		invalidate();
-		Log.v(LOG_TAG, "Stroke color changed to: " + getStrokeColor());
+		LOGGER.trace("Changed the stroke color to: {}", getStrokeColor());
 	}
 
 	/**
@@ -1159,7 +1164,7 @@ public class ActionButton extends View {
 	public void setImageDrawable(Drawable image) {
 		this.image = image;
 		invalidate();
-		Log.v(LOG_TAG, "Image drawable set");
+		LOGGER.trace("Set the Action Button image drawable");
 	}
 
 	/**
@@ -1220,7 +1225,7 @@ public class ActionButton extends View {
 	 */
 	public void setImageSize(float size) {
 		this.imageSize = dpToPx(size);
-		Log.v(LOG_TAG, "Image size changed to: " + getImageSize());
+		LOGGER.trace("Changed the Action Button image size to: {}", getImageSize());
 	}
 
 	/**
@@ -1240,7 +1245,7 @@ public class ActionButton extends View {
 	 */
 	public void setShowAnimation(Animation animation) {
 		this.showAnimation = animation;
-		Log.v(LOG_TAG, "Show animation set");
+		LOGGER.trace("Set the Action Button show animation");
 	}
 
 	/**
@@ -1259,7 +1264,7 @@ public class ActionButton extends View {
 	 */
 	public void removeShowAnimation() {
 		setShowAnimation(Animations.NONE);
-		Log.v(LOG_TAG, "Show animation removed");
+		LOGGER.trace("Removed the Action Button show animation");
 	}
 
 	/**
@@ -1279,7 +1284,7 @@ public class ActionButton extends View {
 	 */
 	public void setHideAnimation(Animation animation) {
 		this.hideAnimation = animation;
-		Log.v(LOG_TAG, "Hide animation set");
+		LOGGER.trace("Set the Action Button hide animation");
 	}
 
 	/**
@@ -1298,7 +1303,7 @@ public class ActionButton extends View {
 	 */
 	public void removeHideAnimation() {
 		setHideAnimation(Animations.NONE);
-		Log.v(LOG_TAG, "Hide animation removed");
+		LOGGER.trace("Removed the Action Button hide animation");
 	}
 
 	/**
@@ -1349,7 +1354,7 @@ public class ActionButton extends View {
 				if (touchPointInsideCircle) {
 					setState(State.PRESSED);
 					setTouchPoint(point);
-					Log.v(LOG_TAG, "Motion event action down detected");
+					LOGGER.trace("Detected the ACTION_DOWN motion event");
 					return true;
 				}
 				break;
@@ -1357,7 +1362,7 @@ public class ActionButton extends View {
 				if (touchPointInsideCircle) {
 					setState(State.NORMAL);
 					getTouchPoint().reset();
-					Log.v(LOG_TAG, "Motion event action up detected");
+					LOGGER.trace("Detected the ACTION_UP motion event");
 					return true;
 				}
 				break;
@@ -1366,12 +1371,12 @@ public class ActionButton extends View {
 						&& getState() == State.PRESSED) {
 					setState(State.NORMAL);
 					getTouchPoint().reset();
-					Log.v(LOG_TAG, "Touch point is outside the circle");
+					LOGGER.trace("Detected the ACTION_MOVE motion event");
 					return true;
 				}
 				break;
 			default:
-				Log.v(LOG_TAG, "Unrecognized motion event detected");
+				LOGGER.warn("Detected unrecognized motion event");
 				break;
 		}
 		return false;
@@ -1408,7 +1413,7 @@ public class ActionButton extends View {
 	protected final void resetPaint() {
 		getPaint().reset();
 		getPaint().setFlags(Paint.ANTI_ALIAS_FLAG);
-		Log.v(LOG_TAG, "Paint reset");
+		LOGGER.trace("Reset the Action Button paint");
 	}
 
 	/**
@@ -1430,7 +1435,7 @@ public class ActionButton extends View {
 	@Override
 	protected void onDraw(final Canvas canvas) {
 		super.onDraw(canvas);
-		Log.v(LOG_TAG, "Action Button onDraw called");
+		LOGGER.trace("Called Action Button onDraw");
 		drawCircle(canvas);
 		if (isRippleEffectEnabled()) {
 			drawRipple(canvas);
@@ -1468,7 +1473,7 @@ public class ActionButton extends View {
 		getPaint().setColor(getState() == State.PRESSED || rippleInProgress ?
 				getButtonColorPressed() : getButtonColor());
 		canvas.drawCircle(calculateCenterX(), calculateCenterY(), calculateCircleRadius(), getPaint());
-		Log.v(LOG_TAG, "Circle drawn");
+		LOGGER.trace("Drawn the Action Button circle");
 	}
 
 	/**
@@ -1478,7 +1483,7 @@ public class ActionButton extends View {
 	 */
 	protected float calculateCenterX() {
 		float centerX = getMeasuredWidth() / 2;
-		Log.v(LOG_TAG, "Calculated center X = " + centerX);
+		LOGGER.trace("Calculated Action Button center X: {}", centerX);
 		return centerX;
 	}
 
@@ -1489,7 +1494,7 @@ public class ActionButton extends View {
 	 */
 	protected float calculateCenterY() {
 		float centerY = getMeasuredHeight() / 2;
-		Log.v(LOG_TAG, "Calculated center Y = " + centerY);
+		LOGGER.trace("Calculated Action Button center Y: {}", centerY);
 		return centerY;
 	}
 
@@ -1500,7 +1505,7 @@ public class ActionButton extends View {
 	 */
 	protected final float calculateCircleRadius() {
 		float circleRadius = getSize() / 2;
-		Log.v(LOG_TAG, "Calculated circle circleRadius = " + circleRadius);
+		LOGGER.trace("Calculated Action Button circle radius: {}", circleRadius);
 		return circleRadius;
 	}
 
@@ -1509,7 +1514,7 @@ public class ActionButton extends View {
 	 */
 	protected void drawShadow() {
 		getPaint().setShadowLayer(getShadowRadius(), getShadowXOffset(), getShadowYOffset(), getShadowColor());
-		Log.v(LOG_TAG, "Shadow drawn");
+		LOGGER.trace("Drawn the Action Button shadow");
 	}
 
 	/**
@@ -1519,7 +1524,7 @@ public class ActionButton extends View {
 	 */
 	protected void drawRipple(Canvas canvas) {
 		rippleEffectDrawer.draw(canvas);
-		Log.v(LOG_TAG, "Ripple effect drawn");
+		LOGGER.trace("Drawn the Action Button Ripple Effect");
 	}
 	
 	/**
@@ -1546,7 +1551,7 @@ public class ActionButton extends View {
 			}
 		};
 		setOutlineProvider(provider);
-		Log.v(LOG_TAG, "Elevation drawn");
+		LOGGER.trace("Drawn the Action Button elevation");
 	}
 
 	/**
@@ -1570,7 +1575,7 @@ public class ActionButton extends View {
 		getPaint().setStrokeWidth(getStrokeWidth());
 		getPaint().setColor(getStrokeColor());
 		canvas.drawCircle(calculateCenterX(), calculateCenterY(), calculateCircleRadius(), getPaint());
-		Log.v(LOG_TAG, "Stroke drawn");
+		LOGGER.trace("Drawn the Action Button stroke");
 	}
 
 	/**
@@ -1585,8 +1590,9 @@ public class ActionButton extends View {
 		int endPointY = (int) (startPointY + getImageSize());
 		getImage().setBounds(startPointX, startPointY, endPointX, endPointY);
 		getImage().draw(canvas);
-		Log.v(LOG_TAG, String.format("Image drawn on canvas with coordinates: startPointX = %s, startPointY = %s, " +
-				"endPointX = %s, endPointY = %s", startPointX, startPointY, endPointX, endPointY));
+		LOGGER.trace("Drawn the Action Button image on canvas with coordinates: X start point = {}, " +
+				"Y start point = {}, X end point = {}, Y end point = {}",
+				startPointX, startPointY, endPointX, endPointY);
 	}
 
 	/**
@@ -1602,9 +1608,9 @@ public class ActionButton extends View {
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		Log.v(LOG_TAG, "Action Button onMeasure called");
+		LOGGER.trace("Called Action Button onMeasure");
 		setMeasuredDimension(calculateMeasuredWidth(), calculateMeasuredHeight());
-		Log.v(LOG_TAG, String.format("View size measured with: height = %s, width = %s", getHeight(), getWidth()));
+		LOGGER.trace("Measured the Action Button size: height = {}, width = {}", getHeight(), getWidth());
 	}
 
 	/**
@@ -1614,7 +1620,7 @@ public class ActionButton extends View {
 	 */
 	private int calculateMeasuredWidth() {
 		int measuredWidth = (int) (getSize() + calculateShadowWidth() + calculateStrokeWeight());
-		Log.v(LOG_TAG, "Calculated measured width = " + measuredWidth);
+		LOGGER.trace("Calculated Action Button measured width: {}", measuredWidth);
 		return measuredWidth;
 	}
 
@@ -1625,7 +1631,7 @@ public class ActionButton extends View {
 	 */
 	private int calculateMeasuredHeight() {
 		int measuredHeight = (int) (getSize() + calculateShadowHeight() + calculateStrokeWeight());
-		Log.v(LOG_TAG, "Calculated measured height = " + measuredHeight);
+		LOGGER.trace("Calculated Action Button measured height: {}", measuredHeight);
 		return measuredHeight;
 	}
 
@@ -1638,7 +1644,7 @@ public class ActionButton extends View {
 		float mShadowRadius = isShadowResponsiveEffectEnabled() ?
 				((ShadowResponsiveDrawer) shadowResponsiveDrawer).getMaxShadowRadius() : getShadowRadius();
 		int shadowWidth = hasShadow() ? (int) ((mShadowRadius	+ Math.abs(getShadowXOffset())) * 2) : 0;
-		Log.v(LOG_TAG, "Calculated shadow width = " + shadowWidth);
+		LOGGER.trace("Calculated Action Button shadow width: {}", shadowWidth);
 		return shadowWidth;
 	}
 
@@ -1651,7 +1657,7 @@ public class ActionButton extends View {
 		float mShadowRadius = isShadowResponsiveEffectEnabled() ?
 				((ShadowResponsiveDrawer) shadowResponsiveDrawer).getMaxShadowRadius() : getShadowRadius();
 		int shadowHeight = hasShadow() ? (int) ((mShadowRadius + Math.abs(getShadowYOffset())) * 2) : 0;
-		Log.v(LOG_TAG, "Calculated shadow height = " + shadowHeight);
+		LOGGER.trace("Calculated Action Button shadow height: {}", shadowHeight);
 		return shadowHeight;
 	}
 
@@ -1662,7 +1668,7 @@ public class ActionButton extends View {
 	 */
 	private int calculateStrokeWeight() {
 		int strokeWeight = (int) (getStrokeWidth() * 2.0f);
-		Log.v(LOG_TAG, "Calculated stroke weight is: " + strokeWeight);
+		LOGGER.trace("Calculated Action Button stroke width: {}", strokeWidth);
 		return strokeWeight;
 	}
 

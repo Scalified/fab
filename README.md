@@ -18,93 +18,31 @@ The Library requires **Android SDK version 9 (Gingerbread)** and higher.
 
 ```java
 dependencies {
-	compile 'com.github.shell-software:fab:1.1.1'
+	compile 'com.github.shell-software:fab:1.1.2'
 }
 ```
 
-> **Action Button** has a dependency on an external [**ViewMover**](https://github.com/shell-software/view-mover) library, which in turn has a transitive dependency on [**UI Tools**](https://github.com/shell-software/uitools) library. 
+> **Action Button** has a dependency on an external [**ViewMover**](https://github.com/shell-software/view-mover) library, which in turn has a transitive dependency on the [**UI Tools**](https://github.com/shell-software/uitools) library. 
 If any of these libraries are already used in the project they must be excluded as transitive dependencies
 
 ## Activity Stream
 
 [**Full ChangeLog**](https://github.com/shell-software/fab/blob/master/CHANGELOG.md)
 
-### 1.1.1 - *current*
+### 1.1.2 - *current*
+
+1. Fixed [**issue #28**: move() method smearing on KitKat with snackbar](https://github.com/shell-software/fab/issues/28):
+	* A fix was made within the dependent **ViewMover** library.
+	  Only **ActionButton** dependency on **ViewMover** library was updated
+        
+2. Changed the standard Android logging API to **SLF4J Logging API**
+
+### 1.1.1 - *previous*
 
 1. Fixed [**issue #27**: Icon is outside the circle](https://github.com/shell-software/fab/issues/27):
 
 	A call to **Canvas.restore()** without calling the **Canvas.save()** first resulted in the unpredictable behaviour.
 	Added call to **Canvas.save()** before **Canvas.restore()** in the **RippleEffectDrawer** class
-
-### 1.0.5 - *previous*
-
-Watch [Demo Video about new features](https://www.youtube.com/watch?v=7GHAcX2myh8)
-
-1. Added Ripple Effect - [**issue #2: ripple effect**](https://github.com/shell-software/fab/issues/2). Disabled by default.
-See [**README.md**](https://github.com/shell-software/fab/blob/master/README.md) for more info
-
-2. Added Shadow Responsive Effect - [**issue #11: Question - Pressed State**](https://github.com/shell-software/fab/issues/11). Enabled by default.
-See [**README.md**](https://github.com/shell-software/fab/blob/master/README.md) for more info
-
-3. Added possibility to move the **Action Button** - [**issue #9: Move button up and down**](https://github.com/shell-software/fab/issues/9). 
-See [**README.md**](https://github.com/shell-software/fab/blob/master/README.md) for more info
-
-4. **Action Button** now has a dependency on an external [**ViewMover**](https://github.com/shell-software/view-mover) library. 
-If it is used already in the project it must be excluded as a transitive dependency
-
-5. Changed the **Action Button** default values:
-
-	1. Button default color for **NORMAL** state changed from **Color.LTGRAY** to **#FF9B9B9B**
-    2. Button default color for **PRESSED** state changed from **Color.DKGRAY** to **#FF696969**
-    3. Shadow default color changed from **#757575** to **#42000000** according to Material Design Guidelines
-    4. Shadow default radius changed from **2.0f** to **8.0f** (in density-independent pixels)
-    5. Shadow default X-axis offset changed from **1.0f** to **0.0f** (in density-independent pixels)
-    6. Shadow default Y-axis offset changed from **1.5f** to **8.0f** (in density-independent pixels)
-
-6. **New** public methods, classes and attributes:
-
-	1. Methods:
-
-		* **setSize(float)** - sets the size of the **Action Button** (in density-independent pixels).
-		Changing the default size of the button breaks the rules of [Material Design](http://www.google.com/design/spec/components/buttons.html).
-	    Setting the button size explicitly means, that button types with its default sizes are completely ignored. Do not use this method, unless you know what you are doing
-		* **getSize()** - returns the size of the **Action Button** in real pixels (the same as **getButtonSize()**, which is now marked as *deprecated*).
-		* **move(MovingParams)** - moves the **Action Button** to the specified position obtained from **MovingParams** object
-		* **moveRight(float)** - moves the **Action Button** right to a specified distance (in density-independent pixels)
-		* **moveDown(float)** - moves the **Action Button** down to a specified distance (in density-independent pixels)
-		* **moveLeft(float)** - moves the **Action Button** left to a specified distance (in density-independent pixels)
-		* **moveUp(float)** - moves the **Action Button** up to a specified distance (in density-independent pixels)
-		* **isRippleEffectEnabled()** - checks whether **Action Button** Ripple Effect enabled
-		* **setRippleEffectEnabled(boolean)** - toggles the Ripple Effect state
-		* **getButtonColorRipple()** - returns the **Action Button** Ripple Effect color
-		* **setButtonColorRipple(int)** - sets the **Action Button** Ripple Effect color
-		* **isShadowResponsiveEffectEnabled()** - returns whether Shadow Responsive Effect enabled
-		* **setShadowResponsiveEffectEnabled(boolean)** - sets the Shadow Responsive Effect
-		* **getTouchPoint()** - returns the **Action Button** touch point
-			
-	2. XML attributes:
-	
-		* **size** - dimension, declares the button size (the same as **setSize(float)**)
-		* **BIG** - enum (value **2**), declares the **Action Button** **BIG** type, which has the size of **72.0dp** (the same as **setType(ActionButton.Type.BIG)**)
-		* **rippleEffect_enabled** - boolean, enables the **Action Button** Ripple Effect (the same as **setRippleEffectEnabled(boolean)**)
-		* **button_colorRipple** - color, declares the **Action Button** Ripple Effect color (the same as **setButtonColorRipple(int)**)
-		* **shadowResponsiveEffect_enabled** - boolean, enables the **Action Button** Shadow Responsive Effect (the same as **setShadowResponsiveEffectEnabled(boolean)**)
-		
-	3. Classes:
-	
-		* added new **Action Button** type - **ActionButton.Type.BIG**, which has a size of ***72*** density-independent pixels. Also added a correspondent value **BIG** to **type** XML attribute
-		([Pull request #16: *Added BIG size, 72dp size for fab buttons, Fix MOVE feedback, update gitignore*](https://github.com/shell-software/fab/pull/16) by [**Aracem**](https://github.com/Aracem))
-        * **TouchPoint** - an entity class, which contains the information about X- and Y-axis coordinates of the touch point (can't be instantiated).
-		
-7. **Attention!** *Deprecated* methods:
-
-	* **getButtonSize()** renamed to **getSize()**. You can still use **getButtonSize()** method, however it is marked as *deprecated* and will be removed in version 2.0.0.
-
-8. Added checking of the *X* and *Y* touch points coordinates
-	
-	* If the touch *X* and *Y* coordinates are not inside the main button circle, the button won't react on click
-	* If the button state is **PRESSED** and touch point moves outside the main circle the button state changes to **NORMAL** 
-	([Pull request #14: *Update ActionButton.java*](https://github.com/shell-software/fab/pull/14) by [**uriel-frankel**](https://github.com/uriel-frankel))
 
 ### Features in the next versions:
 
@@ -142,7 +80,7 @@ Green 500 | Amber 500 | Blue 500
 
 ### Shadow
 
-Shadow is **enabled** by default and has standard settings according to [Material Design Guidelines](http://www.google.com/design/spec/what-is-material/objects-in-3d-space.html). These settings are suitable in most cases. However, shadow can be modified in three ways: *radius*, *X-* or *Y-axis offset* and *color*.
+Shadow **enabled** by default and has standard settings according to [**Material Design Guidelines**](http://www.google.com/design/spec/what-is-material/objects-in-3d-space.html). These settings are suitable in most cases. However, shadow can be modified in three ways: *radius*, *X-* or *Y-axis offset* and *color*.
 
 Default | Radius | X- and Y- axis offset
 :-:|:-:|:-:
@@ -161,7 +99,7 @@ Thin | Medium | Thick
 
 #### Shadow Responsive Effect
 
-Shadow Responsive Effect means that shadow is changed in response to user input.
+Shadow Responsive Effect means that shadow is changed in response to the user input.
 Shadow Responsive Effect **enabled** by default.
 
 #### Ripple Effect
@@ -175,7 +113,7 @@ Shadow Responsive Effect | Ripple Effect
 
 ### Moving
 
-**ActionButton** can be moved in any direction. [ViewMover Library](https://github.com/shell-software/viewmover) is used for performing the **ActionButton** moving
+**ActionButton** can be moved in any direction. [**ViewMover Library**](https://github.com/shell-software/viewmover) is used for performing the **ActionButton** moving
 
 Left-Right Move | Up-Down Move
 :-:|:-:
@@ -275,6 +213,8 @@ actionButton.playHideAnimation();   // plays the hide animation
 ```
 
 > Animations are played only if set. By default animations are not set.
+>
+> The best way to play the animation with the **Activity** launching is to override the [**onWindowFocusChanged(boolean)**](http://developer.android.com/reference/android/view/Window.Callback.html#onWindowFocusChanged(boolean)) and call either **playShowAnimation()** or **playHideAnimation()** within it
 
 #### Moving ActionButton
 
@@ -314,7 +254,7 @@ MovingParams params = new MovingParams(getContext(), xAxisDelta, yAxisDelta, ani
 actionButton.move(params);
 ```
 
-> [ViewMover Library](https://github.com/shell-software/viewmover) is used for performing the **ActionButton** moving.
+> [**ViewMover Library**](https://github.com/shell-software/viewmover) is used for performing the **ActionButton** moving.
 >
 > For API lower than **Jelly Bean** *(version code 16)* moving is guaranteed to work as expected with **FrameLayout** and **RelativeLayout**. Working as expected with other layouts **not guaranteed**
 
@@ -352,7 +292,7 @@ float size = actionButton.getSize();
 actionButton.setSize(60.0f); // in density-independent pixels
 ```
 
-> Changing the default size of the button *breaks the rules* of [**Material Design**](http://www.google.com/design/spec/components/buttons.html)
+> Changing the default size of the button **breaks the rules** of [**Material Design**](http://www.google.com/design/spec/components/buttons.html)
 >
 > Setting the button size explicitly means, that button types with its default sizes are **completely ignored**. Do not use this method, unless you know what you are doing
 	
@@ -400,7 +340,7 @@ int buttonColorPressed = actionButton.getButtonColorPressed();
 #### Shadow
 
 Shadow can be customized in three ways: *color*, *radius* and *offset*.
-By default shadow is **enabled** and has the following default values:
+By default shadow **enabled** and has the following default values:
 	
 * **shadowColor** = **#42000000** (~ light-grey)
 * **shadowRadius** = **8.0f**   (in density-independent pixels)
@@ -447,7 +387,7 @@ actionButton.removeShadow();
 
 #### Image
 
-**Action Button** can have an image centered inside. By default the image is **absent**. 
+**Action Button** can have an image centered inside. By default the image **absent**. 
 Any image can be used for adding. The Library has **fab_plus_icon** drawable, which can also be used. 
 When an image is set its width and height are changed to the default values, which both are set to
 **24.0dp** (according to material design guidelines). However this size is also adjustable.
@@ -476,11 +416,13 @@ float imageSize = actionButton.getImageSize();
 actionButton.removeImage();
 ```
 
-> Image size must be specified in density-independent pixels. Changing the image size breaks the rules of *Material Design Guidelines*
+> Image size must be specified in density-independent pixels. 
+>
+> Changing the image size **breaks the rules** of [**Material Design**](http://www.google.com/design/spec/components/buttons.html)
 
 #### Stroke
 
-Stroke can be customized in two ways: *width* and the *color*. Stroke is **disabled** by default, however it has the default values:
+Stroke can be customized in two ways: *width* and the *color*. Stroke **disabled** by default, however it has the default values:
 
 * **strokeColor** = **Color.BLACK**
 * **strokeWidth** = **0.0f** (no stroke)
@@ -531,7 +473,7 @@ actionButton.setShadowResponsiveEffectEnabled(false);
 >
 > Shadow maximum radius value is calculated by multiplying the shadow initial radius and shadow response factor, which is by default 1.75f. Shadow response factor can't be changed.
 >
-> Note, that having Shadow Responsive Effect enabled leads to **increasing** of the **ActionButton** general view size. In this case view size calculated based on the maximum value of the shadow radius. This means, that event if there is a place near the **ActionButton** unfilled, it is actually used by Shadow Responsive Effect
+> Note, that having Shadow Responsive Effect enabled leads to **increasing** of the **ActionButton** general view size. In this case view size calculated based on the maximum value of the shadow radius. This means, that even if there is a place near the **ActionButton** unfilled, it is actually used by Shadow Responsive Effect
 
 ##### Ripple Effect
 
@@ -621,6 +563,48 @@ Then refer the added namespace to configure **Action Button** parameters
 
 > The above example contains all of the configuration parameters for **Action Button**, so there is no need to configure all of them, because they all have default values
 
+## Logging
+
+To enable logging:
+
+1. Add the following dependency:
+
+	```java
+	dependencies {
+		compile 'com.github.tony19:logback-android-classic:1.1.1-3'
+	}
+	```
+2. Create the **logback.xml** file in the **src/main/assets** with the sample configuration:
+
+	```xml
+	<?xml version="1.0" encoding="UTF-8"?>
+	<configuration>
+		<appender name="LOGCAT" class="ch.qos.logback.classic.android.LogcatAppender">
+			<tagEncoder>
+				<pattern>%logger{0}</pattern>
+			</tagEncoder>
+			<encoder>
+				<pattern>%d{HH:mm:ss.SSS} [%thread] [%logger{0}] - %msg%n</pattern>
+			</encoder>
+		</appender>
+	
+		<root level="TRACE" additivity="false">
+			<appender-ref ref="LOGCAT" />
+		</root>
+	</configuration>
+	```
+	> You may wish to configure different appenders with different log levels for packages, classes etc.
+	
+	> More information about **LOGBack** can be found @ [LOGBack Project Site](http://logback.qos.ch)
+
+3. Add the following **InvalidPackage** ignore rule into **lint.xml** file (located @ the root of the project):
+
+	```xml
+	<issue id="InvalidPackage" >
+    	<ignore path="**/logback-android-core/*" />
+    </issue>
+	```
+
 ## License
 
 ```
@@ -643,6 +627,7 @@ Then refer the added namespace to configure **Action Button** parameters
 
 * [ActionButton Google+ Page](https://plus.google.com/b/104319136856457489585/104319136856457489585/posts)
 * [ActionButton YouTube Channel](https://www.youtube.com/channel/UC_ER2kmJfAcGwt6V77i4uGg)
-* [Shell Software Inc. Google+ Official Page](https://plus.google.com/112119444427380215269)
-* <a href="mailto:com.software.shell@gmail.com?subject=[FAB]: Proposals And Suggestions">Shell Software Inc. Gmail</a>
+* [Shell Software Inc. Google+ Official Page](https://plus.google.com/+ShellSoftware)
+* [Shell Software Inc. YouTube Official Channel](https://www.youtube.com/c/ShellSoftware)
+* <a href="mailto:com.software.shell@gmail.com?subject=[UI Tools]: Proposals And Suggestions">Shell Software Inc. Gmail</a>
 * [Shell Software Inc. Twitter Official Page](https://twitter.com/shell_software)
