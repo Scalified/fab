@@ -264,8 +264,8 @@ actionButton.move(params);
 
 There are three types of **Action Button**, which you can work with:
 
-* **DEFAULT** (40dp)
-* **MINI** (56dp)
+* **DEFAULT** (56dp)
+* **MINI** (40dp)
 * **BIG** (72dp)
 
 By default the button type is set to **DEFAULT**.
