@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 Scalified <http://www.scalified.com>
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		style="@style/fab_container_base_style"
+		android:orientation="vertical"
+		>
+	<TextView
+			style="@style/fab_textview_new_block_style"
+			android:text="@string/fab_textview_button_type_text"
+			/>
+	<RadioGroup
+			android:id="@+id/fab_activity_radiogroup_button_type"
+			style="@style/fab_radiogroup_style"
+			android:orientation="horizontal"
+			>
+		<RadioButton
+				android:id="@+id/fab_activity_radiobutton_default"
+				style="@style/fab_radiobutton_style"
+				android:text="@string/fab_radiobutton_default_type_text"
+				android:checked="true"
+				/>
+		<RadioButton
+				android:id="@+id/fab_activity_radiobutton_mini"
+				style="@style/fab_radiobutton_style"
+				android:text="@string/fab_radiobutton_mini_type_text"
+				/>
+        <RadioButton
+                android:id="@+id/fab_activity_radiobutton_big"
+                style="@style/fab_radiobutton_style"
+                android:text="@string/fab_radiobutton_big_type_text"
+                />
+	</RadioGroup>
+	<TextView
+			style="@style/fab_textview_new_block_style"
+			android:text="@string/fab_textview_shadow_radius_text"
+			/>
+	<SeekBar
+			android:id="@+id/fab_activity_seekbar_shadow_radius"
+			style="@style/fab_seekbar_style"
+			android:max="@integer/fab_seekbar_shadow_radius_max_integer"
+			/>
+	<TextView
+			style="@style/fab_textview_new_block_style"
+			android:text="@string/fab_textview_shadow_x_axis_offset_text"
+			/>
+	<SeekBar
+			android:id="@+id/fab_activity_seekbar_shadow_x_offset"
+			style="@style/fab_seekbar_style"
+			android:max="@integer/fab_seekbar_shadow_x_offset_max_integer"
+			/>
+	<TextView
+			style="@style/fab_textview_new_block_style"
+			android:text="@string/fab_textview_shadow_y_axis_offset_text"
+			/>
+	<SeekBar
+			android:id="@+id/fab_activity_seekbar_shadow_y_offset"
+			style="@style/fab_seekbar_style"
+			android:max="@integer/fab_seekbar_shadow_y_offset_max_integer"
+			/>
+	<TextView
+			style="@style/fab_textview_new_block_style"
+			android:text="@string/fab_textview_image_icon_text"
+			/>
+	<CheckBox
+			android:id="@+id/fab_activity_checkbox_default_icon_plus"
+			style="@style/fab_checkbox_style"
+			android:text="@string/fab_checkbox_default_icon_plus_text"
+			/>
+	<TextView
+			style="@style/fab_textview_new_block_style"
+			android:text="@string/fab_textview_ripple_effect_text"
+			/>
+	<CheckBox
+			android:id="@+id/fab_activity_checkbox_ripple_effect_enabled"
+			style="@style/fab_checkbox_style"
+			android:text="@string/fab_checkbox_ripple_effect_enabled_text"
+			/>
+	<CheckBox
+			android:id="@+id/fab_activity_checkbox_shadow_responsive_effect_enabled"
+			style="@style/fab_checkbox_style"
+			android:text="@string/fab_checkbox_shadow_responsive_effect_enabled_text"
+			/>
+	<TextView
+			style="@style/fab_textview_new_block_style"
+			android:text="@string/fab_textview_button_colors_text"
+			/>
+	<RadioGroup
+			android:id="@+id/fab_activity_radiogroup_colors"
+			style="@style/fab_radiogroup_style"
+			android:orientation="vertical"
+			>
+		<!--Populated in code. See FABActivity#initButtonColorsRadioGroup() -->
+	</RadioGroup>
+	<TextView
+			style="@style/fab_textview_new_block_style"
+			android:text="@string/fab_textview_stroke_text"
+			/>
+	<RadioGroup
+			android:id="@+id/fab_activity_radiogroup_stroke"
+			style="@style/fab_radiogroup_style"
+			android:orientation="vertical"
+			>
+		<!--Populated in code. See FABActivity#initStrokeColorRadioGroup() -->
+	</RadioGroup>
+	<SeekBar
+			android:id="@+id/fab_activity_seekbar_stroke_width"
+			style="@style/fab_seekbar_style"
+			android:max="50"
+			/>
+	<TextView
+			style="@style/fab_textview_new_block_style"
+			android:text="@string/fab_textview_button_behavior_text"
+			/>
+	<RadioGroup
+			android:id="@+id/fab_activity_button_behavior_radiogroup"
+			style="@style/fab_radiogroup_style"
+	        android:orientation="vertical"
+			>
+		<RadioButton
+				android:id="@+id/fab_activity_radiobutton_none_on_click_radiobutton"
+				style="@style/fab_radiobutton_style"
+				android:text="@string/fab_radiobutton_none_on_click_text"
+		        android:checked="true"
+				/>
+		<RadioButton
+				android:id="@+id/fab_activity_radiobutton_hide_and_show_on_click_radiobutton"
+				style="@style/fab_radiobutton_style"
+		        android:text="@string/fab_radiobutton_hide_and_show_on_click_text"
+				/>
+		<RadioButton
+				android:id="@+id/fab_activity_radiobutton_move_up_and_down_on_click_radiobutton"
+				style="@style/fab_radiobutton_style"
+				android:text="@string/fab_radiobutton_move_up_and_down_on_click"
+				/>
+		<RadioButton
+				android:id="@+id/fab_activity_radiobutton_move_left_and_right_on_click_radiobutton"
+				style="@style/fab_radiobutton_style"
+				android:text="@string/fab_radiobutton_move_left_and_right_on_click"
+				/>
+	</RadioGroup>
+	<TextView
+			style="@style/fab_textview_new_block_style"
+			android:text="@string/fab_textview_animations_text"
+			/>
+	<RadioGroup
+			android:id="@+id/fab_activity_radiogroup_animations"
+			style="@style/fab_radiogroup_style"
+			android:orientation="vertical"
+			>
+		<!--Populated in code. See FABActivity#initAnimationsRadioGroup() -->
+	</RadioGroup>
+</LinearLayout>

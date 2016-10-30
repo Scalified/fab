@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 Scalified <http://www.scalified.com>
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+	
+	<!--TextView-->
+	<style name="fab_textview_style" parent="fab_textview_base_style">
+		<item name="android:layout_marginStart">@dimen/fab_textview_left_start_margin_dimen</item>
+		<item name="android:layout_marginEnd">@dimen/fab_textview_right_end_margin_dimen</item>
+		<item name="android:layout_marginTop">@dimen/fab_textview_top_margin_dimen</item>
+		<item name="android:layout_marginBottom">@dimen/fab_textview_bottom_margin_dimen</item>
+	</style>
+	
+	<!--RadioGroup-->
+	<style name="fab_radiogroup_style" parent="fab_radiogroup_base_style">
+		<item name="android:layout_marginStart">@dimen/fab_radiogroup_left_start_margin_dimen</item>
+		<item name="android:layout_marginEnd">@dimen/fab_radiogroup_right_end_margin_dimen</item>
+		<item name="android:layout_marginTop">@dimen/fab_radiogroup_top_margin_dimen</item>
+		<item name="android:layout_marginBottom">@dimen/fab_radiogroup_bottom_margin_dimen</item>
+	</style>
+	
+	<!--RadioButton-->
+	<style name="fab_radiobutton_horizontal_next_style" parent="fab_radiogroup_base_style">
+		<item name="android:layout_marginStart">@dimen/fab_radiobutton_horizontal_left_start_margin</item>
+	</style>
+
+	<!--SeekBar-->
+	<style name="fab_seekbar_style" parent="fab_seekbar_base_style">
+		<item name="android:layout_marginStart">@dimen/fab_seekbar_left_start_margin_dimen</item>
+		<item name="android:layout_marginEnd">@dimen/fab_seekbar_right_end_margin_dimen</item>
+		<item name="android:layout_marginTop">@dimen/fab_seekbar_top_margin_dimen</item>
+		<item name="android:layout_marginBottom">@dimen/fab_seekbar_bottom_margin_dimen</item>
+	</style>
+
+	<!--CheckBox-->
+	<style name="fab_checkbox_base_style" parent="fab_layout_wrap_width_wrap_height_style">
+		<item name="android:layout_marginStart">@dimen/fab_checkbox_left_start_margin_dimen</item>
+		<item name="android:layout_marginEnd">@dimen/fab_checkbox_right_end_margin_dimen</item>
+		<item name="android:layout_marginTop">@dimen/fab_checkbox_top_margin_dimen</item>
+		<item name="android:layout_marginBottom">@dimen/fab_checkbox_bottom_margin_dimen</item>
+	</style>
+
+	<!--Action Button-->
+	<style name="fab_action_button_style" parent="fab_action_button_base_style">
+		<item name="android:layout_alignParentBottom">true</item>
+		<item name="android:layout_alignParentEnd">true</item>
+		<item name="android:layout_marginEnd">@dimen/fab_margin</item>
+		<item name="android:layout_marginBottom">@dimen/fab_margin</item>
+	</style>
+	
+</resources>

@@ -1,0 +1,83 @@
+<!--
+  ~ Copyright 2016 Scalified <http://www.scalified.com>
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+	
+	<!--Application-->
+	<string name="app_name">Action Button</string>
+
+	<!--Colors-->
+	<string name="fab_default_color_text">Default</string>
+	<string name="fab_red_color_text">Red</string>
+	<string name="fab_pink_color_text">Pink</string>
+	<string name="fab_purple_color_text">Purple</string>
+	<string name="fab_deep_purple_color_text">Deep Purple</string>
+	<string name="fab_indigo_color_text">Indigo</string>
+	<string name="fab_blue_color_text">Blue</string>
+	<string name="fab_light_blue_color_text">Light Blue</string>
+	<string name="fab_cyan_color_text">Cyan</string>
+	<string name="fab_teal_color_text">Teal</string>
+	<string name="fab_green_color_text">Green</string>
+	<string name="fab_light_green_color_text">Light Green</string>
+	<string name="fab_lime_color_text">Lime</string>
+	<string name="fab_yellow_color_text">Yellow</string>
+	<string name="fab_amber_color_text">Amber</string>
+	<string name="fab_orange_color_text">Orange</string>
+	<string name="fab_deep_orange_color_text">Deep Orange</string>
+	<string name="fab_brown_color_text">Brown</string>
+	<string name="fab_grey_color_text">Grey</string>
+	<string name="fab_blue_grey_color_text">Blue Grey</string>
+	<string name="fab_black_and_white_color_text">Black and White</string>
+	<string name="fab_black_stroke_color_text">Black</string>
+	<string name="fab_grey_stroke_color_text">Grey</string>
+	<string name="fab_yellow_stroke_color_text">Yellow 900</string>
+	
+	<!--Animations-->
+	<string name="fab_animation_none_text">None</string>
+	<string name="fab_animation_fade_in_fade_out_text">Fade In / Fade Out</string>
+	<string name="fab_animation_scale_up_scale_down_text">Scale Up / Scale Down</string>
+	<string name="fab_animation_roll_from_right_roll_to_right_text">Roll From Right / Roll To Right</string>
+	<string name="fab_animation_roll_from_down_roll_to_down_text">Roll From Down / Roll To Down</string>
+	<string name="fab_animation_jump_from_right_jump_to_right_text">Jump From Right / Jump To Right</string>
+	<string name="fab_animation_jump_from_down_jump_to_down_text">Jump From Down / Jump To Down</string>
+
+	<!--TextView-->
+	<string name="fab_textview_button_type_text">BUTTON TYPE</string>
+	<string name="fab_textview_shadow_radius_text">SHADOW RADIUS</string>
+	<string name="fab_textview_shadow_x_axis_offset_text">SHADOW X-AXIS OFFSET</string>
+	<string name="fab_textview_shadow_y_axis_offset_text">SHADOW Y-AXIS OFFSET</string>
+	<string name="fab_textview_image_icon_text">IMAGE ICON</string>
+	<string name="fab_textview_ripple_effect_text">RIPPLE EFFECT</string>
+	<string name="fab_textview_button_behavior_text">BUTTON BEHAVIOR</string>
+	<string name="fab_textview_button_colors_text">BUTTON COLORS</string>
+	<string name="fab_textview_stroke_text">STROKE</string>
+	<string name="fab_textview_animations_text">ANIMATIONS</string>
+
+	<!--RadioButton-->
+	<string name="fab_radiobutton_default_type_text">DEFAULT</string>
+	<string name="fab_radiobutton_mini_type_text">MINI</string>
+    <string name="fab_radiobutton_big_type_text">BIG</string>
+	<string name="fab_radiobutton_none_on_click_text">None</string>
+	<string name="fab_radiobutton_hide_and_show_on_click_text">Hide and show on click</string>
+	<string name="fab_radiobutton_move_up_and_down_on_click">Move up and down on click</string>
+	<string name="fab_radiobutton_move_left_and_right_on_click">Move left and right on click</string>
+
+	<!--CheckBox-->
+	<string name="fab_checkbox_default_icon_plus_text">Default icon plus</string>
+	<string name="fab_checkbox_ripple_effect_enabled_text">Ripple effect enabled</string>
+	<string name="fab_checkbox_shadow_responsive_effect_enabled_text">Shadow Responsive effect enabled</string>
+
+</resources>
