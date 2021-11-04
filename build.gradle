@@ -37,6 +37,10 @@ buildscript {
 }
 
 allprojects {
+    tasks.withType(JavaCompile).configureEach {
+        options.incremental = true
+    }
+
 
 	group = POM_GROUP_ID
 	version = POM_VERSION
